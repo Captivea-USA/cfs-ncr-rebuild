@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- EOI-392: Add default Journal on Register Payment wizard -->
+    <record id="account_view_journal_form_inherit_payment_default_cfs" model="ir.ui.view">
+        <field name="name">account.view.form.journal.inherit</field>
+        <field name="inherit_id" ref="account.view_account_journal_form" />
+        <field name="model">account.journal</field>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='type']" position="after">
+                <field name="payment_default" />
+            </xpath>
+        </field>
+    </record>
+
+    <!-- EOI-392: Add default Journal on Register Payment wizard -->
+    <record id="account_view_journal_tree_inherit_payment_default_cfs" model="ir.ui.view">
+        <field name="name">account.view.tree.journal.inherit</field>
+        <field name="inherit_id" ref="account.view_account_journal_tree" />
+        <field name="model">account.journal</field>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='company_id']" position="after">
+                <field name="payment_default" />
+            </xpath>
+        </field>
+    </record>
+
+
+</odoo>

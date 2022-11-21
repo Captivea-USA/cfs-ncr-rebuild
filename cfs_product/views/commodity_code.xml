@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+    <!-- EOI-304: Create Commodity Code Tree View -->
+    <!-- Tree View -->
+    <record id="commodity_code_tree_cfs" model="ir.ui.view">
+        <field name="name">commodity.code.tree</field>
+        <field name="model">commodity.code</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="owner_id"/>
+                <field name="lead_time" width="200px"/>
+                <field name="code_ids" widget="many2many_tags"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="commodity_code_form_cfs" model="ir.ui.view">
+        <field name="name">commodity.code.form</field>
+        <field name="model">commodity.code</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <!-- EOI-305: Make Commodity Fields Required -->
+                            <field name="name" required="1"/>
+                            <field name="code" required="1"/>
+                        </group>
+                        <group>
+                            <field name="owner_id" required="1"/>
+                            <field name="lead_time" required="1"/>
+                            <field name="code_ids" widget="many2many_tags" required="1"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_commodity_code" model="ir.actions.act_window">
+        <field name="name">Commodity Codes</field>
+        <field name="res_model">commodity.code</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="commodity_code_tree_cfs"/>
+    </record>
+
+    <!-- Menu Item -->
+    <menuitem id="menu_commodity_code" 
+              action="action_commodity_code"
+              parent="purchase.menu_product_in_config_purchase"
+              sequence="41"
+              name="Commodity Codes"/>
+
+    </data>
+</odoo>

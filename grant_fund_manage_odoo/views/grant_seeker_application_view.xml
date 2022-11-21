@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="custom_grant_seeker_application_form_view" model="ir.ui.view">
+            <field name="name">grant.seeker.application.form</field>
+            <field name="model">grant.seeker.application</field>
+            <field name="arch" type="xml">
+                <form string="Grant Seeker Application">
+                    <header>
+                        <button name="%(custom_action_grant_opportunity_wizard)d" string="Create Grant Application Request" type="action" class="oe_highlight" attrs="{'invisible': [('custom_is_submited_stage', '!=', True)]}"/>
+                        <button name="%(custom_action_grant_project_wizard)d" string="Create Project" type="action" class="oe_highlight" attrs="{'invisible': ['|', ('custom_is_submited_stage', '!=', True), ('custom_project_id', '!=', False)]}"/>
+                        <field name="custom_stage_id" widget="statusbar" options="{'clickable': '1', 'fold_field': 'fold'}"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="action_view_grant_opportunity" type="object" class="oe_stat_button" icon="fa-bars" string="Applications" attrs="{'invisible': [('custom_is_submited_stage', '!=', True)]}">
+                            </button>
+                            <button name="action_view_grant_project" type="object" class="oe_stat_button" icon="fa-server" string="Project" attrs="{'invisible': [('custom_is_submited_stage', '!=', True)]}">
+                            </button>
+                            <button name="action_view_grant_sale_order" type="object" class="oe_stat_button" icon="fa-usd" string="Sale Orders">
+                            </button>
+                            <button name="action_view_grant_invoice" type="object" class="oe_stat_button" icon="fa-pencil-square-o" string="Invoices">
+                            </button>
+                        </div>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="custom_name" attrs="{'readonly': [('custom_is_submited_stage', '!=', False)]}"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="custom_start_date" attrs="{'readonly': [('custom_is_submited_stage', '!=', False)]}"/>
+                                <field name="custom_manager_id" attrs="{'readonly': [('custom_is_submited_stage', '!=', False)]}"/>
+                                <field name="custom_is_submited_stage" invisible="1"/>
+                                <field name="custom_grant_types_id" attrs="{'readonly': [('custom_is_submited_stage', '!=', False)]}"/>
+                                <field name="custom_project_team_id" attrs="{'readonly': [('custom_is_submited_stage', '!=', False)]}"/>
+                                <field name="custom_project_id" attrs="{'readonly': [('custom_is_submited_stage', '!=', False)]}"/>
+                            </group>
+                            <group>
+                                <field name="custom_end_date" attrs="{'readonly': [('custom_is_submited_stage', '!=', False)]}"/>
+                                <field name="custom_crm_team_id" attrs="{'readonly': [('custom_is_submited_stage', '!=', False)]}"/>
+                                <field name="custom_grant_methods_id" attrs="{'readonly': [('custom_is_submited_stage', '!=', False)]}"/>
+                                <field name="custom_grant_tags_ids" widget="many2many_tags"  options="{'color_field': 'color', 'no_create_edit': True}" placeholder="Grant Tags..." attrs="{'readonly': [('custom_is_submited_stage', '!=', False)]}"/>
+                                <field name="custom_company_id" attrs="{'readonly': [('custom_is_submited_stage', '!=', False)]}"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Description" name="description">
+                                <field name="custom_description" attrs="{'readonly': [('custom_is_submited_stage', '!=', False)]}"/>
+                            </page>
+                            <page string="Proposal" name="proposal">
+                                <field name="custom_proposal" attrs="{'readonly': [('custom_is_submited_stage', '!=', False)]}"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <field name="custom_internal_note" />
+                </form>
+            </field>
+        </record>
+
+        <record id="custom_grant_seeker_application_tree_view" model="ir.ui.view">
+            <field name="name">grant.seeker.application.tree</field>
+            <field name="model">grant.seeker.application</field>
+            <field name="arch" type="xml">
+                <tree string="Grant Seeker Application">
+                    <field name="custom_name"/>
+                    <field name="custom_start_date"/>
+                    <field name="custom_end_date"/>
+                    <field name="custom_stage_id"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="custom_grant_seeker_application_kanban_view">
+            <field name="name">grant.seeker.application.kanban</field>
+            <field name="model">grant.seeker.application</field>
+            <field name="arch" type="xml">
+                <kanban default_group_by="custom_stage_id" class="o_kanban_small_column o_kanban_project_tasks" on_create="quick_create" examples="project">
+                    <field name="color"/>
+                    <field name="custom_stage_id"/>
+                    <field name="custom_name"/>
+                    <field name="custom_start_date"/>
+                    <field name="custom_end_date"/>
+                    <templates>
+                    <t t-name="kanban-box">
+                        <div t-attf-class="{{!selection_mode ? 'oe_kanban_color_' + kanban_getcolor(record.color.raw_value) : ''}} oe_kanban_card oe_kanban_global_click">
+                            <div class="oe_kanban_content">
+                                <div class="o_kanban_record_top">
+                                    <div class="o_kanban_record_headings">
+                                        <strong class="o_kanban_record_title"><field name="custom_name"/></strong>
+                                    </div>
+                                </div>
+                                <div class="o_kanban_record_body">
+                                    <strong><span class="o_label" style="color:red;">Start Date :</span><field name="custom_start_date"/></strong><br/>
+                                    <strong><span class="o_label" style="color:red;">End Date :</span><field name="custom_end_date"/></strong>
+                                </div>
+                            </div>
+                            <div class="oe_clear"></div>
+                        </div>
+                    </t>
+                    </templates>
+                </kanban>
+            </field>
+         </record>
+
+        <record id="custom_action_grant_seeker_application" model="ir.actions.act_window">
+            <field name="name">Grant Seeker Applications</field>
+            <field name="res_model">grant.seeker.application</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="view_id" ref="custom_grant_seeker_application_kanban_view"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a new grant seeker application.
+                </p>
+            </field>
+        </record>
+
+    </data>
+</odoo>

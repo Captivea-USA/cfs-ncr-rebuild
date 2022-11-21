@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="report_delivery_document_enhance" name="report_delivery_document_enhance" inherit_id="stock.report_delivery_document">
+
+        <!-- Remove Addresses -->
+        <xpath expr="//t[@t-set='address']" position="replace"/>
+
+
+        <!-- add field for PO number -->
+        <xpath expr="//div[@name='div_origin']" position="before">
+            <div t-if="o.purchase_id.name" class="col-auto" name="div_purchase_id_name">
+                <strong>CFS PO Number:</strong>
+                <p t-field="o.purchase_id.name" />
+            </div>
+        </xpath>
+        <!-- Change order to delivery number -->
+        <xpath expr="//div[@name='div_origin']/strong" position="replace">
+            <strong>Delivery Number:</strong>
+        </xpath>
+
+        <!-- Change Ordered to Quantity -->
+        <xpath expr="//table[@name='stock_move_line_table']//thead//th[@name='th_sml_qty_ordered']/strong" position="replace">
+            <strong>Quantity</strong>
+        </xpath>
+        <!-- change date format for shipping date -->
+        <xpath expr="//p[@t-field='o.scheduled_date']" position="attributes">
+            <attribute name="t-options">{"format": "MM/dd/yyyy"}</attribute>
+        </xpath>
+        <xpath expr="//p[@t-field='o.date_done']" position="attributes">
+            <attribute name="t-options">{"format": "MM/dd/yyyy"}</attribute>
+        </xpath>
+        <xpath expr="//div[@name='div_origin']" position="after">
+            <!-- add shipment date -->
+            <div t-if="o.create_date" class="col-auto" name="div_create_date">
+                <strong>Shipment Date:</strong>
+                <p t-field="o.create_date" t-options='{"format": "MM/dd/yyyy"}' />
+            </div>
+            <!-- add tracking number -->
+            <div t-if="o.carrier_tracking_ref" class="col-auto" name="div_tracking_number">
+                <strong>Tracking Number:</strong>
+                <p t-field="o.carrier_tracking_ref" />
+            </div>
+        </xpath>
+
+        <!-- Removes Delivered Column from Table -->
+        <xpath expr="//th[@name='th_sm_quantity']" position="replace"/>
+        <xpath expr="//table[@name='stock_move_table']//tbody//td[3]" position="replace"/>
+            
+        <!-- Change Ordered Col Header to Quantity -->
+        <xpath expr="//table[@name='stock_move_table']//thead//th[@name='th_sm_ordered']/strong" position="replace">
+            <strong>Quantity</strong>
+        </xpath>
+        
+    </template>
+
+</odoo>

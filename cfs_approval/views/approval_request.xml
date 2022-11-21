@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- EOI-466: Remove approval on Approval Requests -->
+        <record id="approval_request_form_inherit_cfs" model="ir.ui.view">
+            <field name="name">approval.request.form.inherit.cfs</field>
+            <field name="model">approval.request</field>
+            <field name="inherit_id" ref="approvals.approval_request_view_form" />
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='request_status']" position="attributes">
+                    <attribute name="statusbar_visible">new,approved,cancel</attribute>
+                </xpath>
+                <xpath expr="//button[@name='action_approve']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//button[@name='action_refuse']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <!-- EOI-463: Approval Request reason required -->
+                <xpath expr="//page[@name='description']" position="attributes">
+                    <attribute name="string">Reason</attribute>
+                </xpath>
+                <xpath expr="//field[@name='reason']" position="attributes">
+                    <attribute name="placeholder">Enter the reason for purchase, how you selected the vendor, and how you know the price is reasonable and fair. If you considered other options, describe them here.</attribute>
+                </xpath>
+                <!-- EOI377 - Remove cancel button if POs are canceled -->
+                <xpath expr="//button[@name='action_cancel']" position="before">
+                    <field name="po_canceled" invisible="1" />
+                </xpath>
+                <xpath expr="//button[@name='action_cancel']" position="attributes">
+                    <attribute name="attrs">{'invisible':['|', '|', ('po_canceled', '==', False),('request_status','in',['new','cancel']),'&amp;',('user_status','==',False),('has_access_to_request','==',False)]}</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- EOI-433: Change text in button to create draft PO -->
+        <record id="approval_purchase_request_view_form_inherit_inherit" model="ir.ui.view">
+            <field name="name">approval.purchase.request.view.form.inherit.inherit</field>
+            <field name="model">approval.request</field>
+            <field name="inherit_id" ref="approvals_purchase.approval_purchase_request_view_form_inherit"/>
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='action_create_purchase_orders']" position="attributes">
+                    <attribute name="string" >Create Draft PO'S</attribute>
+                    <attribute name="attrs">{'invisible': [('request_status', 'not in', ('pending','approved'))]}</attribute>
+                    <attribute name="groups"></attribute>
+                </xpath>
+            </field>
+        </record>
+        <!-- EOI-474: Changed that Buyer field can be edited -->
+        <record id="approval_product_line_waiting_view_tree" model="ir.ui.view">
+        <field name="name">approval.product.line.waiting.view.tree</field>
+        <field name="model">approval.product.line</field>
+        <field name="arch" type="xml">
+            <tree editable="bottom" multi_edit="1">
+                <field name="product_filter_ids" invisible='1'/>
+                <field name="approval_request_id" invisible="context.get('hide_approval_request_id', False)" readonly="1" widget="many2onebutton"/>
+                <field name="requester_id" optional="hide"/>
+                <field name="buyer_id" optional="hide" />
+                <field name="cap_need_date" optional="show"/>
+                <field name="is_hazardous" optional="hide" readonly="True" string=""/>
+                <field name="product_id" string="CFS Part" required="True" options="{'no_create': True}" domain="[('id','in',product_filter_ids)]"/>
+                <field name="cap_product_name" attrs="{'readonly': 1}"/>
+                <field name="cap_vendor_name" string="Vendor" optional="show"/>
+                <field name="cap_new_vendor_address" attrs="{'readonly': 1}"/>
+                <field name="cap_vendor_part" optional="show"/>
+                <field name="buyer_category_id" domain="[('parent_category','!=',False)]"
+                       options="{'no_create': True, 'no_create_edit':True, 'no_open': True}"
+                       attrs="{'required':[('procurement_type','=','indirect')]}"
+                       placeholder="(indirect only)"/>
+                <field name="description" optional="show"/>
+                <field name="quality_codes" optional="hide"  widget="many2many_tags" options="{'no_create': True}" 
+                       attrs="{'readonly':[('is_prod','=',True),]}" force_save="1"/>
+                <field name="quantity" optional="show" sum="Quantity" modifiers="{}"/>
+				<field name="procurement_type" invisible="1" />
+                <field name="cap_price"/>
+
+                <field name="is_prod" invisible="1"/>
+                <field name="cap_subtotal" optional="show" sum="Subtotal" modifiers="{}"/>
+            </tree>
+        </field>
+    </record>
+    </data>
+</odoo>

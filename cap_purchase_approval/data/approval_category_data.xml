@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- EOI-465: Delete base approval RFQ since base code has no update tag in XML it needs recreated-->
+        <delete id="approvals_purchase.approval_category_data_rfq" model='approval.category' />
+
+        <!-- EOI-331: Changed String from 'New Request' to 'Purchase Request' -->
+        <!-- EOI-465: Fixed Sequence Code to be PR and Persist-->
+        <record id="approval_category_data_rfq" model="approval.category">
+            <field name="sequence">999</field>
+            <field name="name">Purchase Request</field>
+            <field name="approval_type">purchase</field>
+            <field name="image" type="base64" file="approvals/static/src/img/shopping-cart-solid.svg"/>
+            <field name="sequence">80</field>
+            <field name="has_product">required</field>
+            <field name="has_quantity">required</field>
+            <field name="automated_sequence" eval="True"/>
+            <field name="sequence_code">PR/</field>
+        </record>
+     </data>
+</odoo>
+

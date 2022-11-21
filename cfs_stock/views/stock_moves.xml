@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="stock_warehouse_form_inherit_cfs_company_id" model="ir.ui.view">
+        <field name="name">stock.move.line.form.inherit.cfs.company.id</field>
+        <field name="model">stock.move.line</field>
+        <field name="inherit_id" ref="stock.view_move_line_form"/>
+        <field name="arch" type="xml">
+             <xpath expr="//field[@name='date']" position="after">
+                <field name="company_id" readonly="0"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

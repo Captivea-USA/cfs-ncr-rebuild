@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_project_team_custom_manager,access.project.team.custom.manager,model_project_project_team,project.group_project_manager,1,1,1,1
+access_project_team_custom_nogroup,access.project.team.custom.nogroup,model_project_project_team,,1,0,0,0
+

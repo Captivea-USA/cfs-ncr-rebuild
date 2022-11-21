@@ -1,0 +1,255 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 14.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-04-20 01:40+0000\n"
+"PO-Revision-Date: 2021-04-20 01:40+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+
+
+#. module: mrp
+#: model_terms:ir.ui.view,arch_db:mrp.mrp_production_form_view
+#: model_terms:ir.ui.view,arch_db:mrp.mrp_production_workorder_form_view_inherit
+msgid "<span class=\"o_stat_text\">Scraps</span>"
+msgstr "<span class=\"o_stat_text\">Non-Conformances</span>"
+
+
+#. module: mrp
+#: code:addons/mrp/models/mrp_production.py:0
+#: code:addons/mrp/models/mrp_workorder.py:0
+#: model:ir.model,name:mrp.model_stock_scrap
+#: model:ir.model.fields,field_description:mrp.field_mrp_workorder__scrap_ids
+#: model:ir.ui.menu,name:mrp.menu_mrp_scrap
+#: model_terms:ir.ui.view,arch_db:mrp.mrp_production_form_view
+#, python-format
+msgid "Scrap"
+msgstr "Non-Conformance"
+
+
+#. module: mrp
+#: model:ir.model.fields,field_description:mrp.field_mrp_production__scrap_count
+#: model:ir.model.fields,field_description:mrp.field_mrp_workorder__scrap_count
+msgid "Scrap Move"
+msgstr "Non-Conformance Move"
+
+#. module: mrp
+#: model:ir.model.fields,field_description:mrp.field_mrp_production__scrap_ids
+msgid "Scraps"
+msgstr "Non-Conformances"
+
+
+#. module: mrp
+#: model_terms:digest.tip,tip_description:mrp.digest_tip_mrp_0
+msgid ""
+"With the Odoo work center control panel, your worker can start work orders "
+"in the shop and follow instructions of the worksheet. Quality tests are "
+"perfectly integrated into the process. Workers can trigger feedback loops, "
+"maintenance alerts, scrap products, etc."
+msgstr ""
+"With the Odoo work center control panel, your worker can start work orders "
+"in the shop and follow instructions of the worksheet. Quality tests are "
+"perfectly integrated into the process. Workers can trigger feedback loops, "
+"maintenance alerts, send products to Non-Conformance, etc."
+
+
+#. module: stock
+#: code:addons/stock/models/stock_scrap.py:0
+#, python-format
+msgid ": Insufficient Quantity To Scrap"
+msgstr ": Insufficient Quantity for Non-Conformance"
+
+
+#. module: stock
+#: model:ir.model.fields,help:stock.field_stock_location__scrap_location
+#: model:ir.model.fields,help:stock.field_stock_move__scrapped
+msgid ""
+"Check this box to allow using this location to put scrapped/damaged goods."
+msgstr ""
+"Check this box to allow using this location to put non-conformed/damaged goods."
+
+
+
+#. module: stock
+#: model_terms:ir.ui.view,arch_db:stock.stock_warn_insufficient_qty_scrap_form_view
+msgid "Do you confirm you want to scrap"
+msgstr "Do you confirm you want to send to Non-Conformance"
+
+
+#. module: stock
+#: model:ir.model.fields,field_description:stock.field_stock_picking__has_scrap_move
+msgid "Has Scrap Moves"
+msgstr "Has Non-Conformance Moves"
+
+#. module: stock
+#: model:ir.model.fields,field_description:stock.field_stock_location__scrap_location
+msgid "Is a Scrap Location?"
+msgstr "Is a Non-Conformance Location?"
+
+
+#. module: stock
+#: code:addons/stock/models/stock_picking.py:0
+#: model:ir.model,name:stock.model_stock_scrap
+#: model:ir.model.fields,field_description:stock.field_stock_move__scrap_ids
+#: model:ir.model.fields,field_description:stock.field_stock_warn_insufficient_qty_scrap__scrap_id
+#: model:ir.ui.menu,name:stock.menu_stock_scrap
+#: model_terms:ir.ui.view,arch_db:stock.stock_scrap_form_view
+#: model_terms:ir.ui.view,arch_db:stock.stock_scrap_form_view2
+#: model_terms:ir.ui.view,arch_db:stock.view_picking_form
+#, python-format
+msgid "Scrap"
+msgstr "Non-Conformance"
+
+#. module: stock
+#: model:ir.model.fields,field_description:stock.field_stock_scrap__scrap_location_id
+#: model_terms:ir.ui.view,arch_db:stock.stock_scrap_search_view
+msgid "Scrap Location"
+msgstr "Non-Conformance Location"
+
+
+
+#. module: stock
+#: model:ir.model.fields,field_description:stock.field_stock_scrap__move_id
+msgid "Scrap Move"
+msgstr "Non-Conformance Move"
+
+#. module: stock
+#: model:ir.actions.act_window,name:stock.action_stock_scrap
+msgid "Scrap Orders"
+msgstr "Non-Conformance Orders"
+
+#. module: stock
+#: model_terms:ir.actions.act_window,help:stock.action_stock_scrap
+msgid "Scrap products"
+msgstr "Non-Conformance products"
+
+#. module: stock
+#: model:ir.model.fields,field_description:stock.field_stock_move__scrapped
+msgid "Scrapped"
+msgstr "Non-Conformed"
+
+#. module: stock
+#: model_terms:ir.actions.act_window,help:stock.action_stock_scrap
+msgid ""
+"Scrapping a product will remove it from your stock. The product will\n"
+"                end up in a scrap location that can be used for reporting purpose."
+msgstr ""
+"Sending this product to Non-Conformance will remove it from your stock. The product will\n"
+"                end up in a Non-Conformance location that can be used for reporting purpose."
+
+
+#. module: stock
+#: model_terms:ir.ui.view,arch_db:stock.view_picking_form
+msgid "Scraps"
+msgstr "Non-Conformances"
+
+#. module: stock
+#: model_terms:ir.ui.view,arch_db:stock.stock_scrap_search_view
+msgid "Search Scrap"
+msgstr "Search Non-Conformance"
+
+
+
+#. module: stock
+#: model:ir.model,name:stock.model_stock_warn_insufficient_qty_scrap
+msgid "Warn Insufficient Scrap Quantity"
+msgstr "Warn Insufficient Non-Conformance Quantity"
+
+
+#. module: stock
+#: code:addons/stock/models/stock_location.py:0
+#, python-format
+msgid ""
+"You cannot change the location type or its use as a scrap location as there "
+"are products reserved in this location. Please unreserve the products first."
+msgstr ""
+"You cannot change the location type or its use as a Non-Conformance location as there "
+"are products reserved in this location. Please unreserve the products first."
+
+
+#. module: stock
+#: code:addons/stock/models/stock_scrap.py:0
+#, python-format
+msgid "You cannot delete a scrap which is done."
+msgstr "You cannot delete a Non-Conformance which is done."
+
+
+#. module: maintenance
+#: model:maintenance.stage,name:maintenance.stage_4
+msgid "Scrap"
+msgstr "Non-Conformance"
+
+
+#. module: maintenance
+#: model:ir.model.fields,field_description:maintenance.field_maintenance_equipment__scrap_date
+msgid "Scrap Date"
+msgstr "Non-Conformance Date"
+
+
+#. module: mrp_workorder
+#: model_terms:ir.ui.view,arch_db:mrp_workorder.mrp_workorder_view_form_tablet_menu
+msgid "Scrap"
+msgstr "Non-Conformance"
+
+
+#. module: mrp_workorder
+#: model_terms:ir.actions.act_window,help:mrp_workorder.mrp_workorder_action_tablet
+msgid ""
+"Use the table work center control panel to register operations in the shop floor directly.\n"
+"            The tablet provides worksheets for your workers and allow them to scrap products, track time,\n"
+"            launch a maintenance request, perform quality tests, etc."
+msgstr ""
+"Use the table work center control panel to register operations in the shop floor directly.\n"
+"            The tablet provides worksheets for your workers and allow them to send products to Non-Conformance, track time,\n"
+"            launch a maintenance request, perform quality tests, etc."
+
+
+
+#. module: mrp_workorder_iot
+#: model:ir.model.fields.selection,name:mrp_workorder_iot.selection__iot_trigger__action__scrap
+msgid "Scrap"
+msgstr "Non-Conformance"
+
+
+
+#. module: mrp_account_enterprise
+#: model_terms:ir.ui.view,arch_db:mrp_account_enterprise.mrp_cost_structure
+msgid "<span>Scraps</span>"
+msgstr "<span>Non-Conformances</span>"
+
+
+
+#. module: mrp_account_enterprise
+#: model_terms:ir.ui.view,arch_db:mrp_account_enterprise.mrp_cost_structure
+msgid "<strong>Total Cost of Scraps</strong>"
+msgstr "<strong>Total Cost of Non-Conformance</strong>"
+
+
+#. module: mrp_account_enterprise
+#: model_terms:ir.ui.view,arch_db:mrp_account_enterprise.mrp_cost_structure
+msgid "Cost of Scraps"
+msgstr "Cost of Non-Conformance"
+
+
+#. module: stock_barcode
+#. openerp-web
+#: code:addons/stock_barcode/static/src/xml/qweb_templates.xml:0
+#: model:ir.model,name:stock_barcode.model_stock_scrap
+#, python-format
+msgid "Scrap"
+msgstr "Non-Conformance"
+
+
+
+
+
+

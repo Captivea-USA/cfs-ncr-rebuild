@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="budget_cross_line_button_view" model="ir.ui.view">
+            <field name="name">job.costing.form</field>
+            <field name="model">job.costing</field>
+            <field name="inherit_id" ref="odoo_job_costing_management.job_costing_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr = "//div[@name = 'button_box']" position="inside">
+                    <button class="oe_stat_button" type="object" string="Budget Lines" name="show_budget_line_custom"  icon="fa-tasks">
+                        </button>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="view_account_analytic_account_form_enhancement" model="ir.ui.view">
+            <field name="name">Analytic Account Form</field>
+            <field name="model">account.analytic.account</field>
+            <field name="inherit_id" ref="analytic.view_account_analytic_account_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='code']" position = "after">
+                    <field name = "user_id" />
+                    <field name = "show_in_budget_tab" />
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Footer templates -->
+    <template id="footer_custom" inherit_id="website.layout" name="Default" active="True">
+        <xpath expr="//div[@id='footer']" position="replace"/>
+    </template>
+</odoo>

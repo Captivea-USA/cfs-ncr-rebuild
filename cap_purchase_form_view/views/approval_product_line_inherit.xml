@@ -1,0 +1,71 @@
+<odoo>
+    <!-- Adding Need Date into O2M Tree -->
+    <record id="approval_product_line_view_tree_inherit" model="ir.ui.view">
+        <field name="name">approval.product.line.view.tree</field>
+        <field name="model">approval.product.line</field>
+        <field name="inherit_id" ref="approvals.approval_product_line_view_tree"/>
+        <field name="arch" type="xml">
+
+            <!-- EOI-474 - Remove Multi Edit From PR Tree -->
+            <xpath expr="//tree[1]" position="attributes">
+                <attribute name="editable"/>
+            </xpath>
+
+            <!-- EOI-332: Emptied the modifiers -->
+            <!-- EOI-341: Making it required, shouldn't be able to have an empty approval line submission -->
+            <xpath expr="//field[@name='product_id']" position="replace">
+                <field name="product_filter_ids" invisible='1'/>
+                <field name="product_id" string="CFS Part" required="True" options="{'no_create': True}" domain="[('id','in',product_filter_ids)]"></field>
+            </xpath>
+
+            <!-- EOI-447: Add parent_id != False domain to Category --> 
+            <xpath expr="//tree//field[@name='product_id']" position="after">
+                <field name="cap_product_name" attrs="{'readonly': 1}"/>
+                <field name="cap_vendor_name" string="Vendor" optional="show"/>
+                <field name="cap_new_vendor_address" attrs="{'readonly': 1}"/>
+                <field name="cap_vendor_part" optional="show"/>
+				<!-- erpprod233: remove option attribute from category so that its attributes can't be bypassed -->
+                <!-- eoi461: categ is required if product is indirect -->
+                <field name="procurement_type" invisible="1" />
+                <field name="buyer_category_id" domain="[('parent_category','!=',False)]"
+                       options="{'no_create': True, 'no_create_edit':True, 'no_open': True}"
+                       attrs="{'required':[('procurement_type','=','indirect')]}"
+                       placeholder="(indirect only)"/>
+            </xpath>
+
+
+            <xpath expr="//field[@name='description']" position="attributes">
+                <attribute name="optional">hide</attribute>
+            </xpath>
+
+            <xpath expr="//tree//field[@name='product_id']" position="before">
+                <!-- EOI-411: Fix approval menus and views -->
+                <!-- EOI-518: Fix RL/BQ menu domains -->
+                <field name="approval_request_id" invisible="context.get('hide_approval_request_id', False)" readonly="1" widget="many2onebutton"/>
+                <field name="requester_id" optional="hide"/>
+                <field name="buyer_id" optional="hide" />
+                <field name="cap_need_date" optional="show"/>
+                <!-- EOI-332: Making this visible again -->
+                <field name="is_hazardous" optional="hide" readonly="True" string=""/>
+            </xpath>
+
+            <xpath expr="//tree//field[@name='quantity']" position="replace">
+                <!-- EOI-534: Make Category non-optional -->
+                <!-- <field name="buyer_category_id"/> -->
+                <!-- <field name="quality_codes" optional="hide"/> -->
+                <field name="is_prod" invisible="1"/>
+                <field name="quality_codes" optional="hide"  widget="many2many_tags" options="{'no_create': True}" 
+                       attrs="{'readonly':[('is_prod','=',True),]}" force_save="1"/>
+                <field name="quantity" optional="show" sum="Quantity" modifiers="{}"/>
+                <xpath expr="//field[@name='product_uom_id']" position="move"/>
+                <field name="cap_price"/>
+                <field name="cap_subtotal" optional="show" sum="Subtotal" modifiers="{}"/>
+            </xpath>
+
+            <xpath expr="//field[@name='product_uom_id']" position="attributes">
+                <attribute name="string">UoM</attribute>
+            </xpath>
+            
+        </field>
+    </record>
+</odoo>

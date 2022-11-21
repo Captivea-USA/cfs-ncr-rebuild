@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record model="ir.actions.act_window" id="action_cost_sheet_line">
+            <field name="name">Cost Sheet Lines</field>
+            <field name="res_model">job.cost.line</field>
+            <field name="view_mode">tree,form</field>
+<!--            <field name="view_type">form</field> odoo13-->
+        </record>
+    </data>
+</odoo>

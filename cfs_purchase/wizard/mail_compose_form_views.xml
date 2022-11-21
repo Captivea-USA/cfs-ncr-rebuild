@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- 
+        EOI136
+        Pass vendor id in context to have it appear when create and edit is chosen
+     -->
+    <record id="approval_request_form_purchase_inherit_cfs" model="ir.ui.view">
+        <field name="name">mail_compose_message_form_view_purchase_inherit_cfs</field>
+        <field name="model">mail.compose.message</field>
+        <field name="inherit_id" ref="mail.email_compose_message_wizard_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='active_domain']" position="after">
+                <field name="vendor_id" invisible="1" />
+            </xpath>
+            <xpath expr="//field[@name='partner_ids']" position="attributes">
+                <attribute name="options">{'no_quick_create': True}</attribute>
+                <attribute name="context">{'force_email':True, 'show_email':True, 'default_vendor_id': vendor_id}</attribute>
+            </xpath>
+            <!-- EOI-531: Update followers text -->
+            <xpath expr="//span[@name='document_followers_text']" position="replace">
+                <span name="document_followers_text" attrs="{'invisible':['|', ('model', '=', False), ('composition_mode', '=', 'mass_mail')]}">Followers of the document </span>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

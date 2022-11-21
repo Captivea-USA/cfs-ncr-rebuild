@@ -1,0 +1,202 @@
+<odoo>
+<!--    ######FORM VIEW######-->
+    <record id="purchase_request_form_view" model="ir.ui.view">
+        <field name="name">purchase.request.form.view</field>
+        <field name="type">form</field>
+        <field name="model">purchase.order</field>
+        <field name="priority">98</field>
+        <field name="inherit_id" ref="purchase.purchase_order_form"/>
+        <field name="arch" type="xml">
+
+            <!-- EOI-356: Change String from Re-Send by Email to Email -->
+            <xpath expr="//button[@name='action_rfq_send' and @states='sent']" position="attributes">
+                <attribute name="string">Email</attribute>
+            </xpath>
+            <!-- EOI 345 remove fields -->
+            <xpath expr="//field[@name='fiscal_position_id']" position="replace"/>
+            <xpath expr="//field[@name='payment_term_id']" position="after">
+                <field name="fiscal_position_id" string="Default Tax Status"/>
+            </xpath>
+
+            <!-- EOI-356: Payment Term should be required -->
+            <xpath expr="//field[@name='payment_term_id']" position="attributes">
+                <attribute name="attrs">{'required':True}</attribute>
+            </xpath>
+
+            <!-- EOI-356: adding date widget to date_planned on PO Lines -->
+            <xpath expr="//tree//field[@name='date_planned']" position="attributes">
+                <attribute name="widget">date</attribute>
+            </xpath>
+          
+            <!-- EOI-356: Change String from Print RFQ to Print Draft PO -->
+            <xpath expr="//button[@name='print_quotation' and @states='draft']" position="attributes">
+                <attribute name="string">Print Draft PO</attribute>
+            </xpath>
+
+            <!-- EOI-356: Change String from Print RFQ to Print Draft PO -->
+            <xpath expr="//button[@name='print_quotation' and @states='sent']" position="attributes">
+                <attribute name="string">Print Draft PO</attribute>
+            </xpath>
+
+            <xpath expr="//sheet//div[@class='oe_title']//span" position="replace">
+                <span class="o_form_label" attrs="{'invisible': [('state','not in',('draft','sent'))]}">Draft Purchase Order </span>
+            </xpath>
+
+            <xpath expr="//field[@name='date_order']" position="replace">
+                <field name="date_order" widget='date' readonly='True'/>
+            </xpath>
+
+            <xpath expr="//label[@for='date_approve']" position="replace"/>
+            <xpath expr="//div[@name='date_approve']" position="replace"/>
+
+            <xpath expr="//field[@name='currency_id']" position="after">
+				<field name="cfs_default_product_line_tax" widget="many2many_tags" options="{'no_quick_create': True, 'no_create_edit' : True}" on_change="1" can_create="true" can_write="true" modifiers="{}" id="default_product_line_tax"/>
+            </xpath>
+
+            <xpath expr="//field[@name='currency_id']" position="before">
+                <field name="approval_request_id" readonly="1"/>
+            </xpath>
+
+            <!-- EOI-344: Justify T&C to the left -->
+            <xpath expr="//page[@name='products']/group" position="replace">
+                <group class="oe_subtotal_footer oe_right">
+                    <field name="tax_totals_json" widget="account-tax-totals-field" nolabel="1" colspan="2"/>
+                </group>
+                
+                <field name="notes" class="oe_inline col-6" nolabel="1" readonly="1" />
+            </xpath>
+
+
+<!--            ######NOTEBOOK######-->
+            <xpath expr="//field[@name='date_order']" position="attributes">
+                <!-- <attribute name="attrs">{'invisible': [('state','in',('purchase','done'))]}</attribute> -->
+                <attribute name="attrs">{'invisible': []}</attribute>
+            </xpath>
+
+            <!-- Copied from  cfs_purchase_overridegl-->
+            <xpath expr="//field[@name='order_line']/tree/field[@name='name']" position="after">
+                <!-- <field name="can_override_gl_categ" invisible='1'/>
+                <field name="can_override_gl" invisible='1'/> -->
+                <field name="override_account_id" required="0" 
+                        options="{'no_create': True,'no_open': True}" force_save="1" />
+            </xpath>
+            
+            
+            <xpath expr="//field[@name='partner_ref']" position="after">
+                <field name="cfs_buyer" required="1"/>
+            </xpath>
+
+            <xpath expr="//field[@name='date_order']" position="after">
+                <field name="cfs_released_by"/>
+                <field name="create_date" widget='date'/>
+                                <!-- EOI-428 1a) Made Vendor Shipping a required field  -->
+                <field name="cap_shipping_method"
+                        attrs="{'required': True}"/>
+                <field name="date_approve" 
+                        attrs="{'invisible': [('state','not in',('purchase','done'))]}" 
+                        class="o_row" 
+                        modifiers="{'invisible':[['state','not in',['purchase','done']]]}" 
+                        id="date_approve"/>
+            </xpath>
+
+            <xpath expr="//form[1]/sheet[1]/group[1]/group[2]/label[2]" position="attributes">
+                <attribute name="string">Need Date</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='receipt_reminder_email']" position="replace">
+                <field name="receipt_reminder_email" modifiers="{}" id="receipt_reminder_email"/>
+            </xpath>
+
+            <xpath expr="//div[@name='reminder']//span" position="replace">
+                <span>Request email confirmation</span>
+            </xpath>
+
+            <xpath expr="//field[@name='company_id']" position="after">
+                <field name="cfs_rejected"/>
+            </xpath>
+
+            <xpath expr="//field[@name='origin']" position="attributes">
+                <attribute name="attrs">{'invisible': [('origin','=',False)]}</attribute>
+            </xpath>
+
+            <!-- EOI-349: Adding Budgets Page for Approver Logic -->
+            <!-- EOI-549: Fix Adding Notes to PO -->
+            <xpath expr="//page[@name='products']" position="before">
+                <page string="Budgets" name="budgets">
+                    <group>
+                        <!-- eoi586 - add no create options -->
+                        <field name="analytic_id" required="True" domain="[['show_in_budget_tab','=',True]]"  options="{'no_create': True, 'no_create_edit':True}"/>
+                        <field name="requester_id" string="Requester" required="True" readonly="False" invisible="False"/>
+                    </group>
+                </page>
+            </xpath>
+
+<!--            ######PURCHASE ORDER LINES######-->
+
+            <!-- EOI-428: 5a) Moved Line field (cfs_line_number) to far left of PO lines, and made optional (hidden by default)-->
+            <xpath expr="//field[@name='order_line']/tree[1]/field[@name='product_id']" position="before">
+                <field name="cfs_line_number" optional="hide"/>
+            </xpath>
+
+            <xpath expr="//field[@name='order_line']/tree[1]/field[@name='product_id']" position="after">
+                <field name="cfs_product_name"/>
+            </xpath>
+          
+            <!-- EOI-356: Making Incoterm + Payment Terms required -->
+            <xpath expr="//field[@name='incoterm_id']" position="attributes">
+                <attribute name="attrs">{'required':True}</attribute>
+            </xpath>
+
+            <!-- EOI-356: Fixing Delivery Date String -->
+            <xpath expr="//tree//field[@name='date_planned']" position="attributes">
+                <attribute name="string">Need Date</attribute>
+            </xpath>
+
+            <!-- EOI-345: Add fields for PO Lines -->
+            <!-- EOI-428: 3) Add free_description field to PO lines -->
+            <!-- EOI-372: Warehouse onchange action events -->
+            <xpath expr="//field[@name='order_line']/tree[1]/field[@name='name']" position="after">
+                <field name="free_description"/>
+                <field name="cfs_vendor_part"/>
+                <field name="cfs_equipment" optional="1"/>
+                <!-- <field name="cfs_quality_codes" optional="1" readonly="1"/> -->
+                <field name="is_prod" invisible="1"/>
+                <field name="cfs_quality_codes" widget="many2many_tags" optional="show" attrs="{'readonly': ['|',('is_prod','=',True),('parent.state','=','purchase')]}"/>
+                <field name="buyer_category_id"/>
+               <field name="cfs_tracking" optional="1"/>
+            </xpath>
+
+            <!-- [FIX][EOI496] Fix Part Description column title -->
+            <xpath expr="//field[@name='order_line']/tree[1]/field[@name='name']" position="attributes">
+                <attribute name="string">Part Description</attribute>>
+            </xpath>
+            <!-- EOI-428: 4) Taxes field (taxes_id) made required -->
+            <xpath expr="//field[@name='order_line']/tree[1]/field[@name='taxes_id']" position="attributes">
+               <attribute name="attrs">{'required':[('display_type','=', False)]}</attribute>
+            </xpath>
+
+            <!-- EOI-345: Add fields for PO Lines -->
+            <!-- EOI-428: 6a) Requester field on PO Lines made required -->
+            <xpath expr="//field[@name='order_line']/tree[1]/field[@name='taxes_id']" position="after">
+               <field name="requester_id" required='True' />
+               <field name="cfs_request_origin" optional="1"/>
+            </xpath>
+
+            <!-- EOI-341: Add Expand Button -->
+            <!-- EOI-353: Add Additional Payment Terms -->
+            <xpath expr="//field[@name='notes']" position="before">
+                <button name="open_po_lines" 
+                        type="object" 
+                        class="btn btn-link" 
+                        icon="fa-expand"  
+                        string="Expand" />
+                        <div class="oe_clear" />
+                <field name="cap_po_notes"
+                       placeholder="Define Variations (if any) to standard terms and conditions ..."/>
+            </xpath>
+
+        </field>
+    </record>
+
+
+</odoo>

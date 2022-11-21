@@ -1,0 +1,16 @@
+<odoo>
+    <data>
+        <!--EOI 439-->
+        <record id="stock_warehouse_form_inherit_cfs" model="ir.ui.view">
+            <field name="name">Stock Warehouse Form Inherit CFS</field>
+            <field name="model">stock.warehouse</field>
+            <field name="inherit_id" ref="stock.view_warehouse"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='code']" position ="after">
+                    <field name="wh_type"/>
+                    <field name="private" attr="{invisible: [('wh_type','!=','remote')]}"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

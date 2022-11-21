@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- EOI-348: Change fields and attributes in the stock.putaway tree view -->
+    <record id="stock_putaway_list_inherit_cfs" model="ir.ui.view">
+        <field name="name">stock.putaway.rule.tree.inherit.cfs</field>
+        <field name="model">stock.putaway.rule</field>
+        <field name="inherit_id" ref="stock.stock_putaway_list"/>
+        <field name="arch" type="xml">
+
+            <!-- EOI-348: product_id string is now 'CFS Part' and required -->
+            <xpath expr="//field[@name='product_id']" position="attributes">
+                <attribute name="string">CFS Part</attribute>
+                <attribute name="required">True</attribute>
+            </xpath>
+
+            <!-- EOI-348: Dynamic requirement pulled from UATv14 -->
+            <xpath expr="//field[@name='category_id']" position="replace">
+                <field name="category_id" 
+                    attrs="{'readonly': [('product_id', '!=', False)], 'required': [('product_id', '=', False)]}" 
+                    options="{'no_create': True, 'no_open': True}" 
+                    readonly="context.get('fixed_category', False)" 
+                    force_save="1"/>            
+            </xpath>
+
+            <xpath expr="//field[@name='category_id']" position="after">
+                <xpath expr="//field[@name='location_in_id']" position="move"/>
+            </xpath>
+
+                
+
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,8 @@
+<odoo>   
+    <!-- create submenu on purchase order module -->
+    <menuitem id="menu_buyer"
+            name="Buyer Categories"
+            parent="purchase.menu_product_in_config_purchase"
+            action="buyer_action"            
+            />
+</odoo>

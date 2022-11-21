@@ -1,0 +1,19 @@
+<odoo>
+    <!-- create an automated action to validate that certain location can be set as restricted -->
+    <data noupdate="1">
+            <record id="validate_restricted_location" model="base.automation">
+            <field name="name">Location Validation</field>
+            <field name="model_id" ref="stock.model_stock_location"/>
+            <field name="state">code</field>
+            <field name="code">
+                for rec in records:
+                    rec.validation_restricted_location()
+            </field>
+            <field name="trigger">on_create_or_write</field>
+            <field name="active" eval="True"></field>
+            <field name="filter_domain">[("cfs_restricted_location","=", True)]</field>
+        </record>
+    </data>
+    
+
+</odoo>

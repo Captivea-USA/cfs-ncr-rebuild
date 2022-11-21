@@ -1,0 +1,17 @@
+<odoo>
+<!-- EOI-362: Changed Action to cfs_purchase_rfq -->
+    <menuitem
+        id="purchase.menu_purchase_rfq"
+        action="cfs_purchase_rfq"
+        name="Draft Purchase Orders"
+        parent="purchase.menu_procurement_management"
+        sequence="0"/>
+        <!-- eoi 593 add purchase order lines menu item -->
+        <menuitem
+        id="purchase_order_lines"
+        action="purchase_order_lines_action"
+        name="Purchase Order Lines"
+        parent="purchase.menu_procurement_management"
+        sequence="2"/>
+
+</odoo>

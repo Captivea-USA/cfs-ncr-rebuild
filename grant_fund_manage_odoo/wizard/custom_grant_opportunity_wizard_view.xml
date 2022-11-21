@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="custom_grant_opportunity_wizard_form" model="ir.ui.view">
+            <field name="name">custom.grant.opportunity.wizard</field>
+            <field name="model">custom.grant.opportunity.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Create Grant Application Request">
+                    <sheet>
+                        <p class="oe_grey"><b>This wizard will allow you to select your customers and requrest for grant using grant application request. You can then send them proposal invidially.</b></p>
+                        <field name="partners_ids"/>
+                    </sheet>
+                    <footer>
+                        <button name="create_custom_grant_opportunity" type="object" string="Create" default_focus="1"
+                            class="btn-primary"/>
+                        <button string="_Cancel" class="btn-default" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="custom_action_grant_opportunity_wizard" model="ir.actions.act_window">
+            <field name="name">Create Grant Application Request</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">custom.grant.opportunity.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="custom_grant_opportunity_wizard_form"/>
+            <field name="target">new</field>
+        </record>
+    </data>
+</odoo>

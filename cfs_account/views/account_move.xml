@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- EOI-413: Filter Bill vendor to only include companies-->
+    <record id="account_move_view_form_inherit_cfs" model="ir.ui.view">
+        <field name="name">account_move_view_form_inherit_cfs</field>
+        <field name="inherit_id" ref="account.view_move_form" />
+        <field name="model">account.move</field>
+        <field name="arch" type="xml">
+            <!-- EOI-413: Filter Bill vendor to only include companies-->
+            <xpath expr="//field[@name='partner_id']" position="attributes">
+                <attribute name="domain">[('is_company', '=', True),('company_id', 'in', [company_id, False])]</attribute>
+            </xpath>
+        </field>
+    </record>
+</odoo>

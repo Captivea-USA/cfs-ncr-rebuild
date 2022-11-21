@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- EOI-387: Add cfs_autoexec module -->
+    <!-- TODO: This does not actually work and has been omitted in the manifest -->
+    <!-- This is because these groups are not being found by XML ID for
+    uknown reason. These will need to be addressed when adding permissions. -->
+    <data>
+        <record id="cfs_group_owner_design" model="res.groups">
+            <field name="name">Inventory --> Design Owner</field>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+        <record id="cfs_group_owner_mfg" model="res.groups">
+            <field name="name">Inventory --> Manufacturing Owner</field>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+
+        <record id="cfs_group_owner_procurement" model="res.groups">
+            <field name="name">Inventory --> Procurement Owner</field>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+        <record id="cfs_group_owner_planner" model="res.groups">
+            <field name="name">Inventory --> Planner</field>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+    </data>
+</odoo>

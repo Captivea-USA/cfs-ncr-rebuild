@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- Sequences for ncr -->
+        <record id="seq_ncr" model="ir.sequence">
+            <field name="name">NCR</field>
+            <field name="code">ncr</field>
+            <!-- <field name="prefix">NCR</field> -->
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+    </data>
+</odoo>

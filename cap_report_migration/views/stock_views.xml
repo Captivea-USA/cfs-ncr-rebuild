@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+
+    <record id="view_picking_form_inherit" model="ir.ui.view">
+        <field name="name">stock_picking.view_picking_form_inherit</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form" />
+        <field name="arch" type="xml">
+            <!-- EOI-360: Remove duplicate 'location_dest_id' -->
+            <xpath expr="//field[@name='location_dest_id']" position="after">
+                <field name="rma" />
+            </xpath>
+
+            <xpath expr="//button[@name='button_validate']" position="attributes">
+                <attribute name="groups"></attribute>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

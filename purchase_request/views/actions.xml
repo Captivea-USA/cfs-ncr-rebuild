@@ -1,0 +1,62 @@
+<odoo>
+
+    <!-- EOI-296: Inheriting Window Actions and changing their names -->
+    <record id="purchase.action_rfq_form" model="ir.actions.act_window">
+        <field name="name">Draft Purchase Orders</field>
+    </record>
+
+    <record id="purchase.purchase_rfq" model="ir.actions.act_window">
+        <field name="name">Draft Purchase Orders</field>
+    </record>
+
+    <!-- EOI-362: Update domain on Draft Purchase Orders-->
+    <!-- EOI-498: Update domin to include draft, sent and is_approved -->
+    <record id="cfs_purchase_rfq" model="ir.actions.act_window">
+        <field name="name">Draft Purchase Orders</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">purchase.order</field>
+        <field name="view_mode">tree,kanban,form,pivot,graph,calendar,activity</field>
+        <field name="view_id" ref="draft_purchase_request_list_view"/>
+        <field name="domain">[('state','in',['draft', 'sent', 'to approve', 'to reapprove'])]</field>
+        <field name="search_view_id" ref="purchase.view_purchase_order_filter"/>
+        <field name="context">{'quotation_only': True}</field>
+    </record> 
+
+    <record id="purchase.purchase_action_dashboard_list" model="ir.actions.act_window">
+        <field name="name">Draft Purchase Orders</field>
+    </record>
+
+    <record id="purchase.purchase_action_dashboard_kanban" model="ir.actions.act_window">
+        <field name="name">Draft Purchase Orders</field>
+    </record>
+
+    <!-- eoi593 - purchase order lines action window -->
+    <record id="purchase_order_lines_action" model="ir.actions.act_window">
+        <field name="name">Purchase Order Lines</field>
+        <field name="res_model">purchase.order.line</field>
+        <field name="view_mode">tree,form</field>
+        <field name="target">current</field>
+        <field name="help" type="html">
+            <p>Line items on purchase orders</p>
+        </field>
+    </record>
+
+    <!-- EOI-362: Update domain on Purchase Orders and Draft Orders -->
+    <!-- EOI-498: Update domin to exclude draft, sent -->
+    <record id="purchase.purchase_form_action" model="ir.actions.act_window">
+        <field name="domain">[("state","not in",["draft","sent"])]</field>
+    </record>
+
+    <!-- EOI-345: Server Action Recreate Burdens -->
+    <record id="rfqs_recreate_burden_action" model="ir.actions.server">
+        <field name="name">Recreate Burdens</field>
+        <field name="model_id" ref="purchase.model_purchase_order"/>
+        <field name="binding_model_id" ref="purchase.model_purchase_order"/>
+        <field name="binding_view_types">list,form</field>
+        <field name="state">code</field>
+        <field name="code"> 
+        </field>
+    </record>
+
+
+</odoo>

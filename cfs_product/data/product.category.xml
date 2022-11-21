@@ -1,0 +1,25 @@
+<odoo>
+  <data>
+    <function name="write" model="ir.model.data">
+      <function name="search" model="ir.model.data">
+        <value eval="[('module','=','product'),('name','in',['product_category_all','cat_expense','product_category_1'])]" />
+      </function>
+      <value eval="{'noupdate': False}" />
+    </function>
+
+    <record id="product.cat_expense" model="product.category">
+      <field name="parent_id" eval="False" />
+      <field name="name">Indirect</field>
+      <field name="can_override_gl_categ">True</field>
+    </record>
+
+    <function name="write" model="ir.model.data">
+      <function name="search" model="ir.model.data">
+        <value eval="[('module','=','product'),('name','in',['product_category_all','cat_expense','product_category_1'])]" />
+      </function>
+      <value eval="{'noupdate': True}" />
+    </function>
+  </data>
+</odoo>
+  
+  

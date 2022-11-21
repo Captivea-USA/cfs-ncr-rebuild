@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <menuitem 
+            name="Grant" 
+            id="custom_grant_main_menu" 
+            web_icon="grant_fund_manage_odoo,static/description/icon.png"
+            groups="sales_team.group_sale_salesman,project.group_project_user,account.group_account_invoice"
+        />
+        <menuitem 
+            name="Grant Seeker Applications" 
+            id="custom_grant_seeker_main_menu" 
+            parent="custom_grant_main_menu" 
+            sequence="1" 
+        />
+        <menuitem 
+            name="Grant Seeker Applications" 
+            id="custom_grant_seeker_menu" 
+            parent="custom_grant_seeker_main_menu" 
+            sequence="1" 
+            action="grant_fund_manage_odoo.custom_action_grant_seeker_application"
+        />
+        <menuitem 
+            name="Grant Proposal Applications" 
+            id="custom_grant_proposal_applications_menu" 
+            parent="custom_grant_seeker_main_menu" 
+            sequence="2" 
+            action="grant_fund_manage_odoo.custom_action_grant_proposal_applications"
+        />
+        <menuitem 
+            name="Grant Maker" 
+            id="custom_grant_maker_opportunity_menu" 
+            parent="custom_grant_main_menu" 
+            sequence="2" 
+        />
+        <menuitem 
+            name="Received Grant Applications" 
+            id="custom_received_grant_applications_menu" 
+            parent="custom_grant_maker_opportunity_menu" 
+            sequence="1" 
+            action="grant_fund_manage_odoo.custom_action_open_grant_opportunity"
+        />
+        <menuitem 
+            name="Configuration" 
+            id="custom_configation_menu" 
+            parent="custom_grant_main_menu" 
+            sequence="10"
+        />
+        <menuitem 
+            name="Grant Application Stages" 
+            id="custom_grant_stages_menu" 
+            parent="custom_configation_menu" 
+            sequence="1" 
+            action="grant_fund_manage_odoo.custom_action_grant_stages"
+        />
+        <menuitem 
+            name="Application Team" 
+            id="custom_application_team_menu" 
+            parent="custom_configation_menu" 
+            sequence="2" 
+            action="grant_fund_manage_odoo.custom_action_open_application_team"
+        />
+        <menuitem 
+            name="Project Team" 
+            id="custom_project_team_menu" 
+            parent="custom_configation_menu" 
+            sequence="3" 
+            action="grant_fund_manage_odoo.custom_action_open_project_team"
+        />
+        <menuitem 
+            name="Grant Types" 
+            id="custom_grant_types_menu" 
+            parent="custom_configation_menu" 
+            sequence="3" 
+            action="grant_fund_manage_odoo.custom_action_grant_types"
+        />
+        <menuitem 
+            name="Grant Methods" 
+            id="custom_grant_methods_menu" 
+            parent="custom_configation_menu" 
+            sequence="4" 
+            action="grant_fund_manage_odoo.custom_action_grant_methods"
+        />
+        <menuitem 
+            name="Grant Tags" 
+            id="custom_grant_tags_menu" 
+            parent="custom_configation_menu" 
+            sequence="5" 
+            action="grant_fund_manage_odoo.custom_action_grant_tags"
+        />
+    </data>
+</odoo>

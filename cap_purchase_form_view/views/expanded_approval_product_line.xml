@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- EOI-341: Add Expanded Tree View -->
+    <record id="approval_product_line_view_tree_expanded_inherit" model="ir.ui.view">
+        <field name="name">approval.product.line.view.tree.expanded.inherit</field>
+        <field name="model">approval.product.line</field>
+        <field name="type">tree</field>
+        <field name="arch" type="xml">
+            <tree string="Purchase Request Lines" editable="bottom" multi_edit="1">
+                <field name="approval_request_id" string="ARid" invisible="1"/>
+                <field name="cap_warehouse" string="Ship To" modifiers="{}"/>
+                <field name="product_filter_ids" invisible='1'/>
+                <field name="product_id" string="CFS Part" required="True" options="{'no_create': True}"/>
+                <field name="cap_vendor_name" string="Vendor"/>
+                <field name="cap_new_vendor_address"  string="Address" attrs="{'readonly': 1}"/>
+                <field name="cap_vendor_part" string="Vendor Part"/>
+                <field name="description" string="Description"/>
+                <field name="is_indirect" invisible="1"/>
+                <field name="buyer_category_id" optional="show" attrs="{'required':[('is_indirect','=', True)]}"/>
+                <field name="quality_codes" widget="many2many_tags" optional="show"/>
+                <field name="commodity_code" optional="hide"/>
+                <field name="quantity" optional="hide"/>
+                <field name="product_uom_id" optional="hide" string="UoM"/>
+                <field name="product_uom_category_id" invisible="1"/>
+                <field name="cap_price" optional="hide"/>
+                <field name="cap_subtotal" widget="monetary"/>
+                <field name="prior_purchase_order" optional="hide"/>
+                <field name="current_purchase_order" optional="hide"/>
+                <field name="request_status" optional="hide" string="Status"/>
+                <field name="buyer_id" optional="hide"/>
+                <field name="cap_need_date"/>
+                <field name="date_promised"/>
+            </tree>
+        </field>
+    </record>
+
+
+</odoo>

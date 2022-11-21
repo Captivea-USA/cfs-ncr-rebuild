@@ -1,0 +1,10 @@
+<odoo>
+    <data noupdate="1">
+        <record id="custom_grant_seeker_application_user_rule" model="ir.rule">
+            <field name="name">All Grant Seeker Application</field>
+            <field ref="model_grant_seeker_application" name="model_id"/>
+            <field name="domain_force">[(1,'=',1)]</field>
+            <field name="groups" eval="[(4, ref('sales_team.group_sale_salesman')),(4, ref('account.group_account_invoice')),(4, ref('project.group_project_user')),(4, ref('purchase.group_purchase_user'))]"/>
+        </record>
+    </data>
+</odoo>

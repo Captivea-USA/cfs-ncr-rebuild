@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- #EOI 443 - Email Acknowledge -->
+    <data noupdate="1">
+        <record id="cancel_email_template_purchase" model="mail.template">
+            <field name="name">Purchase Order: Cancellation Email</field>
+            <field name="model_id" ref="purchase.model_purchase_order"/>
+            <field name="subject">{{object.company_id.name}} Order (Ref ${{object.name or 'n/a' }})</field>
+            <field name="partner_to">{{object.partner_id.id}}</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p style="box-sizing:border-box;margin: 0px; padding: 0px; font-size: 13px;">
+                        Dear <t t-out="object.partner_id.name" data-oe-t-inline="true" contenteditable="false">N/A</t>
+                        <br/>
+                        <br/>
+                        This email is to cancel the purchase order of <strong t-out="object.name or ''" style="box-sizing:border-box;font-weight:500;" contenteditable="false">N/A</strong>
+                        <t t-if="object.partner_ref" data-oe-t-group-active="true" data-oe-t-group="0" data-oe-t-inline="true">
+                        with reference: <t t-out="object.partner_ref or ''" data-oe-t-inline="true" contenteditable="false">N/A</t>
+                        </t>
+                        from <t t-out="object.company_id.name or ''" data-oe-t-inline="true" contenteditable="false">N/A</t>. 
+                        <br/>
+                        <br/>
+                        If you have any questions, please do not hesitate to contact us.
+                        <br/>
+                        <br/>
+                        Best regards,
+                    </p>
+                </div>
+            </field>
+            <field name="lang">${object.partner_id.lang}</field>
+            <field name="auto_delete" eval="True"/>
+        </record>
+    </data>
+</odoo>

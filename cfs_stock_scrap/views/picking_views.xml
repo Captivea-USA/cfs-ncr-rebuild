@@ -1,0 +1,27 @@
+<odoo>
+    <data noupdate="1">
+        <record id="view_picking_form_inherit_cfs" model="ir.ui.view">
+            <field name="name">stock.picking.form.inherit.cfs</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.view_picking_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[@name='button_box']/button[@name='action_picking_move_tree']" position="after">
+                    <button name="action_view_tickets"
+                        type="object"
+                        class="oe_stat_button"
+                        icon="fa-ticket icon"
+                        attrs="{'invisible': [('ticket_count', '=', 0)]}">
+                        <field name="ticket_count" widget="statinfo" string="Tickets"/>
+                    </button>
+                    <button name="action_view_return_tickets"
+                        type="object"
+                        class="oe_stat_button"
+                        icon="fa-ticket icon"
+                        attrs="{'invisible': [('return_ticket_count', '=', 0)]}">
+                        <field name="return_ticket_count" widget="statinfo" string="Tickets"/>
+                    </button>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

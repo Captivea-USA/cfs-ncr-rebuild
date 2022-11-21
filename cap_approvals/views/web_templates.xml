@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+<!-- #EOI 443 - Email Acknowledge -->
+    <data noupdate="1">
+        <template id="template_response_recorded">
+            <t t-call="website.layout">
+                <t t-set="title">Email Acknowledgement</t>
+                <div class="oe_structure">
+                    <div class="container" style="padding:50px;">
+                        <h1>Thank you for your response.</h1>
+                        <h5>Your response has been recorded: <b><t t-esc="answer"/></b></h5>
+                    </div>
+                </div>
+            </t>
+        </template>
+        <template id="template_unknown_user">
+            <t t-call="website.layout">
+                <t t-set="title">Email Acknowledgement</t>
+                <div class="oe_structure">
+                    <div class="container" style="padding:50px;">
+                        <h1>You are not logged in</h1>
+                        <h5>Please first log into Odoo using <t t-esc="base_url" /> and then use this acknowledgement link</h5>
+                    </div>
+                </div>
+            </t>
+        </template>
+
+    </data>
+</odoo>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- List View -->
+    <record id="ncr_type_tree_view" model="ir.ui.view">
+      <field name="name">ncr.type.tree.view</field>
+      <field name="type">tree</field>
+      <field name="model">ncr.type</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>
+          <field name="cfs_use_when"/>
+        </tree>
+      </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="ncr_type_form_view" model="ir.ui.view">
+      <field name="name">ncr.type.form.view</field>
+      <field name="type">form</field>
+      <field name="model">ncr.type</field>
+      <field name="arch" type="xml">
+        <form>
+          <sheet>
+            <group>
+              <group>
+                <field name="name"/>
+                <field name="cfs_use_when"/>
+              </group>
+              <group>
+                
+              </group>
+            </group>
+          </sheet>
+        </form>
+      </field>
+    </record>
+
+    <!-- Search -->
+    <record id="ncr_type_search" model="ir.ui.view">
+        <field name="name">ncr.type.search</field>
+        <field name="model">ncr.type</field>
+        <field name="type">search</field>
+        <field name="arch" type="xml">
+            <search>
+
+            </search>
+        </field>
+    </record>
+
+</odoo>

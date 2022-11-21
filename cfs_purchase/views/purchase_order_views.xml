@@ -1,0 +1,32 @@
+<odoo>
+    <data>
+        <record id="purchase_order_form_inherit_cfs_dev" model="ir.ui.view">
+            <field name="name">purchase.order.form.inherit.cfs</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.purchase_order_form" />
+            <field name="arch" type="xml">
+                <!-- ITERP243: Add close button -->
+                <xpath expr="//button[@name='button_unlock']" position="after">
+                    <!-- EOI497: include hide_button and is_editable fields to be able to hide the edit button on the PO form view -->
+                    <field name="hide_button" nolabel="1"/>
+                    <field name="is_editable" invisible="1"/>
+                    <!-- only show reset if the state is closed and the previous state is not null -->
+                    <field name="previous_state" invisible="True" />
+                    <!-- todo: this button should be restricted to the buyers group when available -->
+                    <button name="button_reset" type="object" string="Reset" attrs="{'invisible':['|', ('state', '!=', 'closed'), ('previous_state', '=', False)]}" />
+                </xpath>
+                <!-- EOI-434: Removed Tax ID from the end of the Vendor field (UAT also adds {'show_email': True, 'show_status': True} to context) -->
+                <field name="partner_id" position="attributes">
+                    <attribute name="context">{'res_partner_search_mode': 'supplier', 'show_vat': False}</attribute>
+                    <attribute name="options">{'always_reload': True}</attribute>
+                    <!-- EOI-383: Restrict PO Vendor selection to only companies -->
+                    <attribute name="domain">[('is_company', '=', True)]</attribute>
+                </field>
+                <!-- EOI-554: No create and quick create on vendor field -->
+                <xpath expr="//field[@name='partner_id']" position="attributes">
+                    <attribute name="options">{'no_create': True, 'no_create_edit':True}</attribute>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data>
+
+<!-- EOI-605: Fix autoexec installation -->
+<!-- CUSTOM MODULES -->
+<record id="autoexecute_action_custom" 
+        model="ir.actions.server">
+  <field name="name">1 - AutoExec (Custom)</field>
+  <field name="model_id" ref="base.model_ir_actions_server"></field>
+  <field name="state">code</field>
+  <field name="code">
+def install(modules):
+  for module in modules:
+    if module.state in ['uninstalled','to upgrade','to install']:
+      module.button_immediate_install()
+
+# Setup base Company
+env.ref('base.main_company').sudo().write({'country_id': env.ref('base.us').id, 'currency_id': env.ref('base.USD').id })
+
+# CFS Modules
+modules = env['ir.module.module'].search([
+  '|',('name','ilike','cfs%'),('name','ilike','cap%')
+])
+
+# Install modules
+install(modules)
+  </field>
+</record>
+
+  </data>
+</odoo>
+

@@ -1,0 +1,17 @@
+<odoo>
+    <data>
+        <record id="custom_sale_order_form_inherit_grant" model="ir.ui.view">
+            <field name="name">sale.order.inherit.grant</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//notebook//page[@name='other_information']//group[@name='sale_reporting']" position="after">
+                    <group string="Grant Info" name="grant_info">
+                        <field name="custom_grant_application_id"/>
+                        <field name="custom_grant_lead_id"/>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="custom_grant_stages_form_view" model="ir.ui.view">
+            <field name="name">grant.stages.form</field>
+            <field name="model">grant.stages</field>
+            <field name="arch" type="xml">
+                <form string="Grant Stages">
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="custom_name"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="fold"/>
+                                <field name="custom_sequence"/>
+                            </group>
+                            <group>
+                                <field name="custom_is_submited"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="custom_grant_stages_tree_view" model="ir.ui.view">
+            <field name="name">grant.stages.tree</field>
+            <field name="model">grant.stages</field>
+            <field name="arch" type="xml">
+                <tree string="Grant Stages">
+                    <field name="custom_sequence"/>
+                    <field name="custom_name"/>
+                    <field name="fold"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="custom_action_grant_stages" model="ir.actions.act_window">
+            <field name="name">Grant Application Stages</field>
+            <field name="res_model">grant.stages</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="custom_grant_stages_tree_view"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a new grant stages.
+                </p>
+            </field>
+        </record>
+
+    </data>
+</odoo>

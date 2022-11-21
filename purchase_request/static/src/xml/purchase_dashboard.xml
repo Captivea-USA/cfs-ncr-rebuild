@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- EOI-315: Inheriting PurchaseDashboard to reflect Draft POs -->
+
+<!-- Modifying the Purchase Order Dashboard -->
+<templates>
+    <t t-name='PurchaseDashboard' t-inherit="purchase.PurchaseDashboard" t-inherit-mode="extension">
+        <!-- Change 'All RFQs' -->
+        <xpath expr="//thead//tr//td[@class='o_text']" position="replace">
+            <td class="o_text">
+                <div>All Draft POs</div>
+            </td>
+        </xpath>
+
+        <!-- Change 'My RFQs' -->
+        <xpath expr="//tbody//tr//td[@class='o_text']" position="replace">
+            <td class="o_text">
+                <div>My Draft POs</div>
+            </td>
+        </xpath>
+
+        <!-- Change 'RFQs Sent Last 7 Days' -->
+        <xpath expr="//div[@class='col-sm-7']//table//tbody//tr//td[3]" position="replace">
+            <td class="o_text">Draft POs Sent Last 7 Days</td>
+        </xpath>
+    </t>
+</templates>
+
+

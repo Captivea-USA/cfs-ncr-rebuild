@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+   <!-- Form View -->
+    <record id="ncr_quality_check_form_view" model="ir.ui.view">
+      <field name="name">ncr.quality.check.form.view</field>
+      <field name="type">form</field>
+      <field name="model">quality.check</field>
+      <field name="inherit_id" ref="quality_control.quality_check_view_form"/>
+      <field name="arch" type="xml">
+        <xpath expr="//button[6]" position="after">
+          <button name="new_ncr" type="object" class="btn-primary" attrs="{'invisible': [('quality_state', '!=', 'fail')]}" string="New NCR"/>
+        </xpath>
+        <xpath expr="//button[@name='action_see_alerts']" position="before">
+            <button name="action_see_ncrs" icon="fa-pencil-square-o" type="object" class="oe_stat_button" attrs="{'invisible': [('cfs_ncr_count', '=', 0)]}">
+              <field name="cfs_ncr_count" string="NCRs" widget="statinfo"/>
+            </button>
+        </xpath>
+        <xpath expr="//form/sheet/group/group/div[3]" position="after">
+            <field name="cfs_qty_failed" string="QTY Failed"/>
+        </xpath>
+      </field>
+    </record>
+</odoo>

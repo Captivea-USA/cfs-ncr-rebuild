@@ -1,0 +1,13 @@
+<odoo>
+    <data noupdate="1">
+        <record id="scrap_reason_damaged" model="stock.scrap.reason">
+            <field name="name">Damaged while processing</field>
+        </record>
+        <record id="scrap_reason_supplier" model="stock.scrap.reason">
+            <field name="name">Supplier caused issue</field>
+        </record>
+        <record id="scrap_reason_non_scrap" model="stock.scrap.reason">
+            <field name="name">Obsolete (financial scrap)</field>
+        </record>
+    </data>
+</odoo>

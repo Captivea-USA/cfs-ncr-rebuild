@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- EOI-388: Add remittance emails -->
+        <record id="mail_template_data_payment_receipt_enhance" model="mail.template">
+            <field name="name">Vendor Payment Receipts</field>
+            <field name="model_id" ref="account.model_account_payment" />
+            <field name="partner_to">{{object.partner_id.id}}</field>
+            <field name="subject">{{object.company_id.name}} Order (Ref {{object.name or 'n/a' }})</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                        Dear <t t-out="object.partner_id.name"/>
+                        <br /><br />
+                        Good news! Your payment is now on its way for
+                        <strong>invoice <t t-out="object.move_id.ref"/></strong> amounting to
+                        <strong><t t-out="format_amount(object.amount, object.currency_id)"/></strong>.
+                        Your payment is being sent via 
+                        <!-- ERPPROD-199 - Change NACHA text to ACH on remittance emails -->
+                        <t t-if="object.payment_method_id.name == 'NACHA'">
+                            <strong>ACH</strong>.
+                        </t>
+                        <t t-else="">
+                            <strong><t t-out="object.payment_method_id.name"/></strong>.
+                        </t>
+                        <!-- Test if the are any credits and iterate if there are. ERPPROD81 -->
+                        <t t-if="object.vendor_credit_ids">
+                            <br /><br />
+                            The net payment amount of <t t-out="format_amount(object.amount, object.currency_id)"/> is being sent after the application of credit number(s) 
+                            <br />
+                            <t t-foreach="object.vendor_credit_ids" t-as="credit">
+                                <strong><t t-out="credit.ref"/></strong> in the amount of <strong><t t-out="format_amount(credit.amount_total, object.currency_id)"/></strong> <br />
+                            </t>
+                        </t>
+                        <br /><br />
+                        If you are being paid by check, we recommend that you login to the CFS vendor portal and enter your ACH payment information to ensure that moving forward, you are paid in the quickest and most secure manner. Alternatively, you may send 
+                        ACH payment information on official company letterhead to <strong>ap@cfs.energy</strong> and we can enter it on your profile.
+                        <br /><br />
+                        Please reach out to kturner@cfs.energy if you need assistance accessing our vendor portal.
+                        <br /><br />
+                        Please reach out to ap@cfs.energy if you have any questions or concerns regarding your payment.
+                        <br /><br />
+                        All the best,
+                        <br />
+                        Commonwealth Fusion Systems LLC
+                        <br />
+                    </p>
+                </div>
+            </field>
+            <field name="report_template" ref="account.action_report_payment_receipt" />
+            <field name="report_name">{{(object.name or '').replace('/','-')}}</field>
+            <field name="lang">{{object.partner_id.lang}}</field>
+            <field name="auto_delete" eval="False" />
+        </record>
+
+        <record id="cfs_bank_account_verification_email" model="mail.template">
+            <field name="name">Finance -> New/Updated Bank Account</field>
+            <field name="model_id" ref="cfs_account.model_res_partner_bank" />
+            <field name="email_to">{{ctx['email_to']}}</field>
+            <field name="subject">{{ctx['subject']}}</field>
+            <field name="body_html" type="xml">
+                <div style="margin: 0px; padding: 0px;">
+                    <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                        <t t-out="ctx.get('email_body_header')"/><br/><br/>
+                        View it here: <a href="{{ctx.get('email_link')}}"><t t-out="ctx.get('email_link')"/></a><br/><br/>
+                        All the best,<br/>
+                        Commonwealth Fusion Systems LLC<br/>
+                    </p>
+                </div>
+            </field>
+            <field name="auto_delete" eval="False" />
+        </record>
+    </data>
+</odoo>

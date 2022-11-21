@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- <report 
+            id="action_report_grant_seeker"
+            string="Grant Seeker Application"
+            model="grant.seeker.application" 
+            report_type="qweb-pdf"
+            file="grant_fund_manage_odoo.report_grant_seeker" 
+            name="grant_fund_manage_odoo.report_grant_seeker"
+        /> -->
+        <!-- <report 
+            id="action_report_grant_seeker_lead"
+            string="Grant Seeker Application"
+            model="crm.lead" 
+            report_type="qweb-pdf"
+            file="grant_fund_manage_odoo.report_grant_seeker_lead" 
+            name="grant_fund_manage_odoo.report_grant_seeker_lead"
+            menu="False"
+        /> -->
+        <record id="action_report_grant_seeker" model="ir.actions.report">
+            <field name="name">Grant Seeker Application</field>
+            <field name="model">grant.seeker.application</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">grant_fund_manage_odoo.report_grant_seeker</field>
+            <field name="report_file">grant_fund_manage_odoo.report_grant_seeker</field>
+            <field name="binding_model_id" ref="model_grant_seeker_application"/>
+            <field name="binding_type">report</field>
+        </record>
+        
+        <record id="action_report_grant_seeker_lead" model="ir.actions.report">
+            <field name="name">Grant Seeker Application</field>
+            <field name="model">crm.lead</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">grant_fund_manage_odoo.report_grant_seeker_lead</field>
+            <field name="report_file">grant_fund_manage_odoo.report_grant_seeker_lead</field>
+            <field name="binding_model_id" ref="model_crm_lead"/>
+            <field name="binding_type">report</field>
+        </record>
+    </data>
+</odoo>

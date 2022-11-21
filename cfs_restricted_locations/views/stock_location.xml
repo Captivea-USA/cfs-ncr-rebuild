@@ -1,0 +1,24 @@
+<odoo>
+  <data>
+
+    <!-- make visible the boollean field in the location form, thus the user can make it a restricted location -->
+    <record id="stock_location_form_inherit" model="ir.ui.view">
+      <field name="name">stock.location.form.inherit</field>
+      <field name="model">stock.location</field>
+      <field name="inherit_id" ref="stock.view_location_form"/>
+      <field name="arch" type="xml">
+
+        <!-- EOI-348: Change label for scrap_location -->
+        <xpath expr="//field[@name='scrap_location']" position="replace">
+          <field name="scrap_location" 
+                string="Is a Non-Conformance Location?"
+                attrs="{'invisible': [('usage', 'not in', ('inventory', 'internal'))]}" 
+                modifiers="{&quot;invisible&quot;: [[&quot;usage&quot;, &quot;not in&quot;, [&quot;inventory&quot;, &quot;internal&quot;]]]}"/>
+          <field name="cfs_restricted_location"></field>
+        </xpath>
+
+      </field>
+    </record>
+    
+  </data>
+</odoo>

@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- EOI-328: Adds Views and Menu Items all relating to Certification and it's Smart Button -->
+    <menuitem id="menu_certificate" name="Certifications Category" parent="purchase.menu_purchase_config" sequence="5"/>
+
+    <record id="view_partner_certification_type_list" model="ir.ui.view">
+        <field name="name">Vendor Certification Types cfs</field>
+        <field name="model">res.partner.certification.type</field>
+        <field name="arch" type="xml">
+
+<tree multi_edit='1' editable="top">
+    <field name="name"/>
+</tree>
+
+        </field>
+    </record>
+
+    <record id="action_partner_certification_type_cfs" model="ir.actions.act_window">
+        <field name="name">Vendor certification Types</field>
+        <field name="res_model">res.partner.certification.type</field>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="view_partner_certification_type_list"/>
+    </record>
+
+    <menuitem id="menu_partner_certification_type_cfs" name="Certification Types" parent="menu_certificate"
+        action="action_partner_certification_type_cfs" sequence="10"/>
+
+    <record id="view_partner_certification_list" model="ir.ui.view">
+        <field name="name">Vendor Certifications cfs</field>
+        <field name="model">res.partner.certification</field>
+        <field name="type">tree</field>
+        <field name="arch" type="xml">
+
+<tree multi_edit='1'>
+    <field name="sequence" widget="handle"/>
+    <field name="partner_id"/>
+    <field name="name"/>
+    <field name="type"/>
+    <field name="date_start"/>
+    <field name="date_end"/>
+</tree>
+
+        </field>
+    </record>
+
+
+    <record id="view_partner_certification_search" model="ir.ui.view">
+        <field name="name">Vendor Certifications cfs</field>
+        <field name="model">res.partner.certification</field>
+        <field name="type">search</field>
+        <field name="arch" type="xml">
+
+<search>
+    <field name="partner_id"/>
+    <field name="name"/>
+    <field name="type"/>
+    <field name="date_end"/>
+</search>
+
+        </field>
+    </record>
+
+
+    <record id="view_partner_certification_form" model="ir.ui.view">
+        <field name="name">Vendor Certifications cfs</field>
+        <field name="model">res.partner.certification</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="partner_id" context="{'default_supplier_rank': 1}"/>
+                            <field name="name"/>
+                            <field name="type"/>
+                        </group>
+                        <group>
+                            <field name="date_start"/>
+                            <field name="date_end"/>
+                        </group>
+                    </group>
+                </sheet>
+                <div class="oe_chatter" name="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="message_ids"/>
+                    <field name="activity_ids"/>
+                </div>
+            </form>
+
+        </field>
+    </record>
+
+
+    <record id="action_partner_certification_cfs" model="ir.actions.act_window">
+        <field name="name">Vendor Certifications</field>
+        <field name="res_model">res.partner.certification</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="view_partner_certification_list"/>
+    </record>
+
+
+    <menuitem id="menu_partner_certification_cfs" name="Certifications" parent="menu_certificate"
+        action="action_partner_certification_cfs" sequence="5"/>
+
+    <record id="view_partner_buttons_inherit" model="ir.ui.view">
+        <field name="name">res.partner.cert.buttons.custom_cfs</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="model">res.partner</field>
+        <field name="arch" type="xml">
+
+            <div name="button_box" position="inside">
+                <button class="oe_stat_button" name="%(action_partner_certification_cfs)d" type="action" groups="purchase.group_purchase_user" 
+                        icon="fa-calendar-check-o" context="{'search_default_partner_id': [active_id]}">
+                    <field string="Certifications" name="cert_count" widget="statinfo"/>
+                </button>
+            </div>
+
+        </field>
+    </record>
+
+</odoo>

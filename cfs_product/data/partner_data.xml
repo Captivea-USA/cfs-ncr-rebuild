@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="newven" model="res.partner">
+            <field name="name">New Vendor</field>
+            <field name="ref">NEWVEN</field>
+            <field name="supplier_rank">1</field>
+        </record>
+
+    </data>
+</odoo>

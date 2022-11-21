@@ -1,0 +1,11 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_ncr,access.ncr,model_ncr,base.group_user,1,1,1,1
+access_ncr_location,access.ncr.location,model_ncr_location,base.group_user,1,1,1,1
+access_ncr_source,access.ncr.source,model_ncr_source,base.group_user,1,1,1,1
+access_ncr_reason,access.ncr.reason,model_ncr_reason,base.group_user,1,1,1,1
+access_ncr_severity,access.ncr.severity,model_ncr_severity,base.group_user,1,1,1,1
+access_ncr_sme,access.ncr.sme,model_ncr_sme,base.group_user,1,1,1,1
+access_ncr_disposition,access.ncr.disposition,model_ncr_disposition,base.group_user,1,1,1,1
+access_ncr_stage,access.ncr.stage,model_ncr_stage,base.group_user,1,1,1,1
+access_ncr_type,access.ncr.type,model_ncr_type,base.group_user,1,1,1,1
+"base.access_ir_model_user","ir_model_all","base.model_ir_model",base.group_user,1,0,0,0

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="stock_warehouse_form_inherit_cfs" model="ir.ui.view">
+        <field name="name">stock.warehouse.form.inherit.cfs</field>
+        <field name="model">stock.warehouse</field>
+        <field name="inherit_id" ref="stock.view_warehouse"/>
+        <field name="arch" type="xml">
+            <field name="code" position="after">
+                <field name="wh_type"/>
+                <field name="private" attr="{invisible: [('wh_type','!=','remote')]}"/>
+            </field>
+        </field>
+    </record>
+</odoo>

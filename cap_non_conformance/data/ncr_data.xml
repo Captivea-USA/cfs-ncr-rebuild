@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+
+<!-- STAGES -->
+    <record model="ncr.stage" id="stage_1">
+        <field name="name">Draft</field>
+        <field name="sequence">1</field>
+    </record>
+    <record model="ncr.stage" id="stage_2">
+        <field name="name">Released</field>
+        <field name="sequence">2</field>
+    </record>
+    <record model="ncr.stage" id="stage_3">
+        <field name="name">Approval Pending</field>
+        <field name="sequence">3</field>
+    </record>
+    <record model="ncr.stage" id="stage_4">
+        <field name="name">Dispositioned</field>
+        <field name="sequence">4</field>
+    </record>
+    <record model="ncr.stage" id="stage_5">
+        <field name="name">Corrected</field>
+        <field name="sequence">5</field>
+    </record>
+    <record model="ncr.stage" id="stage_6">
+        <field name="name">Verified</field>
+        <field name="sequence">6</field>
+    </record>
+    <record model="ncr.stage" id="stage_7">
+        <field name="name">Closed</field>
+        <field name="sequence">7</field>
+        <field name="fold" eval="False"/>
+    </record>
+
+<!-- TYPES -->
+    <record model="ncr.type" id="type_1">
+        <field name="name">Internal Quality (Purchased)</field>
+        <field name="cfs_use_when">A purchased material fails a Quality inspection step</field>
+    </record>
+    <record model="ncr.type" id="type_2">
+        <field name="name">Manufacturing (Part)</field>
+        <field name="cfs_use_when">A part is found to be non-conforming on the manufacturing floor</field>
+    </record>
+    <record model="ncr.type" id="type_3">
+        <field name="name">Manufacturing (Sub-assembly)</field>
+        <field name="cfs_use_when">A sub-assembly is found to be non-conforming on the manufacturing floor</field>
+    </record>
+    <record model="ncr.type" id="type_4">
+        <field name="name">Stand Alone</field>
+        <field name="cfs_use_when">A non-conformance is discovered without an inspection</field>
+    </record>
+    <record model="ncr.type" id="type_5">
+        <field name="name">Vendor Initiated Non-Conformance</field>
+        <field name="cfs_use_when">A vendor discovers a non-conformance prior to shipment to CFS</field>
+    </record>
+
+<!-- DISPOSITIONS -->
+    <record model="ncr.disposition" id="disposition_1">
+        <field name="name">RTV - Credit</field>
+        <field name="cfs_description">Return to Vendor for a credit; physical or logical (for HTS only)</field>
+    </record>
+    <record model="ncr.disposition" id="disposition_2">
+        <field name="name">RTV - Credit (scrap)</field>
+        <field name="cfs_description">Scap locally per vendor's instructions for a credit; in lieu of a physical return</field>
+    </record>
+    <record model="ncr.disposition" id="disposition_3">
+        <field name="name">Rework - Internal</field>
+        <field name="cfs_description">Rework material for original use; same part</field>
+    </record>
+    <record model="ncr.disposition" id="disposition_4">
+        <field name="name">Repair - Internal</field>
+        <field name="cfs_description">Repair material for original use; same part</field>
+    </record>
+    <record model="ncr.disposition" id="disposition_5">
+        <field name="name">Transship</field>
+        <field name="cfs_description">Ship to vendor defined location for a credit; like an RTV-Credit with an alternative ship-to address</field>
+    </record>
+    <record model="ncr.disposition" id="disposition_6">
+        <field name="name">Regrade</field>
+        <field name="cfs_description">To a different part number</field>
+    </record>
+    <record model="ncr.disposition" id="disposition_7">
+        <field name="name">Use As Is</field>
+        <field name="cfs_description">Agreed concession; move to stock</field>
+    </record>
+    <record model="ncr.disposition" id="disposition_8">
+        <field name="name">Scrap</field>
+        <field name="cfs_description">Scrap material and expense</field>
+    </record>
+    <record model="ncr.disposition" id="disposition_9">
+        <field name="name">RTV - Analysis</field>
+        <field name="cfs_description">Return to Vendor for analysis of the non-conformance; expected material to be sent back to CFS</field>
+    </record>
+    <record model="ncr.disposition" id="disposition_10">
+        <field name="name">RTV - Rework</field>
+        <field name="cfs_description">Return to Vendor for rework of the material; expected material to be sent back to CFS</field>
+    </record>
+    <record model="ncr.disposition" id="disposition_11">
+        <field name="name">RTV - Repair</field>
+        <field name="cfs_description">Return to Vendor for repair of the material; expected material to be sent back to CFS</field>
+    </record>
+
+<!-- LOCATIONS -->
+    <record model="ncr.location" id="location_1">
+        <field name="name">CFS-1</field>
+    </record>
+    <record model="ncr.location" id="location_2">
+        <field name="name">CFS-2</field>
+    </record>
+    <record model="ncr.location" id="location_3">
+        <field name="name">Somerville</field>
+    </record>
+    <record model="ncr.location" id="location_4">
+        <field name="name">Milpitas</field>
+    </record>
+    <record model="ncr.location" id="location_5">
+        <field name="name">External/Vendor</field>
+    </record>
+
+<!-- REASONS -->
+    <record model="ncr.reason" id="reason_1">
+        <field name="name">Dimensional</field>
+    </record>
+    <record model="ncr.reason" id="reason_2">
+        <field name="name">Visual/Appearance</field>
+    </record>
+    <record model="ncr.reason" id="reason_3">
+        <field name="name">Documentation</field>
+    </record>
+    <record model="ncr.reason" id="reason_4">
+        <field name="name">Process Non Compliance</field>
+    </record>
+    <record model="ncr.reason" id="reason_5">
+        <field name="name">QMS Non Compliance</field>
+    </record>
+    <record model="ncr.reason" id="reason_6">
+        <field name="name">Welding Defect</field>
+    </record>
+    <record model="ncr.reason" id="reason_7">
+        <field name="name">Design Error</field>
+    </record>
+    <record model="ncr.reason" id="reason_8">
+        <field name="name">Quantity Error</field>
+    </record>
+    <record model="ncr.reason" id="reason_9">
+        <field name="name">Material</field>
+    </record>
+    <record model="ncr.reason" id="reason_10">
+        <field name="name">Performance</field>
+    </record>
+    <record model="ncr.reason" id="reason_11">
+        <field name="name">Damage</field>
+    </record>
+    <record model="ncr.reason" id="reason_12">
+        <field name="name">Other Technical Non-Conformance</field>
+    </record>
+
+<!-- SEVERITY LEVELS -->
+    <record model="ncr.severity" id="severity_1">
+        <field name="name">Critical</field>
+        <field name="cfs_severity_code">L1</field>
+        <field name="cfs_description">A critical non-conformance impacts the critical path or primary functionality of a system in the product breakdown structure.</field>
+    </record>
+    <record model="ncr.severity" id="severity_2">
+        <field name="name">Major</field>
+        <field name="cfs_severity_code">L2</field>
+        <field name="cfs_description">A major non-conformance impacts the form, fit, function, safety, reliability of a system or its interfacing systems or schedule over 30 days, potentially costs over $100k, or presents a process break down.</field>
+    </record>
+    <record model="ncr.severity" id="severity_3">
+        <field name="name">Minor</field>
+        <field name="cfs_severity_code">L3</field>
+        <field name="cfs_description">Non-conformances that do not fall in the above 2 categories or in L4.</field>
+    </record>
+    <record model="ncr.severity" id="severity_4">
+        <field name="name">Minor Rework</field>
+        <field name="cfs_severity_code">L4</field>
+        <field name="cfs_description">Minor manufacturing rework that is required to bring the non-conforming item back into specification and does not impact the schedule by more than 1 week.</field>
+    </record>
+
+<!-- SOURCES -->
+    <record model="ncr.source" id="source_1">
+        <field name="name">Receiving &amp; Inspection</field>
+    </record>
+    <record model="ncr.source" id="source_2">
+        <field name="name">Manufacturing</field>
+    </record>
+    <record model="ncr.source" id="source_3">
+        <field name="name">Final Inspection</field>
+    </record>
+    <record model="ncr.source" id="source_4">
+        <field name="name">Acceptance Testing</field>
+    </record>
+    <record model="ncr.source" id="source_5">
+        <field name="name">Installation</field>
+    </record>
+    <record model="ncr.source" id="source_6">
+        <field name="name">Assembly</field>
+    </record>
+    <record model="ncr.source" id="source_7">
+        <field name="name">Commissioning</field>
+    </record>
+    <record model="ncr.source" id="source_8">
+        <field name="name">Internal Audit</field>
+    </record>
+    <record model="ncr.source" id="source_9">
+        <field name="name">External Audit</field>
+    </record>
+    <record model="ncr.source" id="source_10">
+        <field name="name">Operation</field>
+    </record>
+    <record model="ncr.source" id="source_11">
+        <field name="name">Vendor Initiated</field>
+    </record>
+
+</odoo>

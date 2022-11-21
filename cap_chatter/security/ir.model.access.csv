@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_res_partner_bank,access.res.partner.bank,model_res_partner_bank,base.group_user,1,0,0,0
+access_res_partner_certification,access.res.partner.certification,model_res_partner_certification,base.group_user,1,1,1,1
+access_res_partner_certification_type,access.res.partner.certification.type,model_res_partner_certification_type,base.group_user,1,1,1,1

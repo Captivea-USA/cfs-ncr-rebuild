@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="filter_info_template_inherit" inherit_id="account_reports.filter_info_template">
+        <xpath expr="//div/div[1]" position="replace"/>
+        <xpath expr="//div/div[1]" position="before">
+            <div class="col-6">
+                <t t-if="options.get('date') and options['date'].get('string')"><t t-esc="options['date']['string']"/></t>
+                <t t-if="not options.get('multi_company') and not options.get('customize_multi_company')">
+                    <br/><t t-esc="report.get('company_name')"/>
+                </t>
+                <t t-if="options.get('date') and options['date'].get('current_date')"><br/><t t-esc="options['date']['current_date']"/></t>
+                <t t-if="options.get('multi_company')">
+                    <br/>Companies:
+                    <t t-set="company_value">All</t>
+                    <t t-foreach="options['multi_company']" t-as="c">
+                        <t t-set="company_value" t-value="''"/>
+                        <t t-esc="c.get('name')"/>
+                    </t>
+                    <t t-esc="company_value"/>
+                </t>
+                <t t-if="options.get('customize_multi_company')">
+                    <br/>Companies:
+                    <t t-set="company_value">All</t>
+                    <t t-set="cnt" t-value="0"/>
+                    <t t-set="company_value" t-value=""/>
+                    <t t-foreach="options['customize_multi_company']" t-as="c">
+                        <t t-if="cnt == 0">
+                            <t t-set="company_value" t-value="c.get('name')"/>
+                        </t>
+                        <t t-if="cnt > 0">
+                            <t t-set="company_value" t-value="company_value + ' | ' + c.get('name')"/>
+                        </t>
+                        <t t-set="cnt" t-value="cnt+1"/>
+                    </t>
+                    <t t-esc="company_value"/>
+                </t>
+            </div>
+        </xpath>
+    </template>
+
+    <template id="main_table_header_inherit" inherit_id="account_reports.main_table_header">
+        <xpath expr="//thead[hasclass('o_account_reports_header_hierarchy')]" position="before">
+            <t t-if="'multi_company' in options and options['multi_company'] and 'customize_multi_company' in options">
+                <thead class="mt32">
+                    <strong>Consolidated Report: </strong><br/>
+                    <t t-set="all_company" t-value=""/>
+                    <t t-set="cnt" t-value="0"/>
+                    <t t-foreach="options['multi_company']" t-as="company">
+                        <t t-if="cnt == 0">
+                            <t t-set="all_company" t-value="company.get('name')"/>
+                        </t>
+                        <t t-if="cnt > 0">
+                            <t t-set="all_company" t-value="all_company + ' | ' +company.get('name')"/>
+                        </t>
+                        <t t-set="cnt" t-value="cnt+1"/>
+                    </t>
+                    <th style="border: none !important;"><span class="float-left"><t t-esc="all_company"/></span></th>
+                </thead>
+            </t>
+        </xpath>
+        <xpath expr="//thead[hasclass('o_account_reports_header_hierarchy')]" position="after">
+            <t t-if="'customize_header' in options and options['customize_header']">
+                <thead class="mt32">
+                    <th style="border: none !important;"><span class="float-right"><t t-esc="options['customize_header']['period_range']"/><span style="margin-left: 30px;"/><t t-esc="options['customize_header']['company']"/></span></th>
+                    <th style="width:20%; border: none !important;"><span class="float-right"><t t-esc="options['customize_header']['current_date_time']"/></span></th>
+                </thead>
+            </t>
+        </xpath>
+    </template>
+</odoo>

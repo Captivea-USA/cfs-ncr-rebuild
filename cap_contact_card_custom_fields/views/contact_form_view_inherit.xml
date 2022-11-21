@@ -1,0 +1,236 @@
+<odoo>
+    <!-- Replicate the form view on UAT v14 to v15 -->
+    <record id="base_view_partner_form_inherit" model="ir.ui.view">
+            <field name="name">base.view.partner.form.inherit</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+
+                <!-- EOI-328: Change 'Website' to 'Website Link' -->
+                <xpath expr="//field[@name='website']" position="attributes">
+                  <attribute name="string">Website Link</attribute>
+                </xpath>
+
+                <!-- EOI-328: Make bank_ids readonly -->
+                <xpath expr="//field[@name='bank_ids']" position="attributes">
+                  <attribute name="readonly">True</attribute>
+                </xpath>
+                 
+                <!-- Replicate left side form UAT  -->
+                <xpath expr="//form[1]/sheet[1]/group[1]/group[1]/field[@name='vat']" position="replace"/>
+                    <xpath expr="//span[@name='address_name']" position="before">
+                    <field name="employee"/>
+                    <field name="ref" required="True"/>
+                    <field name="doing_business_as"/>
+                    <field name="is_grantor"/>
+                </xpath>
+
+                <!-- EOI 245: Hides company_type field after saving -->
+                <xpath expr="//field[@name='company_type']" position="replace">
+                  <field name="company_type" widget="radio" class="oe_edit_only" options="{'horizontal': true}" on_change="1" modifiers="{}" id="company_type"/>
+                </xpath>
+
+                <!-- EOI 245: Changing the Kanban View in Contacts & Addresses to List View -->
+                <!-- EOI-328: Make 'child_ids' field readonly -->
+                <xpath expr="//field[@name='child_ids']" position="replace">
+                  <field name="child_ids" mode="tree"
+                         context="{'default_parent_id': active_id, 'default_street': street,
+                        'default_street2': street2, 'default_city': city, 'default_state_id': state_id, 'default_zip': zip,
+                        'default_country_id': country_id, 'default_lang': None, 'default_user_id': user_id, 'default_type': 'other'}">
+                    <tree string="Contacts" sample="1" multi_edit="1">
+                      <field name="type" string="Type"/><field name="name" string="Name"/>
+                      <field name="function" invisible="1"/><field name="phone" class="o_force_ltr" optional="show"/>
+                      <field name="email" optional="show"/>
+                      <field name="user_id" optional="show" widget="many2one_avatar_user" domain="[('share', '=', False)]"/>
+                      <field name="city" optional="show"/><field name="state_id" optional="hide" readonly="1"/>
+                      <field name="country_id" optional="show" readonly="1"/>
+                    </tree>
+                    <form string="Contact / Address">
+                      <sheet>
+                        <field name="type" required="1" widget="radio" options="{'horizontal': true}"/>
+                        <field name="parent_id" invisible="1"/>
+                        <hr/>
+                        <group col="12">
+                          <group colspan="5">
+                            <field name="name" string="Contact Name" attrs="{'required' : [('type', '=', 'contact')]}"/>
+                            <field name="title" placeholder="e.g. Mr." attrs="{'invisible': [('type','!=', 'contact')]}"/>
+                            <field name="function" placeholder="e.g. Sales Director" attrs="{'invisible': [('type','!=', 'contact')]}"/>
+                            <label for="street" string="Address" attrs="{'invisible': [('type','=', 'contact')]}"/>
+                            <div attrs="{'invisible': [('type','=', 'contact')]}">
+                              <div class="o_address_format" name="div_address">
+                                <field name="street" placeholder="Street..." class="o_address_street"/>
+                                <field name="street2" placeholder="Street 2..." class="o_address_street"/>
+                                <field name="city" placeholder="City" class="o_address_city"/>
+                                <field name="state_id" class="o_address_state" placeholder="State" options="{'no_open': True, 'no_quick_create': True}" 
+                                      context="{'country_id': country_id, 'default_country_id': country_id, 'zip': zip}"/>
+                                <field name="zip" placeholder="ZIP" class="o_address_zip"/>
+                                <field name="country_id" placeholder="Country" class="o_address_country" 
+                                      options="{'no_open': True, 'no_quick_create': True}"/>
+                              </div>
+                            </div>
+                            <field name="comment" placeholder="Internal notes..."/>
+                          </group>
+                          <group colspan="5">
+                            <field name="email" widget="email"/><field name="phone" widget="phone"/>
+                            <field name="mobile" widget="phone"/><field name="company_id" invisible="1"/>
+                          </group>
+                          <group colspan="1">
+                            <field name="image_1920" widget="image" class="oe_avatar" nolabel="1" options="{'image_preview': 'image_128'}"/>
+                          </group>
+                        </group>
+                        <field name="lang" invisible="True"/><field name="user_id" invisible="True"/>
+                      </sheet>
+                    </form>
+                  </field>
+                </xpath>
+
+                <!-- EOI 245: Change Address span to Company Address -->
+                <xpath expr="//span[@name='address_name']" position="replace">
+                  <span class="o_form_label o_td_label" name="address_name">
+                    <field name="type" class="font-weight-bold" on_change="1" invisible="1" modifiers="{&quot;invisible&quot;: true}"/>
+                    <b attrs="{'invisible': [('is_company', '=', False)]}" modifiers="{&quot;invisible&quot;: [[&quot;is_company&quot;, &quot;=&quot;, false]]}">Company Address</b>
+                  </span>
+                </xpath>
+
+                <!-- Change field name from Fiscal Position to Default Tax Status -->
+                <xpath expr="//field[@name='property_account_position_id']" position="attributes">
+                  <attribute name="string">Default Tax Status</attribute>
+                </xpath>
+
+                <!-- EOI-245: Removed by studio in AP2 however may need code in Main -->
+                <!-- <xpath expr="//field[@name='type']" position="replace"/> -->
+                <xpath expr="//field[@name='function']" position="replace"/>
+                
+                <!-- Replicate the layout of Sales & Purchase -->
+                <!-- Sales section  -->
+                <xpath expr="//form[1]/sheet[1]/notebook[1]/page[@name='sales_purchases']/group[@name='container_row_2']/group[@name='sale']/field[@name='user_id']" position="after">
+                  <field name="property_delivery_carrier_id"/>
+                </xpath>
+
+                <!-- Replicate the layout of Sales & Purchase -->
+                <!-- Misc section  -->
+                <xpath expr="//form[1]/sheet[1]/notebook[1]/page[@name='sales_purchases']/group[@name='container_row_2']/group[@name='misc']/field[@name='company_id']" position="after">
+                  <field name="website"/>
+                </xpath>
+
+                <xpath expr="//form[1]/sheet[1]/notebook[1]/page[@name='sales_purchases']/group[@name='container_row_2']/group[@name='misc']/field[@name='ref']" position="replace"/>
+
+                <xpath expr="//form[1]/sheet[1]/notebook[1]" position="inside">
+                    <page string='D&amp;B' name="dandb">
+                      <group >
+                        <group name="_left">
+                            <field name="db_number"/>
+                        </group>
+                        <group name="_right">
+                            <field name="db_score"/>
+                            <field name="date_of_db_score" />
+
+                        </group>
+                      </group>
+                    </page>
+                  </xpath>
+
+                  <!-- Replicate the layout of Sales & Purchase -->
+                  <!-- Purchase  -->
+                  <xpath expr="//field[@name='property_supplier_payment_term_id']" position="before">
+                    <field name="cfs_shipping_method"/>
+                    <field name="incoterms"/>
+                    <!-- EOI 354 made status required -->
+                    <field name="status" required="True"/>
+                    <field name="buyer_id"/>
+                    <field name="commodity_code_ids" widget="many2many_tags"/>
+                  </xpath>
+                  <!-- remove 1099 box from tab -->
+                  <xpath expr="//field[@name='box_1099_id']" position="replace"/>
+
+                  <!-- EOI 245: Added account_check_printing dependency -->
+                  <xpath expr="//field[@name='property_payment_method_id']" position="after">
+                    <field name="last_po_date"/>
+                    <field name="last_invoice_date"/>
+                  </xpath>
+                  
+                  <!-- EOI 261: Security Permissions: Purchasing -->
+                  <xpath expr="//form[1]/sheet[1]/notebook[1]/page[@name='accounting']" position="attributes">
+                    <attribute name="groups"></attribute>
+                  </xpath>
+                  <xpath expr="//form[1]/sheet[1]/notebook[1]/page[@name='accounting']/group[1]/group[@name='accounting_entries']" position="attributes">
+                    <attribute name="groups"></attribute>
+                  </xpath>
+
+                  <!-- Replicate accounting tab -->
+                  <xpath expr="//form[1]/sheet[1]/notebook[1]/page[@name='accounting']/group[1]/group[@name='accounting_entries']/field[@name='currency_id']" position="before">
+                    <field name="vat"/>
+                    <field name="tax_id_type"/>
+                    <field name="business_structure"/>
+                    <field name="ten99_reporting"/>
+                  </xpath>
+                  
+                  <xpath expr="//form[1]/sheet[1]/notebook[1]" position="inside">
+                    <page string='Audit &amp; Review' name="audit_review">
+                      <group >
+                        <group name="_left">
+                            <field name="last_review_date" modifiers="{}" id="last_review_date"/>
+						                <field name="review_results" modifiers="{}" id="review_results"/>
+						                <field name="next_review_date" modifiers="{}" id="next_review_date"/>
+                        </group>
+                        <group name="_right">
+                            <field name="last_audit_date" modifiers="{}" id="last_audit_date"/>
+						                <field name="audit_results" modifiers="{}" id="audit_results"/>
+						                <field name="next_audit_date" modifiers="{}" id="next_audit_date"/>
+                        </group>
+                      </group>
+                    </page>
+                  </xpath>
+
+
+            </field>
+    </record>
+
+    <record id="delivery_view_partner_property_forminherit" model="ir.ui.view">
+      <field name="name">delivery.view.partner.property.form.inherit</field>
+      <field name="model">res.partner</field>
+      <field name="inherit_id" ref="delivery.view_partner_property_form"/>
+      <field name="arch" type="xml">
+        <!-- Replicate Sales & purchase tab, in the right order -->
+          <xpath expr="//field[@name='property_delivery_carrier_id']" position="replace"/>
+        
+
+      </field>
+      
+    </record>
+
+    <record id="purchase_view_partner_property_form_inherit" model="ir.ui.view">
+      <field name="name">purchase.view.partner.property.form.inherit</field>
+      <field name="model">res.partner</field>
+      <field name="inherit_id" ref="purchase.view_partner_property_form"/>
+      <field name="arch" type="xml">
+        <!-- Replicate Sales & purchase tab, in the right order -->
+        <xpath expr="//field[@name='property_purchase_currency_id']" position="before">
+          <field name="is_bills"/>
+        </xpath>
+        
+
+      </field>
+      
+    </record>
+
+    <!-- EOI-260: Purchasing Security Permissions-->
+    <record id="cfs_res_partner_property_form_inherit" model="ir.ui.view">
+      <field name="name">cfs.res.partner.property.form.inherit</field>
+      <field name="model">res.partner</field>
+      <field name="inherit_id" ref="account.view_partner_property_form"/>
+      <field name="arch" type="xml">
+        <!-- Giving access to the accounting page -->
+        <xpath expr="//page[@name='accounting']" position="attributes">
+          <attribute name="groups"></attribute>
+        </xpath>
+        <xpath expr="//group[@name='banks']" position="attributes">
+          <attribute name="groups"></attribute>
+        </xpath>
+        <xpath expr="//group[@name='accounting_entries']" position="attributes">
+          <attribute name="groups"></attribute>
+        </xpath>
+      </field>
+    </record>
+    
+</odoo>

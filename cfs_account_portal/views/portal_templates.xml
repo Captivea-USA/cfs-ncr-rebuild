@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <template id="cfs_account_portal.portal_layout" inherit_id="portal.portal_layout" name="Portal Layout">
+            <xpath expr="//div[hasclass('o_portal_my_details')]" position="after">
+                <div class="o_portal_my_bank_account mt-3">
+                    <h4>Banking Information</h4>
+                    <hr class="mt-1 mb-1"/>
+                    <a href="/my/bank_accounts"><i class="fa fa-pencil mx-1"></i>Edit Bank Accounts</a>
+                </div>
+            </xpath>
+        </template>
+
+        <template id="portal_my_bank_accs" name="My Bank Accounts">
+            <t t-call="cfs_account_portal.portal_layout">
+                <t t-set="breadcrumbs_searchbar" t-value="True"/>
+
+                <t t-call="portal.portal_searchbar">
+                    <t t-set="title">Bank Accounts</t>
+                </t>
+                <t t-if="not banks">
+                    <p>There are currently no bank accounts connected to your account.</p>
+                </t>
+                <t t-if="banks" t-call="portal.portal_table">
+                    <thead>
+                        <tr class="active">
+                            <th class="text-left">Account #</th>
+                            <th class="text-center">Bank</th>
+                            <th class="text-center">Type of Account</th>
+                            <th class="text-center">ABA / Routing</th>
+                            <th class="text-center">Currency</th>
+                            <th class="text-right">Account Holder Name</th>
+                        </tr>
+                    </thead>
+                    <t t-foreach="banks" t-as="bank">
+                        <tr>
+                            <td>
+                                <a t-attf-href="/my/bank_accounts/{{bank.get('id')}}">
+                                    <t t-esc="bank.get('acc_number')"/>
+                                </a>
+                            </td>
+                            <td class="text-center"><span t-esc="bank.get('b_name')"/></td>
+                            <td class="text-center"><span t-esc="bank.get('account_type')"/></td>
+                            <td class="text-center"><span t-esc="bank.get('aba_routing')"/></td>
+                            <td class="text-center"><span t-esc="bank.get('currency_id')[1]"/></td>
+                            <td class="text-right"><span t-esc="bank.get('acc_holder_name')"/></td>
+                        </tr>
+                    </t>
+                </t>
+                <br/>
+                <p><a href="/my/bank_accounts/new">
+                  <button id="add_bank" class="btn btn-secondary btn-m">Add a Bank Account</button>
+                </a></p>
+            </t>
+        </template>
+
+        <template id="portal_my_new_bank_acc">
+            <t t-call="cfs_account_portal.portal_layout">
+                <t t-set="additional_title">Bank Details</t>
+                <form t-attf-action="/my/bank_accounts/new" method="post">
+                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                    <div class="row o_portal_details">
+                        <div class="col-lg-8">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                <div t-if="error_message" class="alert alert-danger" role="alert">
+                                    <t t-foreach="error_message" t-as="err"><t t-esc="err"/><br /></t>
+                                </div>
+                                </div>
+                                <div t-attf-class="form-group #{error.get('account_type') and 'o_has_error' or ''} col-xl-6">
+                                    <label class="col-form-label" for="account_type">Type of Account</label>
+                                    <select name="account_type" t-attf-class="form-control #{error.get('account_type') and 'is-invalid' or ''}">
+                                        <t t-foreach="account_types" t-as="type">
+                                            <option t-att-value="type[0]">
+                                                <t t-esc="type[1]" />
+                                            </option>
+                                        </t>
+                                    </select>
+                                </div>
+                                <div t-attf-class="form-group #{error.get('b_name') and 'o_has_error' or ''} col-xl-6">
+                                    <label class="col-form-label" for="b_name">Bank</label>
+                                    <input type="text" name="b_name" t-attf-class="form-control #{error.get('b_name') and 'is-invalid' or ''}"/>
+                                </div>
+                                <div class="clearfix" />
+                                <div t-attf-class="form-group #{error.get('acc_number') and 'o_has_error' or ''} col-xl-6">
+                                    <label class="col-form-label" for="acc_number">Account Number</label>
+                                    <input type="text" name="acc_number" t-attf-class="form-control #{error.get('acc_number') and 'is-invalid' or ''}"/>
+                                </div>
+                                <div t-attf-class="form-group #{error.get('aba_routing') and 'o_has_error' or ''} col-xl-6">
+                                    <label class="col-form-label" for="aba_routing">ABA / Routing (US banks only)</label>
+                                    <input type="text" name="aba_routing" placeholder="ie: 123456789" t-attf-class="form-control #{error.get('aba_routing') and 'is-invalid' or ''}"/>
+                                </div>
+                                <div t-attf-class="form-group #{error.get('swift') and 'o_has_error' or ''} col-xl-6">
+                                    <label class="col-form-label" for="swift">SWIFT (non US banks only)</label>
+                                    <input type="text" name="swift" placeholder="ie: AAAABBCC123" t-attf-class="form-control #{error.get('swift') and 'is-invalid' or ''}"/>
+                                </div>
+                                <div t-attf-class="form-group #{error.get('currency_id') and 'o_has_error' or ''} col-xl-6">
+                                    <label class="col-form-label" for="currency_id">Currency</label>
+                                    <select name="currency_id" t-attf-class="form-control #{error.get('currency_id') and 'is-invalid' or ''}">
+                                        <option value="">Currency...</option>
+                                        <t t-foreach="currencies or []" t-as="currency">
+                                            <option t-att-value="currency.id">
+                                                <t t-esc="currency.name" />
+                                            </option>
+                                        </t>
+                                    </select>
+                                </div>
+                                <div t-attf-class="form-group #{error.get('acc_holder_name') and 'o_has_error' or ''} col-xl-6">
+                                    <label class="col-form-label" for="acc_holder_name">Account Holder Name</label>
+                                    <input type="text" name="acc_holder_name" t-attf-class="form-control #{error.get('acc_holder_name') and 'is-invalid' or ''}"/>
+                                </div>
+                                <input type="hidden" name="redirect" t-att-value="redirect"/>
+                            </div>
+                            <div class="clearfix">
+                                <button type="submit" class="btn btn-primary float-right mb32 ">
+                                    Confirm
+                                    <span class="fa fa-long-arrow-right" />
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </t>
+        </template>
+
+        <template id="portal_my_bank_acc">
+            <t t-call="cfs_account_portal.portal_layout">
+                <t t-set="additional_title">Bank Details</t>
+                <form t-attf-action="/my/bank_accounts/#{bank_acc.id}" method="post">
+                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                    <div class="row o_portal_details">
+                        <div class="col-lg-8">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                <div t-if="error_message" class="alert alert-danger" role="alert">
+                                    <t t-foreach="error_message" t-as="err"><t t-esc="err"/><br /></t>
+                                </div>
+                                </div>
+                                <div t-attf-class="form-group #{error.get('account_type') and 'o_has_error' or ''} col-xl-6">
+                                    <label class="col-form-label" for="account_type">Type of Account</label>
+                                    <select name="account_type" t-attf-class="form-control #{error.get('account_type') and 'is-invalid' or ''}">
+                                        <t t-foreach="account_types" t-as="type">
+                                            <option t-att-value="type[0]">
+                                                <t t-esc="type[1]" />
+                                            </option>
+                                        </t>
+                                    </select>
+                                </div>
+                                <div t-attf-class="form-group #{error.get('b_name') and 'o_has_error' or ''} col-xl-6">
+                                    <label class="col-form-label" for="b_name">Bank</label>
+                                    <input type="text" name="b_name" t-attf-class="form-control #{error.get('b_name') and 'is-invalid' or ''}" t-att-value="b_name or bank_acc.b_name"/>
+                                </div>
+                                <div class="clearfix" />
+                                <div t-attf-class="form-group #{error.get('acc_number') and 'o_has_error' or ''} col-xl-6">
+                                    <label class="col-form-label" for="acc_number">Account Number</label>
+                                    <input type="text" name="acc_number" t-attf-class="form-control #{error.get('acc_number') and 'is-invalid' or ''}" t-att-value="acc_number or bank_acc.acc_number"/>
+                                </div>
+                                <div t-attf-class="form-group #{error.get('aba_routing') and 'o_has_error' or ''} col-xl-6">
+                                    <label class="col-form-label" for="aba_routing">ABA / Routing</label>
+                                    <input type="text" name="aba_routing" t-attf-class="form-control #{error.get('aba_routing') and 'is-invalid' or ''}" t-att-value="aba_routing or bank_acc.aba_routing" />
+                                </div>
+                                <div t-attf-class="form-group #{error.get('swift') and 'o_has_error' or ''} col-xl-6">
+                                    <label class="col-form-label" for="swift">SWIFT</label>
+                                    <input type="text" name="swift" t-attf-class="form-control #{error.get('swift') and 'is-invalid' or ''}" t-att-value="swift or bank_acc.swift" />
+                                </div>
+                                <div t-attf-class="form-group #{error.get('currency_id') and 'o_has_error' or ''} col-xl-6">
+                                    <label class="col-form-label" for="currency_id">Currency</label>
+                                    <select name="currency_id" t-attf-class="form-control #{error.get('currency_id') and 'is-invalid' or ''}">
+                                        <option value="">Currency...</option>
+                                        <t t-foreach="currencies or []" t-as="currency">
+                                            <option t-att-value="currency.id" t-att-selected="currency.id == int(currency_id) if currency_id else currency.id == bank_acc.currency_id.id">
+                                                <t t-esc="currency.name" />
+                                            </option>
+                                        </t>
+                                    </select>
+                                </div>
+                                <div t-attf-class="form-group #{error.get('acc_holder_name') and 'o_has_error' or ''} col-xl-6">
+                                    <label class="col-form-label" for="acc_holder_name">Account Holder Name</label>
+                                    <input type="text" name="acc_holder_name" t-attf-class="form-control #{error.get('acc_holder_name') and 'is-invalid' or ''}" t-att-value="acc_holder_name or bank_acc.acc_holder_name" />
+                                </div>
+                                <input type="hidden" name="redirect" t-att-value="redirect"/>
+                            </div>
+                            <div class="clearfix">
+                                <button type="submit" class="btn btn-primary float-right mb32 ">
+                                    Confirm
+                                    <span class="fa fa-long-arrow-right" />
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </t>
+        </template>
+    </data>
+</odoo>

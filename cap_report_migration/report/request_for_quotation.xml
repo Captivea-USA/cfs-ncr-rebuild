@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+  <template id="report_purchasequotation_enhance" inherit_id="purchase.report_purchasequotation_document">
+
+    <!-- replace DRAFT PURCHASE ORDER with REQUEST FOR QUOTATION -->
+    <!-- show REF instead of PO in name Ticket 253 -->
+    <h2 position="replace">
+      <h2>
+        Request for Quotation #
+        <span t-raw="o.name.replace('PO', 'REF')" />
+      </h2>
+    </h2>
+
+    <!-- Remove Addresses -->
+    <!-- <xpath expr="//t[@t-set='address']" position="replace"/> -->
+
+
+    <!-- Show Buyer and RFQ date and Payment Terms-->
+    <div id="informations" position="inside">
+    <!-- EOI-496: Fix PO/RFQ print reports missing fields -->
+      <div t-if="o.cap_shipping_method" class="col-2 bm-2">
+        <strong>Shipping:</strong>
+        <p t-field="o.cap_shipping_method" class="m-0" />
+      </div>
+      <div t-if="o.user_id" class="col-3 bm-2">
+        <strong>Buyer:</strong>
+        <p>
+          <span t-field="o.user_id" />
+          (<span t-field="o.user_id.partner_id.email" />)
+        </p>
+      </div>
+      <!-- EOI-496: Fix PO/RFQ print reports missing fields -->
+      <div t-if="o.create_date" class="col-2 bm-2">
+        <strong>RFQ Date:</strong>
+        <p t-field="o.create_date" class="m-0" t-options="{&quot;widget&quot;: &quot;date&quot;}" />
+      </div>
+      <!-- EOI-496: Fix PO/RFQ print reports missing fields -->
+      <div t-if="o.payment_term_id" class="col-2 bm-2">
+        <strong>Payment Terms:</strong>
+        <p t-field="o.payment_term_id" class="m-0" />
+      </div>
+    </div>
+
+    <!-- Show Amounts -->
+    <th name="th_quantity" position="after">
+      <th name="th_price_unit" class="text-right">
+        <strong>Unit Price</strong>
+      </th>
+      <th name="th_amount" class="text-right">
+        <strong>Amount</strong>
+      </th>
+    </th>
+    <t t-if="not order_line.display_type" position="inside">
+      <td class="text-right">
+        <span t-field="order_line.price_unit" />
+      </td>
+      <td class="text-right">
+        <span t-field="order_line.price_subtotal" t-options="{&quot;widget&quot;: &quot;monetary&quot;,
+        &quot;display_currency&quot;: o.currency_id}" />
+      </td>
+    </t>
+
+    <!-- Replace Expected Date with Promise Date -->
+    <th name="th_expected_date" position="replace">
+      <th name="th_expected_date" class="text-center">
+        <strong>Promise Date</strong>
+      </th>
+    </th>
+    <span t-field="order_line.date_planned" position="replace">
+      <span t-field="order_line.date_planned" t-options="{&quot;widget&quot;: &quot;date&quot;}" />
+    </span>
+
+
+    <!-- Show CFS Part, Vendor Part, Description -->
+    <th name="th_description" position="replace">
+      <th name="th_product">
+        <strong>CFS Part</strong>
+      </th>
+      <th name="th_product">
+        <strong>Product Name</strong>
+      </th>
+      <th name="th_vendor_product">
+        <strong>Vendor Part</strong>
+      </th>
+      <th name="th_description">
+        <strong>Description</strong>
+      </th>
+    </th>
+
+    <xpath expr="//td[@id='product']" position="replace">
+      <!-- ITERP539 - add part number -->
+      <td id="product">
+        <span t-if="order_line.product_id">
+          <span t-field="order_line.product_id.name" />
+        </span>
+      </td>
+      <td id="product_name">
+        <span t-if="order_line.product_id.name">
+          <span t-field="order_line.product_id.name" />
+        </span>
+      </td>
+      <td id="cap_vendor_part">
+        <!-- EOI-496: Fix PO/RFQ print reports missing fields -->
+        <span t-if="order_line.cfs_vendor_part">
+          <span t-field="order_line.cfs_vendor_part" />
+        </span>
+      </td>
+      <!-- EOI-496: Fix PO/RFQ print reports missing fields -->
+      <td id="description_direct" t-if="order_line.product_id.categ_id.procurement_type == 'direct'">
+          <span t-field="order_line.name"/>
+      </td>
+      <td id="description_indirect" t-if="order_line.product_id.categ_id.procurement_type == 'indirect'">
+          <span t-field="order_line.free_description"/>
+      </td>
+    </xpath>
+
+    <!-- EOI-496: Fix PO/RFQ print reports missing fields -->
+    <xpath expr="//p[@t-field='o.notes']" position="before">
+      <div class="bm-2">
+          <p style="font-size:11px" t-field="o.cap_po_notes" class="m-0"/>
+      </div>
+    </xpath>
+
+
+  </template>
+</odoo>

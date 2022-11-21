@@ -1,0 +1,480 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="product_template_form_view_inherit" model="ir.ui.view">
+            <field name="name">product.template.common.form.custom_cfs</field>
+            <field name="inherit_id" ref="product.product_template_form_view" />
+            <field name="model">product.template</field>
+            <field name="priority">1</field>
+            <field name="arch" type="xml">
+                <!-- smart buttons -->
+                <xpath expr="//button[@name='open_pricelist_rules']" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </xpath>
+                <div class="oe_title" position="replace">
+                    <div class="oe_title">
+                        <!-- <label class="oe_edit_only" for="default_code" string="CFS Code" /> -->
+                        <field name="priority" invisible="1" />
+                        <h1>
+                            <field name="default_code" placeholder="XJ-28364" />
+                        </h1>
+                        <label for="name" string="Product Name" />
+                        <field name="name" placeholder="Product Name" />
+                    </div>
+                </div>
+
+                <sheet position="before">
+                    <div class="alert alert-danger" role="alert" style="margin-bottom:0px;" attrs="{'invisible': [('is_hazardous','=',False)]}">
+                                This Product is Hazardous.  
+                    </div>
+                </sheet>
+
+                <xpath expr="//page[@name='inventory']" position="attributes">
+                    <attribute name="groups"></attribute>
+                </xpath>
+
+                <!-- EOI - 359 - Hide uom_po_id on general group -->
+                <xpath expr="//group[@name='group_general']/field[@name='uom_po_id']" position="attributes">
+                    <attribute name='invisible'>1</attribute>
+                </xpath>
+                
+                <xpath expr="//group[@name='group_general']" position="inside">
+
+
+                    <field name="part_status" />
+                    <field name="source_controlled" />
+                    <field name="critical_part" />
+                    <field name="log_lead_time" />
+                    <field name="eccn" attrs="{
+                        'required': [
+                            ('procurement_type','=','direct')
+                        ], 'invisible': [
+                            ('procurement_type', '=', 'indirect')
+                        ]
+                    }" />
+                    <field name="detailed_type" position="move" />
+                    <field name="categ_id" position="move" />
+                    <!-- procurement type must appear because it is used in a calc -->
+                    <field name="procurement_type" invisible="1" />
+                    <field name="commodity_code_id" attrs="{'required': [('procurement_type','=','direct')]}" />
+                    <field name="commodity_code" />
+                    <field name="version_char" />
+                </xpath>
+                <xpath expr="//group[@name='group_standard_price']" position="inside">
+                    <field name="company_id" position="move"></field>
+                    <field name="uom_id" position="move"></field>
+                    <!-- EOI-334: Rename Purchase UoM -->
+                    <field name="uom_po_id" string="Purchase Unit of Measure"/>
+                    <field name="is_hazardous" />
+                    <field name="yield_pc" placeholder="ie: 100" />
+                </xpath>
+                <!-- lots and weights group to bring in uom -->
+                <group name="group_lots_and_weight" position="replace">
+                    <group name="group_lots_and_weight" string="Logistics" attrs="{'invisible': [('type', 'not in', ['product', 'consu'])]}">
+                        <label for="uom_less_weight" attrs="{'invisible':[('product_variant_count', '&gt;', 1),('is_product_variant', '=', False)]}" />
+                        <div class="o_row" name="weight" attrs="{'invisible':[('product_variant_count', '&gt;', 1), ('is_product_variant', '=', False)]}">
+                            <field name="uom_less_weight" />
+                            <span>
+                                <field name="weight_uom" />
+                            </span>
+                        </div>
+                        <label for="uom_less_volume" attrs="{'invisible':[('product_variant_count', '&gt;', 1), ('is_product_variant', '=', False)]}" />
+                        <div class="o_row" name="volume" attrs="{'invisible':[('product_variant_count', '&gt;', 1), ('is_product_variant', '=', False)]}">
+                            <field name="uom_less_volume" string="Volume" />
+                            <span>
+                                <field name="volume_uom" />
+                            </span>
+                        </div>
+                        <label for="weight" invisible="1" />
+                        <label for="volume" invisible="1" />
+                        <field name="weight" invisible="1" />
+                        <field name="volume" invisible="1" />
+                        <field name="allowed_loc_ids" widget="many2many_tags" />
+                    </group>
+                </group>
+
+                <!-- invisible fields -->
+                <xpath expr="//field[@name='product_tooltip']" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </xpath>
+                <!-- Hide internal notes -->
+                <!-- need to use parent selector to select the group. string isnt a valid selector -->
+                <xpath expr="//field[@name='description']/parent::group" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </xpath>
+                <xpath expr="//label[@for='list_price']" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </xpath>
+                <xpath expr="//div[@name='pricing']" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </xpath>
+                <xpath expr="//label[@for='standard_price']" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </xpath>
+                <xpath expr="//div[@name='standard_price_uom']" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </xpath>
+                <page name="general_information" position="after">
+                    <page name="owners" string="Owners">
+                        <group>
+                            <group>
+                                <field name="design_owner" options="{'no_create': True, 'no_create_edit':True}" />
+                                <field name="mfg_owner" options="{'no_create': True, 'no_create_edit':True}" />
+                                <field name="procurement_owner" options="{'no_create': True, 'no_create_edit':True}" />
+                                <field name="responsible_id" options="{'no_create': True, 'no_create_edit':True}" />
+                            </group>
+                        </group>
+                    </page>
+                </page>
+                <!-- sale group -->
+                <xpath expr="//group[@name='sale']" position="inside">
+                <!-- EOI-334: Add section title and hide reinoice expense -->
+                    <group string="Invoicing">
+                        <field name="invoice_policy" widget="radio" />
+                        <field name="expense_policy" widget="radio" attrs="{'invisible': True}" />
+                    </group>
+                    <group name="pricing_enhance" string="Sales">
+                        <group>
+                            <field name="list_price" class="oe_inline" widget="monetary" options="{'currency_field': 'currency_id', 'field_digits': True}" />
+                        </group>
+                        <button name="open_pricelist_rules" icon="fa-arrow-right" type="object" groups="product.group_product_pricelist" class="oe_inline">
+                            <field name="pricelist_item_count" attrs="{'invisible': [('pricelist_item_count', '=', 0)]}" />
+                            <span attrs="{'invisible': [('pricelist_item_count', '=', 1)]}">
+                                Extra Prices
+                            </span>
+                            <span attrs="{'invisible': [('pricelist_item_count', '!=', 1)]}">
+                                Extra Price
+                            </span>
+                        </button>
+                        <group name="taxes">
+                            <field name="taxes_id" widget="many2many_tags" context="{'default_type_tax_use':'sale', 'search_default_sale': 1, 'search_default_service': type == 'service', 'search_default_goods': type == 'consu'}" />
+                        </group>
+                    </group>
+                </xpath>
+                <!-- purchase group -->
+                <group name="purchase" position="before">
+                    <group>
+                        <field name="quality_codes" widget="many2many_tags" options="{'no_quick_create': True, 'no_create_edit' : True}" />
+                    </group>
+                </group>
+
+            </field>
+        </record>
+
+        <!-- supplier inherit to hide vendor bills -->
+        <record id="product_template_form_supplier_inherit_cfs" model="ir.ui.view">
+            <field name="name">product.template.form.supplier.inherit.cfs</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="purchase.view_product_supplier_inherit" />
+            <field name="arch" type="xml">
+                <xpath expr="//group[@name='bill']" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- sale timesheet to hide invoice and expense policy on general table -->
+        <record id="product_template_form_view_sale_timesheet_inherit" model="ir.ui.view">
+            <field name="name">product.template.form.view.sale.timesheet.inherit</field>
+            <field name="inherit_id" ref="sale.product_template_form_view_invoice_policy" />
+            <field name="model">product.template</field>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='invoice_policy']" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </xpath>
+                <xpath expr="//field[@name='expense_policy']" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- account.product.template.form view -->
+        <record id="account_product_template_form_inherit_cfs_enhance" model="ir.ui.view">
+            <field name="name">account.product.template.form.inherit.cfs.enhance</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="account.product_template_form_view" />
+            <field name="arch" type="xml">
+                <!-- Remove customer taxes field -->
+                <xpath expr="//field[@name='taxes_id']" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- account.taxcloud.product.template form view -->
+        <record id="account_taxcloud_product_template_form_inherit_cfs_enhance" model="ir.ui.view">
+            <field name="name">account.taxcloud.product.template.form.inherit.cfs.enhance</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="account_taxcloud.product_template_taxcloud_inherit_form" />
+            <field name="arch" type="xml">
+                <!-- 3 - Remove taxcloud field -->
+                <xpath expr="//field[@name='tic_category_id']" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </xpath>
+                <!-- Move vendor taxes to accounting tab -->
+                <xpath expr="//field[@name='supplier_taxes_id']" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </xpath>
+                <xpath expr="//group[@name='payables']" position="after">
+                    <group string="Taxes">
+                        <!-- purchase method is already defaulted to receive -->
+                        <field name="purchase_method" widget="radio" />
+                        <field name="supplier_taxes_id" widget="many2many_tags" context="{'default_type_tax_use':'purchase', 'search_default_purchase': 1, 'search_default_service': type == 'service', 'search_default_goods': type == 'consu'}" />
+                    </group>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- remove tooltip -->
+        <record id="product_template_sale_form_view_inherit" model="ir.ui.view">
+            <field name="name">product.template.sale.form.view.inherit</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="sale.product_template_sale_form_view" />
+            <field name="arch" type="xml">
+                <xpath expr="//div[contains(@class, 'font-italic')]" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- stock.product.template form view -->
+        <record id="product_template_form_stock_inherit_cfs" model="ir.ui.view">
+            <field name="name">product.template.form.stock.inherit.cfs</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="stock.view_template_property_form" />
+            <field name="arch" type="xml">
+                <!-- Rename tracking to serialization on the inventory tab-->
+                <xpath expr="//field[@name='tracking']" position="attributes">
+                    <attribute name="string">Serialization</attribute>
+                </xpath>
+                <xpath expr="//page[@name='inventory']//field[@name='description_picking']" position="after">
+                    <group string="Warning when Moving this Product">
+                        <field name="stock_warn" nolabel="1" />
+                        <field name="stock_warn_msg" colspan="3" nolabel="1" attrs="{'required':[('stock_warn','!=','no-message')],'readonly':[('stock_warn','=','no-message')], 'invisible':[('stock_warn','=','no-message')]}" />
+                    </group>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="product_template_form_view_inherit_version" model="ir.ui.view">
+            <field name="name">product.template.common.form.custom_cfs.version</field>
+            <field name="inherit_id" ref="mrp_plm.product_template_only_form_inherit_version_plm" />
+            <field name="model">product.template</field>
+            <field name="priority">1</field>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='version']" position="replace">
+                    <field name="version" invisible="1" />
+                </xpath>
+                <xpath expr="//label[@for='version']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//label[@for='default_code']" position="attributes">
+                    <attribute name="string">CFS Code</attribute>
+                    <attribute name="class">oe_edit_only</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="product_template_only_form_view_inherits" model="ir.ui.view">
+            <field name="name">product.template.only.form.view.inherit</field>
+            <field name="inherit_id" ref="product.product_template_only_form_view" />
+            <field name="model">product.template</field>
+            <field name="priority">100</field>
+            <field name="arch" type="xml">
+                <!-- Hide Internal Reference -->
+                <xpath expr="//group[@name='group_general']//field[@name='default_code']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="product_template_only_form_view_inherits_sales" model="ir.ui.view">
+            <field name="name">product.template.only.form.view.inherit.sales</field>
+            <field name="inherit_id" ref="product.product_template_only_form_view" />
+            <field name="model">product.template</field>
+            <field name="groups_id" eval="[(4, ref('sales_team.group_sale_salesman'))]"/>
+            <field name="priority">100</field>
+            <field name="arch" type="xml">
+                <!-- Create new sold button -->
+                <xpath expr="//button[@name='action_view_sales']" position="replace" groups="">
+                    <button class="oe_stat_button donotdelete" name="action_view_sales" type="object" icon="fa-signal" attrs="{'invisible': [('sale_ok', '=', False)]}" groups="sales_team.group_sale_salesman" help="Sold in the last 365 days">
+                        <div class="o_field_widget o_stat_info">
+                            <span class="o_stat_value">
+                                <field name="sales_count" widget="statinfo" nolabel="1" class="mr4" />
+                                <field name="uom_name" />
+                            </span>
+                            <span class="o_stat_text">Sold</span>
+                        </div>
+                    </button>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- remove purchase smart button to place in fromt -->
+        <record id="product_template_form_purchase_buttons_inherit_cfs" model="ir.ui.view">
+            <field name="name">product.template.form.purchase.buttons.inherit.cfs</field>
+            <field name="inherit_id" ref="purchase.view_product_template_purchase_buttons_from" />
+            <field name="model">product.template</field>
+            <field name="priority">1</field>
+            <field name="arch" type="xml">
+                <!-- Using multiple conditionals to target invisible for the correct button -->
+                <xpath expr="//button[@name='action_view_po' and not(contains(@class, 'donotdelete'))]" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- EOI-387: Add cfs_autoexec module -->
+        <!-- Commented because it could be accomplished by using replace on the original `action_view_sales` button -->
+        <!-- remove sold smart button -->
+        <!-- <record id="product_template_form_sale_buttons_inherit_cfs" model="ir.ui.view">
+            <field name="name">product.template.form.sale_buttons.inherit.cfs</field>
+            <field name="inherit_id" ref="sale.product_template_form_view_sale_order_button" />
+            <field name="model">product.template</field>
+            <field name="priority">100</field>
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='action_view_sales' and not(contains(@class, 'donotdelete'))]" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+            </field>
+        </record> -->
+
+        <!-- stock procurement to remove planner from inventory page -->
+        <record id="product_template_form_view_procurement_button_inherit_cfs" model="ir.ui.view">
+            <field name="name">product.template.form.view.procurement.button.inherit.cfs</field>
+            <field name="inherit_id" ref="stock.product_template_form_view_procurement_button" />
+            <field name="model">product.template</field>
+            <field name="arch" type="xml">
+                <xpath expr="//page[@name='inventory']//field[@name='responsible_id']" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </xpath>
+                <!-- Create new purchase button -->
+                <xpath expr="//div[@name='button_box']/button[@name='action_open_quants']" position="before">
+                    <button class="oe_stat_button donotdelete" name="action_view_po" type="object" icon="fa-credit-card" attrs="{'invisible': [('purchase_ok', '=', False)]}" help="Purchased in the last 365 days">
+                        <div class="o_field_widget o_stat_info">
+                            <span class="o_stat_value">
+                                <field name="purchased_product_qty" widget="statinfo" nolabel="1" class="mr4" />
+                                <field name="uom_name" />
+                            </span>
+                            <span class="o_stat_text">Purchased</span>
+                        </div>
+                    </button>
+                </xpath>
+                
+            </field>
+        </record>
+
+
+        <!-- Tree View -->
+        <record id="product_template_tree_view_enhance" model="ir.ui.view">
+            <field name="name">product.template.tree.view.enhance</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_tree_view" />
+            <field name="arch" type="xml">
+                <field name="name" position="after">
+                    <field name="is_hazardous" invisible='1' />
+                    <button name="is_hazardous" title="Contains a Hazardous product" icon="fa-exclamation-triangle" attrs="{'invisible': [('is_hazardous', '=', False)]}" />
+                </field>
+                <!-- rename internal reference to CFS Part -->
+                <xpath expr="//field[@name='default_code']" position="attributes">
+                    <attribute name="string">CFS Part</attribute>
+                </xpath>
+                <!-- Add commodity code -->
+                <field name="uom_id" position="after">
+                    <field name="commodity_code_id" optional="show" />
+                </field>
+
+                <!-- Add additional owners -->
+                <field name="commodity_code_id" position="after">
+                    <field name="procurement_owner" optional="hide" />
+                    <field name="mfg_owner" optional="hide" />
+                    <field name="design_owner" optional="hide" />
+                </field>
+                <!-- hide list price -->
+                <xpath expr="//field[@name='list_price']" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </xpath>
+                <!-- hide cost -->
+                <xpath expr="//field[@name='standard_price']" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Kanban View -->
+        <record id="product_template_kanban_inherit_cfs_extended" model="ir.ui.view">
+            <field name="name">product.template.kanban.inherit.cfs.extended</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_kanban_view" />
+            <field name="arch" type="xml">
+                <!--Replace order of bold for name and default code -->
+                <xpath expr="//div[hasclass('oe_kanban_details')]//t" position="replace"></xpath>
+                <xpath expr="//div[hasclass('oe_kanban_details')]//strong" position="replace">
+                    <strong>
+                        <t t-if="record.default_code.value">
+                            [
+                            <field name="default_code" />
+                            ]
+                        </t>
+                    </strong>
+                    <field name="name" />
+                </xpath>
+                <!-- EOI-330 Remove Price and add Forecast QTY-->
+                <xpath expr="//div[@name='product_lst_price']" position="replace">
+                    <div t-if="record.type.raw_value == 'product'">Forcast Qty: <field name="virtual_available"/></div>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- search view -->
+        <record id="product_template_search_inherit_product" model="ir.ui.view">
+            <field name="name">product.template.search.inherit.product</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_search_view" />
+            <field name="arch" type="xml">
+                <filter name="activities_exception" position="after">
+                    <filter string="Hazardous" name="is_hazardous" domain="[('is_hazardous', '=', True)]" />
+                </filter>
+            </field>
+        </record>
+
+        <!-- Purchase form view -->
+        <record id="product_template_form_view_inherit_cfs" model="ir.ui.view">
+            <field name="name">product.template.form.inherit.cfs</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="purchase.product_template_form_view" />
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='property_account_expense_id']" position="after">
+                    <field name="can_override_gl" />
+                </xpath>
+                <xpath expr="//div[hasclass('oe_button_box')]" position="attributes">
+                    <attribute name="groups"></attribute>
+                </xpath>
+
+                <xpath expr="//page[@name='invoicing']" position="attributes">
+                    <attribute name="groups"></attribute>
+                </xpath>
+                <xpath expr="//page[@name='invoicing']/group[@name='properties']" position="attributes">
+                    <attribute name="groups"></attribute>
+                </xpath>
+                <xpath expr="//field[@name='property_account_income_id']" position="attributes">
+                    <attribute name="groups"></attribute>
+                </xpath>
+                <xpath expr="//field[@name='property_account_expense_id']" position="attributes">
+                    <attribute name="groups"></attribute>
+                </xpath>
+                <xpath expr="//field[@name='property_account_creditor_price_difference']" position="attributes">
+                    <attribute name="groups"></attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="stock.product_form_view_procurement_button" model="ir.ui.view">
+            <field name="groups_id" eval="[(6, 0, [])]"/>
+        </record>
+        <record id="stock.product_template_form_view_procurement_button" model="ir.ui.view">
+            <field name="groups_id" eval="[(6, 0, [])]"/>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,63 @@
+<odoo>
+    <data noupdate="1">    
+        <record id="mail_template_data_payment_receipt_remittance_advice" model="mail.template">
+            <field name="name">Remittance Advice: Send by email</field>
+            <field name="model_id" ref="account.model_account_payment"/>
+            <field name="subject">Remittance Advice from {{ object.company_id.name }} (Ref {{ object.name or 'n/a' }})</field>
+            <field name="partner_to">{{ object.partner_id.id }}</field>
+            <field name="body_html" type="html">
+                <table width="100%" border="0" cellpadding="0" cellspacing="0" style="background-color: #F1F1F1; font-family:Verdana, Arial,sans-serif; color: #454748; width: 100%; border-collapse:separate;">
+                    <tr width="100%">
+                        <td align="center">
+                            <table border="0" cellpadding="0" cellspacing="0" width="590" style="padding: 16px; background-color: white; color: #454748; border-collapse:separate;">
+                        <tbody>
+                            <!-- CONTENT -->
+                            <tr>
+                                <td align="center" style="min-width: 590px;">
+                                    <table border="0" cellpadding="0" cellspacing="0" width="590" style="min-width: 590px; background-color: white; padding: 0px 8px 0px 8px; border-collapse:separate;">
+                                        <tr><td valign="top" style="font-size: 13px;">
+                                            <div>
+                                                Dear <b><t t-out="object.partner_id.name or ''">Vendor</t></b>,<br /><br />
+                                                Please find your remittance Advice details.
+                                                <div id="informations" class="row mt32 mb32" style="background-color: #262F64 !important; color:rgba(255,255,255,1)!important; font-weight:bold; border: none;">
+                                                    <div class="col-auto col-3 mw-100 mb-2" t-if="object.date" name="date">
+                                                        <strong>Invoice Date:</strong>
+                                                        <p class="m-0" t-field="object.date"/>
+                                                    </div>
+                                                    <div class="col-auto col-3 mw-100 mb-2" t-if="object.payment_method_id" name="payment_method_id">
+                                                        <strong>Payment Method:</strong>
+                                                        <p class="m-0" t-field="object.payment_method_id"/>
+                                                    </div>
+                                                    <div class="col-auto col-3 mw-100 mb-2" t-if="object.amount" name="amount">
+                                                        <strong>Payment Amount:</strong>
+                                                        <p class="m-0" t-field="object.amount"/>
+                                                    </div>
+                                                    <div class="col-auto col-3 mw-100 mb-2" t-if="object.ref" name="ref">
+                                                        <strong>Memo:</strong>
+                                                        <p class="m-0" t-field="object.ref"/>
+                                                    </div>
+                                                </div>
+                                                <br /><br />
+                                                Also attached PDF for same.<br />
+                                                Thanks
+                                            </div>
+                                        </td></tr>
+                                        <tr><td style="text-align:center;">
+                                          <hr width="100%" style="background-color:rgb(204,204,204);border:medium none;clear:both;display:block;font-size:0px;min-height:1px;line-height:0; margin: 16px 0px 16px 0px;"/>
+                                        </td></tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </tbody>
+                        </table>
+                        </td>
+                    </tr>
+                </table>
+            </field>
+            <field name="report_template" ref="remittance_advice_report_omax.action_remittance_advice_report_menu"/>
+            <field name="report_name">{{ (object.name or '').replace('/','-') }}</field>
+            <field name="lang">{{ object.partner_id.lang }}</field>
+            <field name="auto_delete" eval="True"/>
+        </record>
+    </data>
+</odoo>

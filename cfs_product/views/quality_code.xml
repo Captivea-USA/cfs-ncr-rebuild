@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_quality_code_cfs" model="ir.ui.view">
+        <field name="name">Quality Code List View</field>
+        <field name="model">product.quality.code</field>
+        <field name="arch" type="xml">
+            <tree string="Quality Codes" editable="bottom">
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_quality_code" model="ir.actions.act_window">
+        <field name="name">Quality Codes</field>
+        <field name="res_model">product.quality.code</field>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="view_quality_code_cfs"/>
+    </record>
+
+    <menuitem id="menu_quality_code_purchase" action="action_quality_code"
+              parent="purchase.menu_product_in_config_purchase" name="Vendor Quality Codes"/>
+
+    <menuitem id="menu_quality_code_inventory" action="action_quality_code"
+              parent="stock.menu_product_in_config_stock" name="Vendor Quality Codes"/>
+
+</odoo>
+

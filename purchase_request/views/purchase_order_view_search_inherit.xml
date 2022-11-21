@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- EOI-319: Add Hazardous filter on Purchase Orders -->
+    <record id="purchase_order_draft_list_inherit_product" model="ir.ui.view">
+        <field name="name">purchase.order.draft.form.inherit.product</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_kpis_tree" />
+        <field name="arch" type="xml">
+            <field name="name" position="after">
+                <field name="is_hazardous" invisible='1' />
+                <button name="is_hazardous" title="Contains a Hazardous product" icon="fa-exclamation-triangle" attrs="{'invisible': [('is_hazardous', '=', False)]}" />
+            </field>
+        </field>
+    </record>
+
+    <record id="purchase_order_list_inherit_product" model="ir.ui.view">
+        <field name="name">purchase.order.form.inherit.product</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_view_tree" />
+        <field name="arch" type="xml">
+            <field name="name" position="after">
+                <field name="is_hazardous" invisible='1' />
+                <button name="is_hazardous" title="Contains a Hazardous product" icon="fa-exclamation-triangle" attrs="{'invisible': [('is_hazardous', '=', False)]}" />
+            </field>
+        </field>
+    </record>
+
+    <record id="purchase_order_form" model="ir.ui.view">
+        <field name="name">purchase.order.form.inherit.custom_cfs</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_form" />
+        <field name="arch" type="xml">
+            <sheet position="before">
+                <field name="is_hazardous" invisible='1' />
+                <div class="alert alert-danger" role="alert" style="margin-bottom:0px;" attrs="{'invisible': [('is_hazardous','=',False)]}">
+                            This Purchase Order contains at least one Hazardous product.
+                   </div>
+            </sheet>
+            <xpath expr="//page[@name='products']/field[@name='order_line']/tree/field[@name='display_type']" position="before">
+                <field name="is_hazardous" invisible='1' />
+                <button name="is_hazardous" icon="fa-exclamation-triangle" title="Hazardous Product" attrs="{'invisible': [('is_hazardous', '=', False)]}" />
+            </xpath>
+            <field name="notes" position="before">
+                <field name="po_notes" string="" class="oe_inline" placeholder="Define variations (if any) to standard terms and conditions ..." />
+            </field>
+        </field>
+    </record>
+
+    <record id="purchase_order_line_search_inherit_product" model="ir.ui.view">
+        <field name="name">purchase.order.line.form.inherit.product</field>
+        <field name="model">purchase.order.line</field>
+        <field name="inherit_id" ref="purchase.purchase_order_line_search" />
+        <field name="arch" type="xml">
+            <filter name="hide_cancelled" position="after">
+                <separator />
+                <filter string="Contains Hazardous product(s)" name="is_hazardous" domain="[('is_hazardous', '=', True)]" />
+            </filter>
+        </field>
+    </record>
+
+    <record id="purchase_order_view_search" model="ir.ui.view">
+        <field name="name">purchase.order.select.custom_cfs</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_view_search" />
+        <field name="arch" type="xml">
+            <filter name="activities_exception" position="after">
+                <filter string="Contains Hazardous product(s)" name="is_hazardous" domain="[('is_hazardous', '=', True)]" />
+            </filter>
+        </field>
+    </record>
+
+    <record id="view_purchase_order_filter" model="ir.ui.view">
+        <field name="name">request.quotation.select.custom_cfs</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.view_purchase_order_filter" />
+        <field name="arch" type="xml">
+            <filter name="activities_exception" position="after">
+                <filter string="Contains Hazardous product(s)" name="is_hazardous" domain="[('is_hazardous', '=', True)]" />
+            </filter>
+        </field>
+    </record>
+
+</odoo>

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record model="ir.ui.view" id="res_config_settings_view_payment_disc">
+        <field name="name">res.config.settings.view.form.paymentdisc</field>
+        <field name="model">res.config.settings</field>
+        <field name="priority" eval="99"/>
+        <field name="inherit_id" ref="base.res_config_settings_view_form" />
+        <field name="arch" type="xml">
+
+            <xpath expr="//div[@class='settings']" position="inside">
+                <div>
+                     <div class="app_settings_block o_documents_block" data-string="Test" id="test" string="Budget User Parameter" data-key="cap_approvals"/>
+                </div> 
+                <div>                 
+                    <div class="row mt16 o_settings_container" name="users_setting_container">
+                        <div class="col-12 col-lg-6 o_setting_box" id="invite_users_setting">
+                            <div class="o_setting_right_pane">
+                                <div class="content-group">
+                                    <h2> Cap Approvals </h2>
+                                    <div class="row mt16">
+                                        <label string="Purchase Order Finance Users" for="cfs_purchase_order_finance_users" class="col-lg-3 o_light_label"/>
+                                        <field name="cfs_purchase_order_finance_users"/>
+                                    </div>
+                                    <br/>
+                                    <div class="row mt16">
+                                        <label string="Purchase Order Manager Users" for="cfs_purchase_manager_users" class="col-lg-3 o_light_label"/>
+                                        <field name="cfs_purchase_manager_users"/>
+                                    </div>
+                                    <br/>
+                                    <div class="row mt16">
+                                        <label string="Skip Purchase Order Manager Users" for="cfs_skip_purchase_manager_users" class="col-lg-3 o_light_label"/>
+                                        <field name="cfs_skip_purchase_manager_users"/>
+                                    </div>
+                                    <br/>
+                                    <div class="row mt16">
+                                        <label string="Purchase Order CEO" for="cfs_purchase_order_ceo_id" class="col-lg-3 o_light_label"/>
+                                        <field name="cfs_purchase_order_ceo_id"/>
+                                    </div>
+                                    <br/>
+									<div class="row mt16">
+										<label string="CFO" for="cfs_cfo" class="col-lg-3 o_light_label"/>
+										<field name="cfs_cfo"/>
+									</div>
+									<br/>
+                                    <div class="row mt16">
+                                        <label string="Minimum Amount CEO" for="cfs_min_amount_ceo" class="col-lg-3 o_light_label"/>
+                                        <field name="cfs_min_amount_ceo"/>
+                                    </div>
+                                    <br/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </xpath>
+
+        </field>
+    </record>
+</odoo> 

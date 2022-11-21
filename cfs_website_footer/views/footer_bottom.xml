@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="brand_promotion" inherit_id="web.brand_promotion" name="Brand Promotion">
+        <xpath expr="//t[@t-call='web.brand_promotion_message']" position="replace"/>
+    </template>
+
+    <template id="footer_language_selector" inherit_id="portal.frontend_layout" name="Footer Language Selector">
+        <xpath expr="//*[hasclass('o_footer_copyright_name')]" position="replace">
+            <div style="font-size: .75rem;">
+                <a href="https://cfs.energy/legal/potnc">PO Standard Terms and Conditions</a> 
+                <p t-ignore="true" t-if="website.user_id != user_id" style="display: inline-block; margin-bottom: 0px;"> | </p>
+                <a t-ignore="true" t-if="website.user_id != user_id" href="https://cfs.energy/legal/portal-tou">Portal Use Terms and Conditions</a>
+                <p style="margin-bottom: 0px;">For support, please email <a href="mailto:supplierportal@cfs.energy">supplierportal@cfs.energy</a></p>
+            </div>
+
+            <span class="o_footer_copyright_name mr-2">&amp;copy; 2022 Commonwealth Fusion Systems, LLC</span>
+
+        </xpath>
+    </template>
+</odoo>

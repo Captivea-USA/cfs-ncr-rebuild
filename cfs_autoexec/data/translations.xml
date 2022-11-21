@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+<!-- EOI-387: Add cfs_autoexec module -->
+<delete model="ir.translation" search="[]"/>
+
+</odoo>

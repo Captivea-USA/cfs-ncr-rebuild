@@ -1,0 +1,17 @@
+<odoo>
+    <data>
+        <record id="custom_account_move_form_inherit_grant" model="ir.ui.view">
+            <field name="name">account.move.inherit.grant</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_move_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//notebook//page[@name='other_info']//group[@name='accounting_info_group']" position="after">
+                    <group string="Grant Info" name="grant_info">
+                        <field name="custom_grant_application_id"/>
+                        <field name="custom_grant_lead_id"/>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

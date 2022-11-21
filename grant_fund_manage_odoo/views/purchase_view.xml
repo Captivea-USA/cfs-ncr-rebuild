@@ -1,0 +1,14 @@
+<odoo>
+    <data>
+        <record id="custom_purchase_order_form_inherit_grant" model="ir.ui.view">
+            <field name="name">purchase.order.inherit.grant</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.purchase_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//notebook/page[@name='purchase_delivery_invoice']//field[@name='fiscal_position_id']" position="after">
+                    <field name="custom_received_grant_application_id"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

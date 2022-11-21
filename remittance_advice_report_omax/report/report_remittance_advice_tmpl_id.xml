@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_remittance_advice_tmpl_id">
+        <t t-call="remittance_advice_report_omax.report_remittance_advice_layout">
+            <t t-set="o" t-value="o.with_context(lang=lang)"/>
+            <div class="page">
+                <center><h3><strong>Remittance Advice Receipt: <span t-field="o.name"/></strong></h3></center>
+                <div class="row" id="address">
+                    <table width="100%" class="table table-sm">
+                        <thead style="display: table-row-group">
+                            <tr width="100%" style="background-color: #262F64 !important; color:rgba(255,255,255,1)!important; font-weight:bold; border: none;">
+                                <td width="50%">Receipients Infromation</td>
+                                <td width="50%">By Order of</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <t t-if="o.partner_id">
+                                        <address t-field="o.partner_id" t-options='{"widget": "contact", "fields": ["address", "name","phone"], "no_marker": True}' />
+                                    </t>
+                                </td>
+                                <td>
+                                    <t t-if="o.company_id">
+                                        <span t-esc="o.company_id.name"/><br/>
+                                        <t t-if="o.company_id.street">
+                                            <span t-esc="o.company_id.street"/><br/>
+                                        </t>
+                                        <t t-if="o.company_id.city or o.company_id.zip">
+                                            <span t-esc="o.company_id.city"/>&amp;nbsp;<span t-esc="o.company_id.zip"/><br/>
+                                        </t>
+                                        <t t-if="o.company_id.state_id">
+                                            <span t-esc="o.company_id.state_id.name"/><br/>
+                                        </t>
+                                        <t t-if="o.company_id.country_id">
+                                            <span t-esc="o.company_id.country_id.name"/><br/>
+                                        </t>
+                                        <t t-if="o.company_id.phone">
+                                            <span t-esc="o.company_id.phone"/><br/>
+                                        </t>
+                                        <!--address t-field="o.company_id" t-options='{"widget": "contact", "fields": ["address", "name","phone"], "no_marker": True}'/-->
+                                    </t>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- -->
+                <div id="informations" class="row mt32 mb32" style="background-color: #262F64 !important; color:rgba(255,255,255,1)!important; font-weight:bold; border: none;">
+                    <div class="col-auto col-3 mw-100 mb-2" t-if="o.date" name="date">
+                        <strong>Payment Date:</strong>
+                        <p class="m-0" t-field="o.date"/>
+                    </div>
+                    <div class="col-auto col-3 mw-100 mb-2" t-if="o.partner_id" name="partner_id">
+                        <strong>Customer:</strong>
+                        <p class="m-0" t-field="o.partner_id"/>
+                    </div>
+                    <div class="col-auto col-3 mw-100 mb-2" t-if="o.payment_method_id" name="payment_method_id">
+                        <strong>Payment Method:</strong>
+                        <p class="m-0" t-field="o.payment_method_id"/>
+                    </div>
+                    <div class="col-auto col-3 mw-100 mb-2" t-if="o.amount" name="amount">
+                        <strong>Payment Amount:</strong>
+                        <p class="m-0" t-field="o.amount"/>
+                    </div>
+                    <div class="col-auto col-3 mw-100 mb-2" t-if="o.ref" name="ref">
+                        <strong>Memo:</strong>
+                        <p class="m-0" t-field="o.ref"/>
+                    </div>
+                </div>
+                <br/><br/>
+                <!-- -->
+                <div class="row" id="payment_table">
+                    <table width="100%" class="table table-sm">
+                        <thead>
+                            <tr width="100%" style="background-color: #262F64 !important; color:rgba(255,255,255,1)!important; font-weight:bold; border: none;">
+                                <th><span>Invoice Date</span></th>
+                                <th><span>Invoice Number</span></th>
+                                <th><span>Reference</span></th>
+                                <th class="text-right"><span>Amount</span></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="o.move_id._get_reconciled_invoices_partials()" t-as="rec">
+                                <!-- MOVE -->
+                                <t t-set="inv" t-value="rec[2].move_id"/>
+                                <t t-if="inv.move_type != 'entry'">
+                                    <tr>
+                                        <td><span t-field="inv.invoice_date"/></td>
+                                        <td><span t-field="inv.name"/></td>
+                                        <td><span t-field="inv.ref"/></td>
+                                        <td class="text-right"><span t-field="inv.amount_total"/></td>
+                                    </tr>
+                                    <!-- PAYMENTS/REVERSALS -->
+                                    <tr t-foreach="inv._get_reconciled_invoices_partials()" t-as="par" style="background-color: #e8f1f9 !important;">
+                                        <t t-set="amount" t-value="par[1]"/>
+                                        <t t-set="payment" t-value="par[2].move_id"/>
+                                        <td><span t-field="payment.date"/></td>
+                                        <td><span t-field="payment.name"/></td>
+                                        <td><span t-field="payment.ref"/></td>
+                                        <td class="text-right">-<span t-esc="amount" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/></td>
+                                    </tr>
+                                    <!-- BALANCE -->
+                                    <tr>
+                                        <td/>
+                                        <td><strong>Due Amount for <span t-field="inv.name"/></strong></td>
+                                        <td/>
+                                        <td class="text-right"><strong><span t-field="inv.amount_residual"/></strong></td>
+                                    </tr>
+                                </t>
+                            </t>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- -->
+                <br/><br/>
+                <div class="row" id="signature">
+                    <t t-if="o.company_id.signature_image">
+                        <table width="100%">
+                            <tr width="100%">
+                                <td width="25%">
+                                    <div>
+                                        <strong>For &amp;nbsp;<span t-field="o.company_id.name"/></strong><br/>
+                                        <span itemprop="image" t-field="o.company_id.signature_image" t-options="{&quot;widget&quot;: &quot;image&quot;}" style="width:130px;height:40px; display: block;"/><br/><br/><br/><br/>
+                                    </div>
+                                </td>
+                                <td width="75%"/>
+                            </tr>
+                        </table>
+                    </t>
+                </div>
+            </div>
+        </t>
+    </template>
+</odoo>

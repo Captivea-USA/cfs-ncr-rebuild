@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="mail_template_grant_proposal" model="mail.template">
+            <field name="name">Grnat: Proposal Email</field>
+            <field name="model_id" ref="crm.model_crm_lead"/>
+            <field name="subject">Grant Proposal</field>
+            <field name="email_from">{{object.user_id.email_formatted}}</field>
+            <field name="partner_to">{{object.partner_id.id}}</field>
+            <field name="body_html" type="html">
+<div style="margin: 0px; padding: 0px;">
+    <p style="margin: 0px; padding: 0px; font-size: 12px;">
+        Hello <t t-out="object.partner_id.name"/>,
+        <br/><br/>
+        I am writing this letter to submit an interesting proposal.we have applied the same for our pricious customers and it is our goal to spread the method amoung other prospective clients.
+        <br/><br/>
+        You will find a proposal attached to the letter in which explain the details of our plan.The plan comes with guidelines that we use in case of the majority of our clients.
+        <br/><br/>
+        I will call you as a follow-up of the grant proposal.i hope that you will help us to make our mission go ahead.
+        <br/><br/>
+    </p>
+</div></field>
+            <field name="report_template" ref="action_report_grant_seeker_lead"/>
+            <field name="report_name">Grant Proposal</field>
+            <field name="lang">{{object.partner_id.lang}}</field>
+            <!-- <field name="user_signature" eval="False"/> -->
+            <field name="auto_delete" eval="True"/>
+        </record>
+    </data>
+</odoo>

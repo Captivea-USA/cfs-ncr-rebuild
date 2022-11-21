@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- EOI-498: Fix domain on Purchase Orders list view -->
+    <record id="stock.action_view_inventory_tree" model="ir.actions.server">
+        <field name="groups_id" eval="[(6, 0, [])]"/>
+    </record>
+
+</odoo>

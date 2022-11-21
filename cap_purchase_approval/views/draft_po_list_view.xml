@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    
+
+    <!-- Tree View -->
+    <record id="draft_po_tree_view" model="ir.ui.view">
+        <field name="name">draft.po.tree.view</field>
+        <field name="model">purchase.order</field>
+        <field name="type">tree</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="company_id"/>
+                <field name="user_id"/>
+                <field name="create_date" widget="date"/>
+                <field name="date_planned" widget="date"/>
+                <field name="activity_ids"/>
+                <!-- <field name="origin"/> -->
+                <field name="amount_total" widget="monetary" 
+                                           options="{'currency_field': 'currency_id'}"/>
+                                           <!-- decoration-bf="1" 
+                                           modifiers="{'readonly':true}"
+                                           sum="Total Amount"/> -->
+                <field name="state" widget="badge" decoration-success="state == 'approved'" 
+                                                   decoration-warning="state == 'to approve' or state == 'to reapprove'" 
+                                                   decoration-info="state == 'draft' or state == 'sent'" on_change="1" modifiers="{'readonly':true}"/>
+
+            </tree>
+        </field>
+    </record>
+
+
+</odoo>

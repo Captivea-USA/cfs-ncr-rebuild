@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- #EOI 226/227 Setup Views-->
+<odoo>
+    <data>
+        <record id="view_budget_enhancement_tree" model="ir.ui.view">
+            <field name="name">account.budget.enhancement.tree</field>
+            <field name="model">crossovered.budget.lines</field>
+            <field name="inherit_id" ref="account_budget.view_crossovered_budget_line_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='practical_amount']" position="replace">
+                    <field name="abs_practical_amount"/>
+                    <field name="draft_burden" optional="hide"/>
+                    <field name="approved_burden" optional="hide"/>
+                    <field name="released_burden" optional="hide"/>
+                    <field name="closed_burden" optional="hide"/>
+                    <field name="total_burden" optional="hide"/>
+                </xpath>
+                <xpath expr="//field[@name='theoritical_amount']" position="replace">
+                    <field name="abs_theoritical_amount"/>
+                </xpath>
+                <xpath expr="//field[@name='planned_amount']" position="replace">
+                    <field name="abs_planned_amount"/>
+                </xpath>
+                <xpath expr="//field[@name='percentage']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+            </field>
+        </record>
+    </data>
+
+    <data>
+        <record id="view_budget_enhancement_form" model="ir.ui.view">
+            <field name="name">account.budget.enhancement.form</field>
+            <field name="model">crossovered.budget.lines</field>
+            <field name="inherit_id" ref="account_budget.view_crossovered_budget_line_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='practical_amount']" position="replace">
+                    <field name="practical_amount" invisible="1"/>
+                    <field name="abs_practical_amount"/>
+                    <field name="draft_burden"/>
+                    <field name="approved_burden"/>
+                    <field name="released_burden"/>
+                    <field name="total_burden"/>
+                </xpath>
+                <!-- EOI 487 - Fix fields -->
+                <xpath expr="//field[@name='planned_amount']" position="replace">
+                    <field name="planned_amount" invisible="1"/>
+                    <field name="abs_planned_amount"/>
+                </xpath>
+                <!-- EOI 487 - Fix Fields -->
+                <xpath expr="//field[@name='theoritical_amount']" position="replace">
+                    <field name="theoritical_amount" invisible="1"/>
+                    <field name="abs_theoritical_amount"/>
+                </xpath>
+                <!-- EOI 487 - Make achievement invisible -->
+                <xpath expr="//field[@name='percentage']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+            </field>
+        </record>
+    </data>
+
+    <data>
+        <record id="view_budget_enhancement_pivot" model="ir.ui.view">
+            <field name="name">account.budget.enhancement.pivot</field>
+            <field name="model">crossovered.budget.lines</field>
+            <field name="inherit_id" ref="account_budget.view_crossovered_budget_line_pivot"/>
+            <field name="arch" type="xml">
+            <xpath expr="//field[@name='percentage']" position="after">
+                <field name="abs_planned_amount" type="measure"/>
+                <field name="abs_practical_amount" type="measure"/>
+                <field name="abs_theoritical_amount" type="measure"/>
+                <field name="approved_burden" type="measure"/>
+                <field name="closed_burden" type="measure"/>
+                <field name="draft_burden" type="measure"/>
+                <field name="released_burden" type="measure"/>
+                <field name="total_burden" type="measure"/>
+            </xpath>
+            <xpath expr="//field[@name='theoritical_amount']" position="replace"/>
+            <xpath expr="//field[@name='practical_amount']" position="replace"/>
+
+            </field>
+        </record>
+    </data>
+
+</odoo>

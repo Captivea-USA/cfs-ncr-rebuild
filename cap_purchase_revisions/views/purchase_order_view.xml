@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="view_purchase_revision_form" model="ir.ui.view">
+            <field name="name">Purchase Revision</field>
+            <field name="model">purchase.order</field>
+            <field name="priority">99</field>
+            <field name="inherit_id" ref="purchase.purchase_order_form"/>
+            <field name="arch" type="xml">
+                <data>
+                    <!-- PO Header -->
+                    <xpath expr="//form/header" position="inside">
+                        <button name="button_revise_po" type="object" string="Revise" attrs="{'invisible': [('state','!=','purchase')]}" class="oe_highlight"/>
+                    </xpath>
+                    <!-- EOI-428 8a) added to the existing domain: ('code', '=', 'incoming') -->
+                    <xpath expr="//field[@name='cfs_buyer']" position="after">
+                        <field name="picking_type_id" domain="[('code','=','incoming'), '|', ('warehouse_id', '=', False), ('warehouse_id.company_id', '=', company_id)]"/>
+                    </xpath>
+                   <!-- EOI 323 Prior PO Logic -->
+                    <xpath expr="//field[@name='picking_type_id']" position="after">
+                        <field name="prior_po" attrs="{'invisible': [('prior_po','=',False)] }"/>
+                    </xpath>
+
+                    <!-- PO Lines -->
+                    <!-- EOI 324 - Old Q and $ -->
+                    <xpath expr="//field[@name='order_line']/tree[1]/field[@name='product_id']" position="before">
+                        <field name='prior_line' invisible='1'/>
+                    </xpath>
+                    <xpath expr="//field[@name='order_line']/tree[1]/field[@name='product_id']" position="before">
+                        <field name="change_type" attrs="{'column_invisible': [('parent.prior_po', '=', False )]}"/>
+                    </xpath>
+                    <xpath expr="//field[@name='order_line']/tree[1]/field[@name='product_qty']" position="before">
+                        <field name="prior_product_qty" attrs="{'column_invisible': [('parent.prior_po', '=', False )]}"/>
+                    </xpath>
+                    <xpath expr="//field[@name='order_line']/tree[1]/field[@name='price_unit']" position="before">
+                        <field name="prior_price_unit" attrs="{'column_invisible': [('parent.prior_po', '=', False )]}"/>
+                    </xpath>
+                </data>
+            </field>
+        </record>
+    </data>
+</odoo>

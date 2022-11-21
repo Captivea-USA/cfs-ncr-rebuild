@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        
+        <record id="view_account_move_form" model="ir.ui.view">
+            <field name="name">Account Move Approval</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_move_form"/>
+            <field name="arch" type="xml">
+                <!-- EOI-554: No create and quick create on vendor field -->
+                <xpath expr="//field[@name='partner_id']" position="attributes">
+                    <attribute name="options">{'no_create': True, 'no_create_edit':True}</attribute>
+                </xpath>
+                <!-- TODO: we shouldnt need to replace the entire button -->
+                <xpath expr="//button[@name='action_register_payment']" position="replace">
+                    <field name='is_approved' invisible="1"/>
+                    <!-- EOI-522: hide_register_payment_button needed below -->
+                    <field name='hide_register_payment_button' invisible='1'/>
+                    <!-- EOI-508: Changed domain on action_register_payment to use the require_approval field and added require_approval field into view -->
+                    <field name='require_approval' invisible='1'/>
+                    <button name="action_register_payment" id="account_invoice_payment_btn" type="object" class="oe_highlight" 
+                            attrs="{'invisible': [
+                                ('hide_register_payment_button','=',True)
+                            ]}"
+                            context="{'dont_redirect_to_payments': True}" 
+                            string="Register Payment" 
+                            data-hotkey="g" 
+                            groups="account.group_account_invoice"/>
+                </xpath>
+                <!--EOI 350-->
+                <xpath expr="//div[@name='button_box']" position="inside">
+                    <button class="oe_stat_button" name="action_view_approvals" type="object" icon="fa-pencil-square-o" attrs="{'invisible': [('multi_approval_id_count', '=', 0)]}">
+                        <div class="o_field_widget o_stat_info">
+                            <span class="o_stat_value">
+                                <field name="multi_approval_id_count"/>
+                            </span>
+                            <span class="o_stat_text">Approvals</span>
+                        </div>
+                    </button>
+                    <!-- EOI-488: Removed javascript code, because we removed the model that kept adding in modifiers into our domains -->
+                </xpath>
+                <!-- EOI-553: Restrict Analytic Account field domain -->
+                <xpath t-if="invoice_line_ids" expr="//field[@name='invoice_line_ids']/tree/field[@name='analytic_account_id']" position="attributes">
+                    <attribute name="domain">[('show_in_budget_tab', '=', True)]</attribute>
+                    <!-- EOI 556: Added required Analytic Account field  -->
+                    <attribute name="required">1</attribute>
+                </xpath>
+                <!-- EOI-553: Restrict Analytic Account field domain -->
+                <xpath t-if="line_ids" expr="//field[@name='line_ids']/tree/field[@name='analytic_account_id']" position="attributes">
+                    <attribute name="domain">[('show_in_budget_tab', '=', True)]</attribute>
+                    <!-- EOI 556: Added required Analytic Account field  -->
+                    <attribute name="required">1</attribute>
+                </xpath>
+                <xpath expr="//field[@name='ref']" position="attributes">
+                    <attribute name="required">1</attribute>
+                </xpath>
+                <!--EOI 380-->
+                <xpath expr="//field[@name='invoice_date']" position="attributes">
+                    <attribute name='attrs'>{'required': [('move_type','!=','entry')], 'invisible': [('move_type','=','entry')] }</attribute>
+                </xpath>
+                <xpath expr="//form[1]/sheet[1]/group[1]/group[1]/field[@name='partner_bank_id']" position="after">
+                    <field name = "acc_type" />
+                </xpath>
+                <!-- EOI 350 -->
+                <xpath expr="//form[1]/sheet[1]/group[1]/group[2]/field[@name='date']" position="after">
+                    <field name="linked_purchase_id" attrs="{'invisible': [('move_type','!=','in_invoice')]}"/>
+                </xpath>
+                <!-- EOI-494 - Linked PO field needs to be available on the Refunds view-->
+                <xpath expr="//form[1]/sheet[1]/group[1]/group[2]/field[@name='date']" position="after">
+                    <field name="linked_purchase_refund_id" attrs="{'invisible': [('move_type','!=','in_refund')]}"/>
+                </xpath>
+                <xpath expr="//page[@name='other_info']//field[@name='company_id']" position="before">
+                    <field name="on_hold"/>
+                </xpath>
+                <xpath expr="//page[@name='other_info']//field[@name='fiscal_position_id']" position="attributes">
+                    <attribute name="string">Default Tax Status</attribute>
+                </xpath>
+                <xpath expr="//field[@name='invoice_cash_rounding_id']" position="replace"/>
+            </field>
+        </record>
+
+        <!--EOI 350-->
+        <record id="view_account_move_enhanced" model="ir.ui.view">
+            <field name="name">Account Move Tree Enhanced</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_invoice_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='activity_ids']" position="after">
+                    <field name="company_id"/>
+                </xpath>
+                <xpath expr="//field[@name='amount_total_signed']" position="after">
+                    <field name="invoice_payment_term_id" optional="show"/>
+                </xpath>
+                <xpath expr="//field[@name='invoice_payment_term_id']" position="after">
+                    <field name="terms_due_date" optional="show"/>
+                </xpath>
+                <xpath expr="//field[@name='terms_due_date']" position="after">
+                    <field name="terms_amount" optional="show"/>
+                </xpath>
+                <xpath expr="//field[@name='state']" position="after">
+                    <field name="acc_type"/>
+                </xpath>
+                <xpath expr="//field[@name='acc_type']" position="after">
+                    <field name="is_approved"/>
+                </xpath>
+                <xpath expr="//field[@name='is_approved']" position="after">
+                    <field name="bank_info_check" optional="show"/>
+                </xpath>
+                <xpath expr="//field[@name='bank_info_check']" position="after">
+                    <field name="release_to_pay_manual" widget="badge" optional="show" decoration-danger="release_to_pay_manual == 'no'" decoration-warning="release_to_pay_manual == 'exception'" decoration-success="release_to_pay_manual =='yes'"/>
+                </xpath>
+                <xpath expr="//field[@name='to_check']" position="replace">
+                    <field name='to_check' invisible='1'/>
+                </xpath>
+                <xpath expr="//field[@name='date']" position="replace">
+                    <field name='date' invisible='1'/>
+                </xpath>
+                <xpath expr="//field[@name='amount_total_in_currency_signed']" position="replace">
+                    <field name='amount_total_in_currency_signed' invisible='1'/>
+                </xpath>
+                <xpath expr="//field[@name='currency_id']" position="replace">
+                    <field name='currency_id' invisible='1'/>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- EOI 338 -->
+        <record id="view_account_move_multi_approval_form" model="ir.ui.view">
+            <field name="name">Account Move Multi Approval View</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_move_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//form/header" position="inside">
+                    <field name="x_need_approval" invisible="1"/>
+                    <field name="x_review_result" invisible="1"/>
+                    <field name="is_approved" invisible="1"/>
+                    <field name="x_has_request_approval" invisible="1"/>
+                    <field name="multi_approval_id_count" invisible="1"/>
+                    <!-- EOI-502: changed domain for action request to hide if there is an approval in progress -->
+                    <field name="approval_in_progress" invisible="1"/>
+					<!-- EOI-508: Changed domain on action_request to use the require_approval field -->
+                    <!-- EOI-556: Changed domain for journal entry requirements -->
+                    <button name="action_request" attrs="{'invisible': [  '|', '|','|', ['require_approval','=',False],['state','!=','posted'], ['approval_in_progress','=',True], ['move_type','=','entry']]}" type="object" class="oe_highlight" approval_btn="1" string="Request Approval"/>
+                    <button name="%(multi_level_approval_configuration.action_open_request)d" type="action" string="View Approval" groups="multi_level_approval.group_approval_user" attrs="{'invisible': [('x_has_request_approval', '=', False)]}" approval_btn="1"/>
+                    <button name="%(multi_level_approval_configuration.rework_approval_action)d" type="action" string="Rework" groups="multi_level_approval.group_approval_user" attrs="{'invisible': [('x_review_result', '!=', 'refused')]}" approval_btn="1"/>
+                </xpath>
+                <xpath expr="//form/sheet" position="before">
+                    <div>
+                        <!-- EOI-508: Changed invisible parameters -->
+                        <div attrs="{'invisible': [('is_approved', '=', True)]}" class="alert alert-danger" style="margin-bottom:0px;" role="alert">This Bill has not been approved.</div>
+                        <div attrs="{'invisible': ['|', ('x_need_approval', '=', False), ('x_review_result', '!=', 'reapprove')]}" class="alert alert-danger" style="margin-bottom:0px;" role="alert">This Bill needs another approval.</div>
+                        <div attrs="{'invisible': ['|', ('x_need_approval', '=', False), ('x_review_result', '!=', 'refused')]}" class="alert alert-danger" style="margin-bottom:0px;" role="alert">This Bill has been refused.</div>
+                    </div>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- EOI 350 - Reproduce Accounting -->
+        <record id="purchase_to_bill_list_view" model="ir.ui.view">
+            <field name="name">purchase.to.bill.list.view</field>
+            <field name="type">tree</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.purchase_order_view_tree"/>
+            <field name="arch" type="xml">
+                <data>
+                    <xpath expr="//field[@name='name']" position="attributes">
+                        <attribute name="string">PO Number</attribute>
+                    </xpath>
+                    <xpath expr="//field[@name='date_approve']" position="attributes">
+                        <attribute name="string">Approved On</attribute>
+                    </xpath>
+                    <xpath expr="//field[@name='date_planned']" position="attributes">
+                        <attribute name="string">Need Date</attribute>
+                        <attribute name="widget">date</attribute>
+                    </xpath>
+                    <xpath expr="//field[@name='user_id']" position="attributes">
+                        <attribute name="string">Created By</attribute>
+                    </xpath>
+                    <xpath expr="//field[@name='user_id']" position="after">
+                        <field name="cfs_released_by" optional="show"/>
+                    </xpath>
+                    <xpath expr="//field[@name='state']" position="attributes">
+                        <attribute name="invisible">0</attribute>
+                        <attribute name="widget">badge</attribute>
+                    </xpath>
+                    <xpath expr="//field[@name='state']" position="after">
+                        <field name="cfs_is_transfer_return" optional="show"/>
+                    </xpath>
+                </data>
+            </field>
+        </record>
+        <!-- EOI- 556 show Analytic Account ID -->
+        <record id="view_move_line_tree_grouped_cfs" model="ir.ui.view">
+            <field name="model">account.move.line</field>
+            <field name="type">tree</field>
+            <field name="inherit_id" ref="account.view_move_line_tree_grouped"></field>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='analytic_account_id']" position="attributes">
+                    <attribute name="optional">show</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="account_purchase_to_bill" model="ir.actions.act_window">
+            <field name="name">PO's to Bill</field>
+            <field name="res_model">purchase.order</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="cap_approvals.purchase_to_bill_list_view"/>
+            <field name="domain">[('invoice_status','=','to invoice')]</field>
+            <field name="target">current</field>
+            <field name="help" type="html">
+                <p>PO's to Bill</p>
+            </field>
+        </record>
+
+        <menuitem 
+            id="menu_purchase_to_bill" 
+            name="PO's to Bill" 
+            action="cap_approvals.account_purchase_to_bill" 
+            parent="account.menu_finance_payables" 
+            sequence="0" />
+
+    </data>
+</odoo>

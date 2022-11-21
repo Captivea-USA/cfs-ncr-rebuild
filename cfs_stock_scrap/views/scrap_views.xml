@@ -1,0 +1,27 @@
+<odoo>
+    <data noupdate="1">
+        <record id="stock_scrap_form_view_inherit_cfs" model="ir.ui.view">
+            <field name="name">stock.scrap.form.inherit.cfs</field>
+            <field name="model">stock.scrap</field>
+            <field name="inherit_id" ref="stock.stock_scrap_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='product_id']" position="after">
+                    <field name="helpdesk_ticket_id" attrs="{'invisible': [('helpdesk_ticket_id','=',False)]}"/>
+                    <field name="reason_id" required="1" options="{'no_create': True, 'no_create_edit':True}" />
+                    <field name="lot_ids" invisible="1"/>
+                </xpath>
+            </field>
+        </record>
+        <record id="stock_scrap_form_view2_inherit_cfs" model="ir.ui.view">
+            <field name="name">stock.scrap.form2.inherit.cfs</field>
+            <field name="model">stock.scrap</field>
+            <field name="inherit_id" ref="stock.stock_scrap_form_view2"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='product_id']" position="after">
+                    <field name="reason_id" required="1" options="{'no_create': True, 'no_create_edit':True}" />
+                    <field name="lot_ids" invisible="1"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

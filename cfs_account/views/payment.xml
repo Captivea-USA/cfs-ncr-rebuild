@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- EOI-368: Make Vendor required on Payments -->
+    <record id="account_payment_cfs_inherit" model="ir.ui.view">
+        <field name="name">account.payment.cfs.inherit</field>
+        <field name="model">account.payment</field>
+        <field name="inherit_id" ref="account.view_account_payment_form" />
+        <field name="arch" type="xml">
+            <!-- 
+                Two `partner_id` xpaths are required because there are two `partner_id` fields on the default Odoo view
+                They have two different visibility states per partner type (Vendor/Customer).
+             -->
+            <xpath expr="//field[@name='partner_id'][1]" position="attributes">
+                <attribute name="required">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='partner_id'][2]" position="attributes">
+                <attribute name="required">1</attribute>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

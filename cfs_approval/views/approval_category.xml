@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+        <!-- EOI-411: Fix approval menus and views -->
+        <!-- Approval Category Form Action -->
+        <record id="approval_category_view_form_inherit" model="ir.ui.view">
+            <field name="name">approval.category.views.form.inherit</field>
+            <field name="inherit_id" ref="approvals.approval_category_view_form"/>
+            <field name="model">approval.category</field>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='has_location']" position="after">
+                    <field name="show" />
+                </xpath>
+            </field>
+        </record>
+
+        <!-- EOI-411: Fix approval menus and views -->
+        <!-- Approvals Dashboard Action -->
+        <record id="approval_category_dashboard" model="ir.actions.act_window">
+            <field name="name">Dashboard</field>
+            <field name="res_model">approval.category</field>
+            <field name="view_mode">kanban</field>
+            <field name="domain">[('show','=',True)]</field>
+        </record>
+
+        <!-- EOI-411: Fix approval menus and views -->
+        <!-- Approvals Root Menu-->
+        <record id="approvals.approvals_menu_root" model="ir.ui.menu">
+            <field name="action" ref="approval_category_dashboard"/>
+        </record>
+
+        <!-- EOI-411: Fix approval menus and views -->
+        <!-- All Requests Action -->
+        <record id="approval_request_action" model="ir.actions.act_window">
+            <field name="name">All Requests</field>
+            <field name="res_model">approval.request</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No Approvals Requests
+                </p>
+                <p>
+                    Let's go to the <a type="action" class="text-primary" name="%(approvals.approval_category_action_new_request)d">new request</a> menu
+                </p>
+            </field>
+        </record>
+        
+        <!-- EOI-411: Fix approval menus and views -->
+        <!-- My Requests Action -->
+        <record id="approval_request_action_my_requests" model="ir.actions.act_window">
+            <field name="name">My Requests</field>
+            <field name="res_model">approval.request</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('request_owner_id','=',uid)]</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No Approvals Requests
+                </p>
+                <p>
+                    Let's go to the <a type="action" class="text-primary" name="%(approvals.approval_category_action_new_request)d">new request</a> menu
+                </p>
+            </field>
+        </record>
+
+        <!-- EOI-411: Fix approval menus and views -->
+        <!-- All Requests Menu Item -->
+        <menuitem
+            id="approvals_request_menu_all_requests"
+            parent="approvals.approvals_approval_menu"
+            name="All Requests"
+            action="approval_request_action"
+            sequence="20"/>
+
+        <!-- EOI-411: Fix approval menus and views -->
+        <!-- My Requests Menu Item -->
+        <menuitem
+            id="approvals_request_menu_my_requests"
+            parent="approvals.approvals_approval_menu"
+            name="My Requests"
+            action="approval_request_action_my_requests"
+            sequence="30"/>
+
+</odoo>

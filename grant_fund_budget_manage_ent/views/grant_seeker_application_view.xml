@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="inherit_grant_seeker_application_form_budget" model="ir.ui.view">
+            <field name="name">grant.seeker.application.form</field>
+            <field name="model">grant.seeker.application</field>
+            <field name="inherit_id" ref="grant_fund_manage_odoo.custom_grant_seeker_application_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr = "//div[@name = 'button_box']" position="inside">
+                    <button name="action_view_grant_budgets" type="object" class="oe_stat_button" icon="fa-btc" string="Budgets">
+                    </button>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

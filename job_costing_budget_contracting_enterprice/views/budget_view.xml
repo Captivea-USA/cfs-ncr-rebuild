@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+<!--        <record id="crossovered_budget_view_form_inherit_budget" model="ir.ui.view"> odoo13-->
+        <record id="crossovered_budget_view_form_inherit_budget_custom" model="ir.ui.view">
+            <field name="name">crossovered.budget.view.form.inherit_budget</field>
+            <field name="model">crossovered.budget</field>
+            <field name="inherit_id" ref="account_budget.crossovered_budget_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//page//form//field[@name='planned_amount']" position="before">
+                    <field name="line_type"/>
+                    <field name="costsheet_id"/>
+                    <field name="jobtype_id"/>
+                    <field name="jobcost_line_id"/>
+                </xpath>
+                <xpath expr="//page//form//group" position="after">
+                    <group>
+                        <group string="Actual Quantity">
+                            <field name="actual_purchase_quantity"/>
+                            <field name="actual_vendor_quantity"/>
+                            <field name="actual_cost_unit"/>
+                        </group>
+                         <group string="Planned Quantity">
+                            <field name="material_planned_qyt" attrs="{'invisible': [('line_type', '!=', 'material')]}"/>
+                            <field name="overhead_planned_qyt" attrs="{'invisible': [('line_type', '!=', 'overhead')]}"/>
+                            <field name="labour_hour" attrs="{'invisible': [('line_type', '!=', 'labour')]}"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Actual Amount">
+                            <field name="actual_purchase_amount" widget="monetary" options="{'currency_field': 'custom_currency_id'}"/>
+                            <field name="actual_vendorbill_amount" widget="monetary" options="{'currency_field': 'custom_currency_id'}"/>
+                            <field name="actual_amount_total" widget="monetary" options="{'currency_field': 'custom_currency_id'}"/>
+                        </group>
+                         <group string="Other Information">
+                            <field name="custom_currency_id"/>
+                            <field name="product_id"/>
+                            <field name="uom_id"/>
+                            <field name="description"/>
+                            <field name="reference"/>
+                        </group>
+                    </group>
+                </xpath>
+                <xpath expr="//tree/field[@name='analytic_account_id']" position="after">
+                    <field name="line_type"/>
+                    <field name="jobtype_id"/>
+                    <field name="costsheet_id"/>
+                    <field name="jobcost_line_id"/>
+                    <field name="product_id"/>
+                    <field name="uom_id"/>
+                    <field name="description"/>
+                    <field name="reference"/>
+                    <field name="actual_purchase_quantity" sum="Total" invisible="1"/>
+                    <field name="actual_vendor_quantity" sum="Total" invisible="1"/>
+                    <field name="actual_cost_unit" sum="Total" invisible="1"/>
+                    <field name="actual_purchase_amount" sum="Total" invisible="1"/>
+                    <field name="actual_vendorbill_amount" sum="Total" invisible="1"/>
+                    <field name="actual_amount_total" sum="Total" invisible="1"/>
+                    <field name="material_planned_qyt" sum="Total" invisible="1"/>
+                    <field name="overhead_planned_qyt" sum="Total" invisible="1"/>
+                    <field name="labour_hour" sum="Total" invisible="1"/>
+                    <field name="custom_currency_id" sum="Total" invisible="1"/>
+                </xpath>
+                <xpath expr="//div[@class='oe_title']" position="after">
+                    <div class="oe_button_box" name="button_box">
+                        <button name="show_costsheet_custom" type="object"  icon="fa-pencil-square-o" string="Cost Sheet"/>
+                        <button name="show_costsheet_line_custom" type="object"  icon="fa-pencil-square-o" string="Cost Sheet Lines"/>
+                    </div>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_crossovered_budget_line_form_inherit_custom" model="ir.ui.view">
+<!--        <record id="view_crossovered_budget_line_form_inherit" model="ir.ui.view"> odoo13-->
+            <field name="name">crossovered.budget.line.form.inherit</field>
+            <field name="model">crossovered.budget.lines</field>
+            <field name="inherit_id" ref="account_budget.view_crossovered_budget_line_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='planned_amount']" position="before">
+                    <field name="line_type"/>
+                    <field name="costsheet_id"/>
+                    <field name="jobtype_id"/>
+                    <field name="jobcost_line_id"/>
+                </xpath>
+                <xpath expr="//group" position="after">
+                    <group>
+                        <group string="Actual Quantity">
+                            <field name="actual_purchase_quantity"/>
+                            <field name="actual_vendor_quantity"/>
+                            <field name="actual_cost_unit"/>
+                        </group>
+                         <group string="Planned Quantity">
+                            <field name="material_planned_qyt" attrs="{'invisible': [('line_type', '!=', 'material')]}"/>
+                            <field name="overhead_planned_qyt" attrs="{'invisible': [('line_type', '!=', 'overhead')]}"/>
+                            <field name="labour_hour" attrs="{'invisible': [('line_type', '!=', 'labour')]}"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Actual Amount">
+                            <field name="actual_purchase_amount" widget="monetary" options="{'currency_field': 'custom_currency_id'}"/>
+                            <field name="actual_vendorbill_amount" widget="monetary" options="{'currency_field': 'custom_currency_id'}"/>
+                            <field name="actual_amount_total" widget="monetary" options="{'currency_field': 'custom_currency_id'}"/>
+                        </group>
+                         <group string="Other Information">
+                            <field name="custom_currency_id"/>
+                            <field name="product_id"/>
+                            <field name="uom_id"/>
+                            <field name="description"/>
+                            <field name="reference"/>
+                        </group>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+
+<!--        <record id="reporting_budget_crossover_line_tree_view" model="ir.ui.view"> odoo13-->
+        <record id="reporting_budget_crossover_line_tree_view_custom" model="ir.ui.view">
+            <field name="name">crossovered.budget.line.tree.inherit</field>
+            <field name="model">crossovered.budget.lines</field>
+            <field name="inherit_id" ref="account_budget.view_crossovered_budget_line_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='paid_date']" position="after">
+                    <field name="line_type"/>
+                    <field name="costsheet_id"/>
+                    <field name="jobtype_id"/>
+                    <field name="jobcost_line_id"/>
+                    <field name="product_id"/>
+                    <field name="uom_id"/>
+                    <field name="description"/>
+                    <field name="reference"/>
+                    <field name="actual_purchase_quantity" sum="Total"/>
+                    <field name="actual_vendor_quantity" sum="Total"/>
+                    <field name="actual_cost_unit" sum="Total"/>
+                    <field name="material_planned_qyt" sum="Total"/>
+                    <field name="overhead_planned_qyt" sum="Total"/>
+                    <field name="labour_hour" sum="Total"/>
+                    <field name="custom_currency_id"/>
+                    <field name="actual_purchase_amount" widget="monetary" options="{'currency_field': 'custom_currency_id'}" sum="Total"/>
+                    <field name="actual_vendorbill_amount" widget="monetary" options="{'currency_field': 'custom_currency_id'}" sum="Total"/>
+                    <field name="actual_amount_total" widget="monetary" options="{'currency_field': 'custom_currency_id'}" sum="Total"/>
+                </xpath>
+            </field>
+        </record>
+
+<!--        <record id="reporting_budget_crossover_line_search_view" model="ir.ui.view"> odoo13-->
+        <record id="reporting_budget_crossover_line_search_view_custom" model="ir.ui.view">
+            <field name="name">account.budget.line.search.inherit</field>
+            <field name="model">crossovered.budget.lines</field>
+            <field name="inherit_id" ref="account_budget.view_crossovered_budget_line_search"/>
+            <field name="arch" type="xml">
+                <xpath expr="//search" position="inside">
+                    <field name="jobcost_line_id"/>
+                    <field name="jobtype_id"/>
+                    <field name="costsheet_id"/>
+                    <field name="product_id"/>
+                    <filter name="grp_cost_line" string="Cost Sheet Line" context="{'group_by':'jobcost_line_id'}"/>
+                    <filter name="grp_jobtype" string="Job Type" context="{'group_by':'jobtype_id'}"/>
+                    <filter name="grp_cost_sheet" string="Cost Sheet" context="{'group_by':'costsheet_id'}"/>
+                    <filter name="grp_product" string="Product" context="{'group_by':'product_id'}"/>
+                </xpath>
+            </field>
+        </record>
+
+<!--        <record id="budget_line_pivot_view" model="ir.ui.view"> odoo13-->
+        <record id="budget_line_pivot_view_custom" model="ir.ui.view">
+        <field name="name">crossovered.budget.line.pivot.inherit</field>
+        <field name="model">crossovered.budget.lines</field>
+        <field name="inherit_id" ref="account_budget.view_crossovered_budget_line_pivot"/>
+         <field name="arch" type="xml">
+             <xpath expr="//field[@name='percentage']" position="after">
+               <field name="analytic_account_id" type="row"/>
+                 <field name="costsheet_id" type="row"/>
+<!--                 <field name="jobcost_line_id" type="col"/-->
+                 <field name="actual_purchase_quantity" type="measure"/>
+                <field name="actual_vendor_quantity" type="measure"/>
+                <field name="actual_cost_unit" type="measure"/>
+                <field name="material_planned_qyt" type="measure"/>
+                <field name="overhead_planned_qyt" type="measure"/>
+                <field name="labour_hour" type="measure"/>
+                <field name="actual_purchase_amount" type="measure"/>
+                <field name="actual_vendorbill_amount" type="measure"/>
+                <field name="actual_amount_total" type="measure"/>
+             </xpath>
+         </field>
+    </record>
+
+<!--        <record id="action_budget_line_report" model="ir.actions.act_window"> odoo13-->
+        <record id="action_budget_line_report_custom" model="ir.actions.act_window">
+        <field name="name">Budget Analysis</field>
+        <field name="res_model">crossovered.budget.lines</field>
+<!--        <field name="view_type">form</field> odoo13-->
+        <field name="view_mode">tree,form,pivot</field>
+<!--        <field name="view_id" ref="budget_line_pivot_view"></field> odoo13-->
+        <field name="view_id" ref="budget_line_pivot_view_custom"></field>
+    </record>
+
+        <menuitem id="menu_budget_report" name="Budget Report"  parent="odoo_job_costing_management.menu_job_managmt" sequence="5"/>
+        <menuitem id="menu_budget_line_report" name="Budget Analysis" 
+        action="action_budget_line_report_custom"  parent="menu_budget_report"/>
+
+    </data>
+</odoo>

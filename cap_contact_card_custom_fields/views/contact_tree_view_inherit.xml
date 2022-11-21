@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- EOI-336: Added fields onto Vendor List view to match UATv14 -->
+    <record id="view_partner_tree_inherit_cfs" model="ir.ui.view">
+        <field name="name">res.partner.tree.inherit.cfs</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_tree"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//field[@name='display_name']" position="after">
+                <field name="company_type" string="Type"/>
+            </xpath>
+
+            <xpath expr="//field[@name='user_id']" position="before">
+                <!-- EOI-360: Make status optional -->
+                <field name="status" optional="1"/>
+                <field name="last_po_date"/>
+                <field name="last_invoice_date"/>
+            </xpath>
+
+            <xpath expr="//field[@name='user_id']" position="after">
+                <field name="street" optional="hide" readonly="1"/>
+                <field name="street2" optional="hide" readonly="1"/>
+            </xpath>
+
+        </field>
+
+    </record>
+
+    <record id="res_partner_view_search_inherit_cfs" model="ir.ui.view">
+        <field name="name">res.partner.search.inherit.cfs</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="account.res_partner_view_search"/>
+        <field name="arch" type="xml">
+            <xpath expr="//filter[@name='supplier']" position="replace">
+                <filter string="Vendors" name="supplier" domain="[('supplier_rank','>', 0)]"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

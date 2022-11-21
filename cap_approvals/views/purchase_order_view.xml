@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <record id="view_purchase_approvals_form" model="ir.ui.view">
+            <field name="name">Purchase Approval</field>
+            <field name="model">purchase.order</field>
+            <field name="priority">99</field>
+            <field name="inherit_id" ref="purchase.purchase_order_form"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//div[hasclass('oe_button_box')]/button[@name='action_view_picking']" position="attributes">
+                    <attribute name="groups"></attribute>
+                </xpath>
+
+                <xpath expr="//form/header" position="inside">
+                    <field name="x_need_approval" invisible="1"/>
+                    <field name="x_review_result" invisible="1"/>
+					<field name="is_approved" invisible="1"/>:
+					<field name="is_being_approved" invisible="1"/>
+                    <field name="x_has_request_approval" invisible="1"/>
+                    <button name="action_request" type="object" string="Request Approval" attrs="{'invisible': [('state','not in',('draft','sent'))]}" class="oe_highlight" approval_btn="1" context="{'search_default_id':'active_id'}"/>
+                    <button name="action_request" type="object" string="Request Approval" attrs="{'invisible': [('state','not in','to reapprove')]}" class="oe_highlight" approval_btn="1" context="{'search_default_id':'active_id'}"/>
+                    <button name="%(multi_level_approval_configuration.action_open_request)d" type="action" string="View Approval" attrs="{'invisible': [('x_has_request_approval', '=', False)]}" approval_btn="1"/>
+                    <button name="%(multi_level_approval_configuration.rework_approval_action)d" type="action" string="Rework"  attrs="{'invisible': [('x_review_result', '!=', 'refused')]}" approval_btn="1"/>
+                </xpath>
+
+                
+                <xpath expr="//form/header" position="after">
+                    <div>
+                        <!-- EOI-457: Updated the grammar and domains -->
+                        <div attrs="{'invisible': [('is_approved' ,'!=' ,False)]}" class="alert alert-info" style="margin-bottom:0px;" role="alert">This document needs to be approved !</div>
+						<div attrs="{'invisible': [('is_approved', '!=', True)]}" class="alert alert-info" style="margin-bottom:0px;" role="alert">This document has been approved !</div>
+                        <div attrs="{'invisible': ['|', ('x_need_approval', '=', False), ('x_review_result', '!=', 'refused')]}" class="alert alert-danger" style="margin-bottom:0px;" role="alert">This document has been refused !</div>
+                    </div>
+                </xpath>
+
+                <!-- EOI-443: Add acknowledged field underneath 'Need Date' -->
+                <xpath expr="//div[@name='date_planned_div']" position="after">
+                    <field name="acknowledged" id="ack"></field>
+                </xpath>
+
+                <!-- EOI-349: Replacing button_cancel to encompass all states -->
+                <xpath expr="//button[@name='button_cancel']" position="replace">
+                    <button name="button_cancel" states="draft,to approve,sent,purchase,to reapprove, approved" string="Cancel" type="object" data-hotkey="x" />
+                </xpath>
+                <!-- EOI-349: Adding Multi Level Approval Smart Button -->
+                <xpath expr="//div[@name='button_box']" position="inside">
+                    <button class="oe_stat_button" id="smart_app_btn" name="multi_app_smart_button_window_action" type="object"
+                            icon="fa-pencil" attrs="{'invisible': [('multi_approval_count', '=', 0)]}">
+                        <field string="Multi Approval" name="multi_approval_count" id="multi_approval_count" widget="statinfo"/>
+                    </button>
+
+                    <!-- EOI-488: Multi Approval smart button should be invisible if there are no approvals to review or approve -->
+                </xpath>
+
+                <!-- EOI 226/227 Add field -->
+                <!-- EOI-549: Fix Adding Notes to PO -->
+                <xpath expr="//form[1]/sheet[1]/notebook[1]/page[@name='products']/field[@name='order_line']/tree[1]/field[@name='product_qty']" position="after">
+                    <field name="date_promised" attrs="{'required': [('display_type', '=', False)]}"/>
+                </xpath>
+
+                <!-- EOI 504 Make account_analytic_id required -->
+                <field name="account_analytic_id" position="attributes">
+                    <attribute name="attrs">{'required': 1}</attribute>
+                    <attribute name="readonly">1</attribute>
+                </field>
+
+                <!-- EOI 222 Add states -->
+                <xpath expr="//field[@name='state']" position="replace">
+                    <field name="state" widget="statusbar" statusbar_visible="draft,sent,to approve,to reapprove,approved,purchase,released,done,closed" readonly="1"/>
+                </xpath>
+
+                <!-- EOI 222 Add Remove Replace buttons -->
+                <!-- EOI-349: Added 2nd parameters to the xpath touching the button_confirms -->
+                <xpath expr="//button[@name='button_confirm' and @states='draft']" position="replace"/>
+                <xpath expr="//button[@name='button_approve']" position="replace"/>
+                <xpath expr="//button[@name='button_confirm' and @states='sent']" position="replace">
+                    <button name="button_confirm" type="object" string="Release Order" states='approved' class="oe_highlight"/>
+                </xpath>
+
+                <!-- EOI 222 - Send for approval buttons -->
+                <xpath expr="//form/header" position="inside">
+                    <!--EOI-150 Add field-->
+                    <button name="button_close_by_credit_card" states="purchase" string="Close By Credit Card" type="object"/>
+                </xpath>
+                
+                <!-- EOI 222 - Multilevel ribbon -->
+                <xpath expr="//form/header" position="after">
+                    <div>
+                        <field name="x_need_approval" invisible='1'/>
+                        <field name="x_review_result" invisible='1'/>
+                        <div attrs="{'invisible': ['|', ('x_need_approval', '=', False), ('x_review_result', '!=', 'reapprove')]}" class="alert alert-info" style="margin-bottom:0px;" role="alert">This Purchase Order needs another approval!</div>
+                    </div>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

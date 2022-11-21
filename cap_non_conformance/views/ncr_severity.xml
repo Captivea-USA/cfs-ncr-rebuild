@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- List View -->
+    <record id="ncr_severity_tree_view" model="ir.ui.view">
+      <field name="name">ncr.severity.tree.view</field>
+      <field name="type">tree</field>
+      <field name="model">ncr.severity</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>
+        </tree>
+      </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="ncr_severity_form_view" model="ir.ui.view">
+      <field name="name">ncr.severity.form.view</field>
+      <field name="type">form</field>
+      <field name="model">ncr.severity</field>
+      <field name="arch" type="xml">
+        <form>
+          <sheet>
+            <group>
+              <group>
+                <field name="name"/>
+                <field name="cfs_severity_code"/>
+                <field name="cfs_description"/>
+              </group>
+              <group>
+                
+              </group>
+            </group>
+          </sheet>
+        </form>
+      </field>
+    </record>
+
+    <!-- Search -->
+    <record id="ncr_severity_search" model="ir.ui.view">
+        <field name="name">ncr.severity.search</field>
+        <field name="model">ncr.severity</field>
+        <field name="type">search</field>
+        <field name="arch" type="xml">
+            <search>
+
+            </search>
+        </field>
+    </record>
+
+
+    <!-- Action -->
+    <!-- <record id="ncr_severity_view" model="ir.actions.act_window">
+        <field name="name">NCR Severity</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">ncr.severity</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a new Non Conformance Severity Level
+                </p>
+            </field>
+    </record> -->
+    
+  <!-- Menu Items -->
+    <!-- <menuitem 
+      id="ncr_severity" 
+      name="NCR Severity Levels" 
+      parent="quality_control.menu_quality_configuration" 
+      action="ncr_severity_view"
+      sequence="50"/> -->
+
+
+</odoo>

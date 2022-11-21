@@ -1,0 +1,5 @@
+"id","name","model_id:id","group_id:id","perm_read","perm_write","perm_create","perm_unlink"
+commodity_code_admin,"Admin","model_commodity_code","purchase.group_purchase_manager","True","True","True","True"
+commodity_read,"All","model_commodity_code","base.group_user","True","","",""
+access_product_quality_code,access.product.quality.code,model_product_quality_code,base.group_user,1,1,1,1
+access_account_tolerance_description,access.account.tolerance.description,model_account_tolerance_description,base.group_user,1,1,1,1

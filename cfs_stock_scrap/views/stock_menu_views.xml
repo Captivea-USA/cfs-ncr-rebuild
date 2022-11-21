@@ -1,0 +1,8 @@
+<odoo>
+    <data noupdate="1">
+        <menuitem id="scrap_reason_menu"
+            parent="stock.menu_product_in_config_stock"
+            action="cfs_stock_scrap.act_scrap_2_scrap_reason"
+            sequence="5"/>
+    </data>
+</odoo>

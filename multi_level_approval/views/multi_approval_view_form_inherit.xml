@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- EOI-349: Inherit and make a new form view for multi approval -->
+    <record id="multi_approval_view_form_inherit" model="ir.ui.view">
+        <field name="name">multi_approval_view_form_inherit</field>
+        <field name="model">multi.approval</field>
+        <field name="inherit_id" ref="multi_level_approval.multi_approval_view_form"/>
+        <field name="priority">1</field>
+        <field name="mode">primary</field>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="attributes">
+                <attribute name="create">0</attribute>
+            </xpath>
+
+            <xpath expr="//sheet" position="replace">
+                <sheet>
+                
+                    <div class="oe_title">
+
+                        <label for="name" class="oe_edit_only" />
+                        <h1>
+                            <field name="name" placeholder="Title" attrs="{'readonly': [('state', '!=', 'Draft')]}"/>
+                        </h1>
+                    </div>
+                    <div>
+                        <group>
+                            <field name="attachment_number" invisible="1"/>
+                            <field name="user_id" readonly="1"/>
+                            <field name="request_date" attrs="{'readonly': [('state', '!=', 'Draft')]}"/>
+                            <field name="type_id" attrs="{'readonly': [('state', '!=', 'Draft')]}"
+                                 options="{'no_create': True, 'no_open': True}"/>
+                            <field name="reference" readonly="1"/>
+                            <field name="deadline" string="Need Date"/>
+                            <field name="complete_date" string="Date Confirmed"/>
+                            <field name="location" />
+                            <field name="amount"/>                        
+                        </group>
+                    </div>
+                    
+                    <notebook>
+                        <page string="Description" name="description">
+                            <field name="description" nolabel="1" placeholder='Description' attrs="{'readonly': [('state', 'not in', ('Draft', 'Submitted'))]}"/>
+                        </page>
+                        <page string="Approver(s)" name="cap_approvers">
+                            <!-- EOI695 - approval table editable in draft state -->
+                            <field name="line_ids" attrs="{'readonly': [('state', '!=', 'Draft')]}">
+                                <tree editable="1" multi_edit="1">
+                                    <field name="name" invisible="1"/>
+                                    <field name="user_id" invisible="1"/>
+                                    <field name="level"/>
+                                    <field name="min_approval" width="200px"/>
+                                    <field name="everyone_approves" width="200px"/>
+                                    <field name="user_ids" widget="many2many_tags"/>
+                                    <field name="user_approval_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                                    <field name="status" width="200px"/>
+                                    <field name="action_timestamp" width="200px"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="cfs_bank_accountant" model="res.groups">
+            <field name="name">Finance -> Bank Accountant</field>
+        </record>
+        <record id="cfs_bank_accountant_viewer" model="res.groups">
+            <field name="name">Finance -> Bank Accountant Viewer</field>
+        </record>
+        <!-- bank managers/users and users will only have read permissions -->
+        <record id="base.access_res_partner_bank_group_partner_manager" model="ir.model.access">
+            <field name="perm_read" eval="True" />
+            <field name="perm_write" eval="False" />
+            <field name="perm_create" eval="False" />
+            <field name="perm_unlink" eval="False" />
+        </record>
+        <record id="base.access_res_partner_bank_group_user" model="ir.model.access">
+            <field name="perm_read" eval="True" />
+            <field name="perm_write" eval="False" />
+            <field name="perm_create" eval="False" />
+            <field name="perm_unlink" eval="False" />
+        </record>
+    </data>
+</odoo>

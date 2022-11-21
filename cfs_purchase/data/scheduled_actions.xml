@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="po_close_chron" model="ir.cron">
+            <field name="name">Close POs [1 day]</field>
+            <field name="model_id" ref="purchase.model_purchase_order" />
+            <field name="state">code</field>
+            <field name="code">
+                model._check_close()
+            </field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field name="nextcall" eval="(DateTime.now() +     timedelta(days=1)).strftime('%Y-%m-%d %H:%M:%S')" />
+            <field name="active">True</field>
+        </record>
+    </data>  
+</odoo>

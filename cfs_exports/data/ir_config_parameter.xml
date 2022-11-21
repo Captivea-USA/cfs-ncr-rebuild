@@ -1,0 +1,9 @@
+<odoo>
+    <data noupdate="1">
+        <!-- Directory for exporting reports -->
+        <record model="ir.config_parameter" id="cfs_export_directory">
+            <field name="key">export.directory</field>
+            <field name="value">/home</field>
+        </record>
+    </data>
+</odoo>

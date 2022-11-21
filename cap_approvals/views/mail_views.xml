@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+<!-- #EOI 443 - Email Acknowledge -->
+    <data noupdate="1">
+         <record id="view_email_template_form_view_inherit_cfs" model="ir.ui.view">
+            <field name="name">email.template.form.view.inherit.cfs</field>
+            <field name="model">mail.template</field>
+            <field name="inherit_id" ref="mail.email_template_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='scheduled_date']" position="after">
+                    <field name="include_acknowledgement"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_mail_compose_message_form_view_inherit_cfs" model="ir.ui.view">
+            <field name="name">mail_compose_message_form_view_inherit_cfs</field>
+            <field name="model">mail.compose.message</field>
+            <field name="inherit_id" ref="mail.email_compose_message_wizard_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='template_id']" position="after">
+                    <field name="include_acknowledgement"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

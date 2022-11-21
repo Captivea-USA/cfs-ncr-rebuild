@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="custom_grant_project_wizard_form" model="ir.ui.view">
+            <field name="name">custom.grant.project.wizard</field>
+            <field name="model">custom.grant.project.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Grant Project Creation">
+                    <sheet>
+                        <p class="oe_grey"><b>This wizard will create grant project.</b></p>
+                        <group>
+                            <group>
+                                <field name="name"/>
+                                <field name="custom_grant_seeker_id" invisible="1"/>
+                            </group>
+                            <group>
+                                <field name="project_manager_id"/>
+                            </group>
+                        </group>
+                        <field name="custom_description"/>
+                    </sheet>
+                    <footer>
+                        <button name="custom_create_grant_project" type="object" string="Create" default_focus="1"
+                            class="btn-primary"/>
+                        <button string="_Cancel" class="btn-default" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="custom_action_grant_project_wizard" model="ir.actions.act_window">
+            <field name="name">Grant Project Creation</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">custom.grant.project.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="custom_grant_project_wizard_form"/>
+            <field name="target">new</field>
+        </record>
+    </data>
+</odoo>

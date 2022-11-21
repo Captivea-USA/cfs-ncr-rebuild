@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="report_picking_document" inherit_id="stock.report_picking">
+
+        <xpath expr="//div[hasclass('page')]" position="before">
+            <t t-if="o.is_hazardous == True">
+                <p style="background-color:yellow;"><strong><u>Note:</u> This Order contains one or more Hazardous Products, as shown by the 
+                <i class="fa fa-exclamation-triangle"/> icon</strong></p>
+            </t>
+        </xpath>
+        
+        <xpath expr="//span[@t-field='ml.product_id.display_name']" position="after">
+            <i t-if="ml.product_id.is_hazardous" class="fa fa-exclamation-triangle"/>
+        </xpath>
+
+        <!-- Adds "Return of WH/XX/#####" -->
+        <xpath expr="//h1" position="replace">
+            <h1>
+                <span t-field="o.name"/> | <span t-field="o.origin"/>
+            </h1>
+        </xpath>
+
+        <!-- Replace 'Product' Header -->
+        <xpath expr="//th[@name='th_product']" position="replace">
+            <th name="th_cfs_part">
+                <strong>CFS Part</strong>
+            </th>
+        </xpath>
+
+        <!-- Modify Product Data to product_id.name -->
+        <xpath expr="//tbody//t//tr//td[1]" position="replace">
+            <td>
+                <span t-field="ml.product_id.name"/>
+            </td>
+        </xpath>
+
+        <!-- Replace 'Product Barcode' Header -->
+        <xpath expr="//th[@name='th_barcode']" position="replace">
+            <th name="th_from">
+                <strong>From</strong>
+            </th>
+        </xpath>
+
+        <!-- Replace Barcodes Row -->
+        <xpath expr="//tbody//t//tr//td[@t-if='has_barcode']" position="replace">
+            <td>
+                <span t-field="ml.location_dest_id"/>
+            </td>
+        </xpath>
+
+        <!-- Removing Weight -->
+        <xpath expr="//div[@t-if='o.weight']" position="replace"/>
+
+    </template>
+
+
+
+</odoo>

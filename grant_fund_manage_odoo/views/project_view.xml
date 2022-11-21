@@ -1,0 +1,37 @@
+<odoo>
+    <data>
+
+        <record id="custom_edit_project_inherit_grant_application" model="ir.ui.view">
+            <field name="name">project.project.form.inherit.grant_application</field>
+            <field name="model">project.project</field>
+            <field name="inherit_id" ref="project.edit_project"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[@name='button_box']" position="inside">
+                    <button class="oe_stat_button" type="object" attrs="{'invisible':[('custom_is_grant_seeker','!=', True)]}" name="custom_show_grant_opportunity" icon="fa-tasks" string="Grant Opportunity">
+                    </button>
+                </xpath>
+                <xpath expr="//field[@name='partner_id']" position="after">
+                    <field name="custom_grant_seeker_id"/>
+                    <field name="custom_is_grant_seeker" invisible="1"/>
+                </xpath>
+                <xpath expr="//notebook//page[@name='settings']" position="before">
+                    <page string="Description" name="custom_description">
+                        <field name="custom_description"/>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="custom_action_open_project_team" model="ir.actions.act_window">
+            <field name="name">Project Team</field>
+            <field name="res_model">project.project.team</field>
+            <field name="view_mode">tree,form</field>
+            <field name="target">main</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a new project team.
+                </p>
+            </field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="ncr_status_update" model="mail.template">
+            <field name="name">NCR: Status Update</field>
+            <field name="model_id" ref="cap_non_conformance.model_ncr"/>
+            <field name="subject">{{object.name or ''}} Status Update</field>
+            <field name="partner_to">{{object.cfs_assignee_id.id}}</field>
+            <field name="lang">${object.partner_id.lang}</field>
+            <field name="auto_delete" eval="True"/>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p style="box-sizing:border-box;margin: 0px; padding: 0px; font-size: 13px;">
+                        Dear <t t-out="object.cfs_assignee_id.name or ''" data-oe-t-inline="true" contenteditable="false" />
+                        <br/>
+                        <br/>
+                        This email is to inform you the status of NCR <strong t-out="object.name or ''" style="box-sizing:border-box;font-weight:500;" contenteditable="false"/>
+                        has been updated to <strong t-out="object.cfs_stage_id.name or ''" data-oe-t-inline="true" contenteditable="false"/>.
+                        <br/>
+                        <br/>
+                        If you have any questions, please do not hesitate to contact us.
+                    </p>
+                </div>
+            </field>
+        </record>
+
+
+        <!-- set default order confirmation template -->
+        <!-- <record id="ncr_status_update" model="ir.config_parameter">
+            <field name="key">ncr.ncr_status_update</field>
+            <field name="value" ref="ncr.ncr_status_update"/>
+        </record> -->
+
+
+
+    </data>
+</odoo>

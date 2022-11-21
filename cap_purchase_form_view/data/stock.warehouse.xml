@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="my_house" model="stock.warehouse">
+            <field name="name">My House</field>
+            <field name="code">RMY</field>
+            <field name="partner_id" eval="False"/>
+            <!-- TODO setting active to false doesn't allow us to select from the dropdown menu. 
+            I think the problem is that they don't want to edit this warehouse on warehouse config -->
+            <!-- <field name="active" eval="False"/> -->
+            <field name="wh_type">remote</field>
+        </record>
+
+     </data>
+</odoo>
+

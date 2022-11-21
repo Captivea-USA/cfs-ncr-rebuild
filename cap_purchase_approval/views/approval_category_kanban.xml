@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- EOI-331: Removes 'To Review' button -->
+    <record id="approval_category_view_kanban_inherit_cfs" model="ir.ui.view">
+        <field name="name">approval.category.views.kanban</field>
+        <field name="model">approval.category</field>
+        <field name="inherit_id" ref="approvals.approval_category_view_kanban"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[2]" position="replace">
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

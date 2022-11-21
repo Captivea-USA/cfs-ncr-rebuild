@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_grant_seeker_document">
+    <t t-call="web.external_layout">
+        <t t-set="doc" t-value="doc.with_context()" />
+        <div class="page">
+            <div class="oe_structure"/>
+
+            <h2 class="mt16">
+                <span t-field="doc.custom_name"/>
+            </h2>
+
+            <h4 style="margin-top:20px;"><b>Client Information</b></h4>
+            <table class="table table-responsive">
+               <tr style="border-top:hidden; border-bottom:hidden;">
+                   <td><strong>Start Date:</strong></td><td><span t-field="doc.custom_start_date"/></td>
+                   <td><strong>End Date:</strong></td><td><span t-field="doc.custom_end_date"/></td>
+                   
+               </tr>
+               <tr style="border-bottom:hidden;">
+                   <td><strong>Responsible:</strong></td><td><span t-field="doc.custom_manager_id"/></td>
+                   <td><strong>Application Team:</strong></td><td><span t-field="doc.custom_crm_team_id"/></td>
+               </tr>
+               <tr style="border-bottom:hidden;">
+                   <td><strong>Grant Types:</strong></td><td><span t-field="doc.custom_grant_types_id"/></td>
+                   <td><strong>Grant Methods:</strong></td><td><span t-field="doc.custom_grant_methods_id"/></td>
+               </tr>
+               <tr style="border-bottom:hidden;">
+                   <td><strong>Project Team:</strong></td><td><span t-field="doc.custom_project_team_id"/></td>
+                   <t t-set="grant_tags" t-value="doc.custom_grant_tags_print()"/>
+                   <td><strong>Grant Tags:</strong></td><td><span t-esc="grant_tags"/></td>
+               </tr>
+               <tr style="border-bottom:hidden;">
+                   <td><strong>Project:</strong></td><td><span t-field="doc.custom_project_id"/></td>
+                   <t t-set="grant_tags" t-value="doc.custom_grant_tags_print()"/>
+                   <td><strong>Company:</strong></td><td><span t-field="doc.custom_company_id"/></td>
+               </tr>
+            </table>
+            <div>
+                <h4><strong>Description</strong></h4>
+                <span t-field="doc.custom_description"/>
+            </div>
+            <div class="mt32 mb32">
+                <h4><strong>Proposal</strong></h4>
+                <span t-field="doc.custom_proposal"/>
+            </div>
+        </div>
+    </t>
+</template>
+
+    <template id="report_grant_seeker">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="grant_fund_manage_odoo.report_grant_seeker_document"/>
+            </t>
+        </t>
+    </template>
+</odoo>

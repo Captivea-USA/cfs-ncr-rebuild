@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="product_category_form_inherit_cfs" model="ir.ui.view">
+        <field name="name">product.category.form.inherit.cfs</field>
+        <field name="model">product.category</field>
+        <field name="inherit_id" ref="product.product_category_form_view"/>
+        <field name="arch" type="xml">
+
+            <!-- EOI-348: Add description_ids + procurement_type required-->
+            <field name="parent_id" position="after">
+                <field name="description_ids" widget="many2many_tags"/>
+                <field name="procurement_type" required="True"/>
+            </field>
+
+            <!-- EOI-348: Add 'can_override_gl_categ' below 'property_account_expense_categ_id' -->
+            <xpath expr="//field[@name='property_account_expense_categ_id']" position="after">
+                <field name="can_override_gl_categ" />
+            </xpath>
+        </field>
+    </record>
+</odoo>

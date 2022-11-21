@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="custom_view_grant_tags_form" model="ir.ui.view">
+            <field name="name">grant.tags.form</field>
+            <field name="model">grant.tags</field>
+            <field name="arch" type="xml">
+                <form string="Grant Tags">
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="code"/>
+                            </group>
+                            <group>
+                                <field name="color"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="custom_view_grant_tags_tree" model="ir.ui.view">
+            <field name="name">grant.tags.tree</field>
+            <field name="model">grant.tags</field>
+            <field name="arch" type="xml">
+                <tree string="Grant Tags">
+                    <field name="code"/>
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="custom_action_grant_tags" model="ir.actions.act_window">
+            <field name="name">Grant Tags</field>
+            <field name="res_model">grant.tags</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="custom_view_grant_tags_tree"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a new grant tags.
+                </p>
+            </field>
+        </record>
+
+    </data>
+</odoo>

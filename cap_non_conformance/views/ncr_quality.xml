@@ -1,0 +1,370 @@
+<odoo>
+    <!-- List View -->
+    <record id="ncr_quality_tree_view" model="ir.ui.view">
+      <field name="name">ncr.quality.tree.view</field>
+      <field name="type">tree</field>
+      <field name="model">ncr</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="display_name"/>
+          <field name="cfs_stage_id"/>
+        </tree>
+      </field>
+    </record>
+
+    <!-- Kanban View -->
+    <record id="ncr_quality_kanban_view" model="ir.ui.view">
+      <field name="name">ncr.quality.kanban.view</field>
+      <field name="type">kanban</field>
+      <field name="model">ncr</field>
+      <field name="arch" type="xml">
+        <kanban string="NCR Flow" default_group_by="cfs_stage_id" class="o_kanban_small_column o_opportunity_kanban" sample="1" quick_create="false" group_create="false" group_delete="false" group_edit="false" archivable="false">
+          <field name="cfs_stage_id" options='{"group_by_tooltip": {"requirements": "Description"}}'/>
+          <field name="cfs_severity_label"/>
+          <templates>
+            <t t-name="kanban-box">
+              <div t-attf-class="oe_kanban_global_click oe_kanban_card_ribbon oe_kanban_card d-flex flex-column">
+                <div class="ribbon ribbon-top-right" attrs="{'invisible': [('cfs_severity_label', '!=', 'Critical')]}">
+                  <span class="bg-danger">Critical</span>
+                </div>
+                <div class="ribbon ribbon-top-right" attrs="{'invisible': [('cfs_severity_label', '!=', 'Major')]}">
+                  <span class="bg-warning">Major</span>
+                </div>
+                <div class="oe_kanban_content flex-grow-1">
+                  <div class="o_kanban_record_title oe_kanban_details">
+                    <strong><field name="display_name"/></strong>
+                  </div>
+                  <div>
+                    <span><b>Type: </b></span>
+                    <field name="cfs_type_id"/>
+                  </div>
+                  <div>
+                    <span><b>Severity: </b></span>
+                    <field name="cfs_severity_id"/>
+                  </div>
+                  <div>
+                    <span><b>Created On: </b></span>
+                    <field name="create_date"/>
+                  </div>
+                </div>
+              </div>
+            </t>
+          </templates>
+        </kanban>
+      </field>
+    </record>
+    
+    <!-- Form View -->
+    <record id="ncr_quality_form_view" model="ir.ui.view">
+      <field name="name">ncr.quality.form.view</field>
+      <field name="type">form</field>
+      <field name="model">ncr</field>
+      <field name="arch" type="xml">
+        <form>
+          <field name="cfs_severity_label" invisible="1"/>
+          <header>
+            <button name="advance_stage" string="Advance" type="object" class="oe_highlight" attrs="{'invisible': [('cfs_stage_id', 'in', [3, 7])]}"/>
+            <button name="pass_ncr" string="Pass" type="object" class="oe_highlight" attrs="{'invisible': [('cfs_stage_id', 'not in', [3])]}"/>
+            <button name="fail_ncr" string="Fail" type="object" attrs="{'invisible': [('cfs_stage_id', 'not in', [3])]}"/>
+            <field name="cfs_stage_id" widget="statusbar" required="1"/>
+          </header>
+          <div attrs="{'invisible': [('cfs_stage_id', 'not in', [3])]}" class="alert alert-danger" style="margin-bottom:0px;" role="alert">This NCR is waiting on Functional Approval.</div>
+          <sheet>
+            <widget name="web_ribbon" title="Critical" bg_color="bg-danger" attrs="{'invisible': [('cfs_severity_label', '!=', 'Critical')]}"/>
+            <widget name="web_ribbon" title="Major" bg_color="bg-warning" attrs="{'invisible': [('cfs_severity_label', '!=', 'Major')]}"/>
+            <div class="oe_title">
+              <h1>
+                <field name="name" readonly="1"/>
+              </h1>
+            </div>
+            <group>
+              <field name="cfs_type_id" required="1"/>
+            </group>
+            <group>
+              <group>
+                <field name="cfs_planned_execution_date" attrs="{'required': [['cfs_stage_id','not in',[1, 2]]]}"/>
+                <field name="cfs_severity_id" attrs="{'required': [['cfs_stage_id','not in',[1]]]}"/>
+                <field name="cfs_assignee_id" required="1"/>
+              </group>
+              <group>
+                <field name="cfs_ncr_age"/>
+                <field name="create_uid"/>
+                <field name="create_date" widget="date"/>
+              </group>
+            </group>
+            <group>
+              <group>
+                <field name="cfs_financial_notif_id" attrs="{'required': [['cfs_stage_id','not in',[1]]]}"/>
+                <field name="cfs_functional_approver_id" attrs="{'required': [['cfs_stage_id','not in',[1]]]}"/>
+              </group>
+              <group>
+              </group>
+            </group>
+            <group>
+              <group name='po_information' string='PO Information' attrs="{'invisible': [('cfs_type_id', '!=', 1)]}">
+                <field name="cfs_po_num_id"/>
+                <field name="cfs_po_line_num_id"/>
+                <field name="cfs_supplier_id"/>
+                <field name="cfs_buyer_id"/>
+              </group>
+              <group name='wo_information' string='WO Information' attrs="{'invisible': [('cfs_type_id', 'not in', [2, 3])]}">
+                <field name="cfs_mo_id"/>
+              </group>
+              <group name='part_information' string='Part Information'>
+                <field name="cfs_part_number_id" required="1"/>
+                <field name="cfs_responsible_engineer_id" required="1"/>
+                <field name="cfs_part_value" required="1"/>
+                <field name="cfs_lot_sn_id" attrs="{'invisible': [('cfs_lot_sn_name', '!=', False)]}"/>
+                <field name="cfs_lot_sn_name" attrs="{'invisible': [('cfs_lot_sn_id', '!=', False)]}"/>
+              </group>
+            </group>
+            <group>
+              <group>
+                <field name="cfs_qty_tested"/>
+                <field name="cfs_qty_failed" required="1"/>
+              </group>
+              <group>
+              </group>
+            </group>
+            <group>
+              <group>
+                <field name="cfs_location_id" required="1"/>
+                <field name="cfs_source_id" required="1"/>
+                <field name="cfs_reason_id" required="1"/>
+                <field name="cfs_disposition_id" attrs="{'required': [['cfs_stage_id','not in',[1, 2]]]}"/>
+              </group>
+              <group>
+                <field name="cfs_disposition_cost" attrs="{'required': [['cfs_stage_id','not in',[1, 2]]]}"/>
+                <field name="cfs_internal_labor_hrs" attrs="{'required': [['cfs_stage_id','not in',[1, 2]]]}"/>
+              </group>
+            </group>
+
+            <group>
+              <field name="cfs_nc_description" required="1"/>
+            </group>
+
+            <group>
+              <field name="cfs_sme_ids" mode="tree,form">
+                <tree string="Non Conformance SME" editable="bottom">
+                  <field name="cfs_user_id" optional="show"/>
+                  <field name="cfs_notes" optional="show"/>
+                  <field name="cfs_attachment" optional="show"/>
+                </tree>
+                <form>
+                  <sheet>
+                    <group>
+                      <field name="cfs_user_id" string="User"/>
+                      <field name="cfs_notes" string="Notes"/>
+                      <field name="cfs_attachment" string="Attachment"/>
+                    </group>
+                  </sheet>
+                </form>
+              </field>
+            </group>
+
+            <notebook>
+              <page string="Notes">
+                <group>
+                  <field name="cfs_disposition_notes" attrs="{'required': [['cfs_stage_id','not in',[1, 2]]]}"/>
+                  <field name="cfs_justification_notes" attrs="{'required': [['cfs_stage_id','not in',[1, 2]]]}"/>
+                </group>
+              </page>
+              <page string="Correction">
+                <group>
+                  <field name="cfs_correction_responsible_id" attrs="{'required': [['cfs_stage_id','not in',[1, 2]]]}"/>
+                  <field name="cfs_correction_notes" attrs="{'required': [['cfs_stage_id','not in',[1, 2]]]}"/>
+                </group>
+              </page>
+              <page string="Verification">
+                <group>
+                  <field name="cfs_verification_responsible_id" attrs="{'required': [['cfs_stage_id','not in',[1, 2, 3]]]}"/>
+                  <field name="cfs_verification_notes" attrs="{'required': [['cfs_stage_id','not in',[1, 2, 3]]]}"/>
+                </group>
+              </page>
+            </notebook>
+
+          </sheet>
+          <div class="oe_chatter">
+            <field name="message_follower_ids" widget="mail_followers"/>
+            <field name="activity_ids"/>
+            <field name="message_ids" widget="mail_thread"/> 
+          </div>
+        </form>
+      </field>
+    </record>
+
+    <!-- Actions -->
+    <record id="ncr_quality_view" model="ir.actions.act_window">
+        <field name="name">NCR</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">ncr</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <!-- <field name="view_id" ref="ncr_quality_form_view"/> -->
+        <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a new Non Conformance Report
+                </p>
+            </field>
+    </record>
+
+    <record id="ncr_stage_view" model="ir.actions.act_window">
+        <field name="name">Stages</field>
+        <field name="res_model">ncr.stage</field>
+        <field name="help" type="html">
+          <p class="o_view_nocontent_smiling_face">
+            Set a new stage in your Non Conformance Pipeline
+          </p>
+        </field>
+    </record>
+
+    <record id="ncr_type_view" model="ir.actions.act_window">
+        <field name="name">Types</field>
+        <field name="res_model">ncr.type</field>
+        <field name="help" type="html">
+          <p class="o_view_nocontent_smiling_face">
+            Create a new Non Conformance Type
+          </p>
+        </field>
+    </record>
+
+    <record id="ncr_disposition_view" model="ir.actions.act_window">
+        <field name="name">NCR Dispositions</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">ncr.disposition</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a new Non Conformance Disposition
+                </p>
+            </field>
+    </record>
+
+    <record id="ncr_location_view" model="ir.actions.act_window">
+        <field name="name">NCR Locations</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">ncr.location</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a new Non Conformance Location
+                </p>
+            </field>
+    </record>
+
+    <record id="ncr_reason_view" model="ir.actions.act_window">
+        <field name="name">NCR Reasons</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">ncr.reason</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a new Non Conformance Reason
+                </p>
+            </field>
+    </record>
+    
+    <record id="ncr_severity_view" model="ir.actions.act_window">
+        <field name="name">NCR Severity</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">ncr.severity</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a new Non Conformance Severity Level
+                </p>
+            </field>
+    </record>
+
+    <record id="ncr_source_view" model="ir.actions.act_window">
+        <field name="name">NCR Sources</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">ncr.source</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a new Non Conformance Source
+                </p>
+            </field>
+    </record>
+
+
+
+    
+  <!-- Menu Items -->
+    <!-- <menuitem 
+      id="ncr_quality" 
+      name="NCR" 
+      parent="quality_control.menu_quality_root" 
+      action="ncr_quality_view"
+      sequence="30"/> -->
+      <menuitem 
+      id="ncr_quality_root" 
+      name="NCR" 
+      sequence="160"/>
+
+      <menuitem 
+      id="ncr_quality" 
+      name="NCR" 
+      parent="ncr_quality_root"
+      action="ncr_quality_view"
+      sequence="5"/>
+
+      <menuitem 
+      id="ncr_config" 
+      name="Configuration" 
+      parent="ncr_quality_root"
+      sequence="10"/>
+
+      <menuitem 
+      id="ncr_stage" 
+      name="NCR Stages" 
+      parent="ncr_config" 
+      action="ncr_stage_view"
+      sequence="1"/>
+
+      <menuitem 
+      id="ncr_type" 
+      name="NCR Types" 
+      parent="ncr_config" 
+      action="ncr_type_view"
+      sequence="2"/>
+
+      <menuitem 
+      id="ncr_disposition" 
+      name="NCR Dispositions" 
+      parent="ncr_config" 
+      action="ncr_disposition_view"
+      sequence="5"/>
+
+      <menuitem 
+      id="ncr_location" 
+      name="NCR Locations" 
+      parent="ncr_config" 
+      action="ncr_location_view"
+      sequence="10"/>
+
+      <menuitem 
+      id="ncr_reasons" 
+      name="NCR Reasons" 
+      parent="ncr_config" 
+      action="ncr_reason_view"
+      sequence="15"/>
+
+      <menuitem 
+      id="ncr_severity" 
+      name="NCR Severity Levels" 
+      parent="ncr_config" 
+      action="ncr_severity_view"
+      sequence="20"/>
+
+      <menuitem 
+      id="ncr_sources" 
+      name="NCR Sources" 
+      parent="ncr_config" 
+      action="ncr_source_view"
+      sequence="25"/>
+
+
+
+
+</odoo>

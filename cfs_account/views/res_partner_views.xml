@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- everyone can see the masks and only see the full number if in the viewer group -->
+    <record id="view_partner_partner_form_restrict_enhance" model="ir.ui.view">
+        <field name="name">view.partner.property.form.restrict.enhance</field>
+        <field name="inherit_id" ref="account.view_partner_property_form" />
+        <field name="model">res.partner</field>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='bank_ids']" position="attributes">
+                <attribute name="readonly">1</attribute>
+            </xpath>
+            <!-- clicking on bank_id will not give up a popup -->
+            <xpath expr="//field[@name='bank_ids']/tree/field[@name='bank_id']" position="attributes">
+                <attribute name="style">pointer-events:none;</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='bank_ids']/tree/field[@name='acc_number']" position="after">
+                <field name="acc_number_mask" style="pointer-events:none;" />
+            </xpath>
+            <xpath expr="//field[@name='bank_ids']/tree/field[@name='acc_number']" position="attributes">
+                <attribute name="groups">cfs_account.cfs_bank_accountant,cfs_account.cfs_bank_accountant_viewer</attribute>
+            </xpath>
+
+            <xpath expr="//group[@name='banks']/button[hasclass('btn-link')]" position="attributes">
+                <attribute name="groups">cfs_account.cfs_bank_accountant,cfs_account.cfs_bank_accountant_viewer</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- if in the groups, the mask will be hidden -->
+    <record id="view_partner_partner_form_enhance_partner_mask" model="ir.ui.view">
+        <field name="name">view.partner.property.form.enhance.partner.mask</field>
+        <field name="inherit_id" ref="cfs_account.view_partner_partner_form_restrict_enhance" />
+        <field name="groups_id" eval="[
+            (6, 0, [
+                ref('cfs_account.cfs_bank_accountant'),
+                ref('cfs_account.cfs_bank_accountant_viewer') 
+            ])
+        ]" />
+        <field name="model">res.partner</field>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='bank_ids']/tree/field[@name='bank_id']" position="attributes">
+                <attribute name="style">pointer-events:auto;</attribute>
+            </xpath>
+            <xpath expr="//field[@name='bank_ids']/tree/field[@name='acc_number_mask']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+        </field>
+    </record>
+</odoo>

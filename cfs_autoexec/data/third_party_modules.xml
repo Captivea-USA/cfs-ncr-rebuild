@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data>
+
+<!-- EOI-605: Fix autoexec installation -->
+<!-- 3RD PARTY MODULES -->
+<record id="autoexecute_action_third_party" 
+        model="ir.actions.server">
+  <field name="name">2 - AutoExec (3rd Party)</field>
+  <field name="model_id" ref="base.model_ir_actions_server"></field>
+  <field name="state">code</field>
+  <field name="code">
+def install(modules):
+  for module in modules:
+    if module.state in ['uninstalled','to upgrade','to install']:
+      module.button_immediate_install()
+
+# Setup base Company
+env.ref('base.main_company').sudo().write({'country_id': env.ref('base.us').id, 'currency_id': env.ref('base.USD').id })
+
+# CFS Modules
+modules = env['ir.module.module'].search([('name','in',[
+  'account_analytic_parent',
+  'advanced_web_domain_widget',
+  'grant_fund_budget_manage_ent',
+  'grant_fund_manage_odoo',
+  'job_costing_budget_contracting_enterprice',
+  'mail_optional_follower_notification',
+  'material_purchase_requisitions',
+  'multi_level_approval',
+  'multi_level_approval_configuration',
+  'multi_level_approval_hr',
+  'odoo_job_costing_management',
+  'project_team_odoo',
+  'purchase_request',
+  'remittance_advice_report_omax',
+  'simplify_access_management',
+  'todo_list',
+  'web_environment_ribbon',
+])])
+
+# Install modules
+install(modules)
+  </field>
+</record>
+
+  </data>
+</odoo>
+

@@ -1,0 +1,33 @@
+<odoo>
+  <data>
+    <record id="indirect_expensed" model="product.template">
+      <field name="type">consu</field>
+      <field name="categ_id" ref="product.cat_expense" />
+      <field name="name">Expensed Items</field>
+      <field name="can_override_gl">True</field>
+    </record>
+
+    <record id="indirect_asset" model="product.template">
+      <field name="type">product</field>
+      <field name="categ_id" ref="product.cat_expense" />
+      <field name="name">Fixed Assets</field>
+      <field name="can_override_gl">True</field>
+    </record>
+
+    <record id="indirect_progress" model="product.template">
+      <field name="type">service</field>
+      <field name="categ_id" ref="product.cat_expense" />
+      <field name="name">Projects in Progress</field>
+      <field name="can_override_gl">True</field>
+    </record>
+
+    <record id="indirect_service" model="product.template">
+      <field name="type">service</field>
+      <field name="categ_id" ref="product.cat_expense" />
+      <field name="name">Services</field>
+      <field name="can_override_gl">True</field>
+    </record>
+  </data>
+</odoo>
+  
+  

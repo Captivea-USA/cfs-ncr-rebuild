@@ -1,0 +1,108 @@
+<odoo>
+    <data>
+        <record id="custom_crm_lead_inherit_grant" model="ir.ui.view">
+            <field name="name">crm.lead.inherit.grant</field>
+            <field name="model">crm.lead</field>
+            <field name="inherit_id" ref="crm.crm_lead_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='phone']" position="after">
+                    <field name="custom_is_grant_maker" invisible="1"/>
+                    <field name="custom_is_grant_seeker" invisible="1"/>
+                </xpath>
+                <xpath expr="//button[@name='action_set_lost']" position="after">
+                    <button name="action_custom_proposal_send" string="Send Proposal by Email" type="object" class="btn-primary"/>
+                </xpath>
+                <xpath expr="//page[last()]" position="after">
+                    <page string="Application Proposal" name="proposal">
+                        <group>
+                            <group><field name="custom_grant_seeker_id"  attrs="{'invisible': [('custom_is_grant_seeker', '!=', True)]}"/></group>
+                            <group/>
+                        </group>
+                        <field name="custom_proposal"/>
+                    </page>
+                </xpath>
+
+                <xpath expr="//div[hasclass('oe_button_box')]" position="inside">
+                    <button name="action_view_grant_purchase_order" type="object" class="oe_stat_button" icon="fa-shopping-cart" string="Purchase Order" attrs="{'invisible': [('custom_is_grant_seeker', '!=', False)]}">
+                    </button>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="custom_crm_lead_opportunities_filter_inherit_grant" model="ir.ui.view">
+            <field name="name">crm.lead.inherit.grant</field>
+            <field name="model">crm.lead</field>
+            <field name="inherit_id" ref="crm.view_crm_case_opportunities_filter"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='city']" position="after">
+                    <field name="custom_grant_seeker_id"/>
+                    <field name="custom_is_grant_seeker"/>
+                </xpath>
+                <xpath expr="//filter[@name='open_opportunities']" position="after">
+                    <filter string="My Grant Application Request" name="my_grant_application_request"
+                        domain="[('custom_is_grant_seeker', '=', True), ('type', '=', 'opportunity')]"
+                        help="Open My Grant Application Request"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="custom_action_open_grant_opportunity" model="ir.actions.act_window">
+            <field name="name">Received Grant Applications</field>
+            <field name="res_model">crm.lead</field>
+            <field name="domain">[('custom_is_grant_maker', '=', True)]</field>
+            <field name="view_mode">kanban,form</field>
+            <field name="context">{
+            'default_custom_is_grant_maker': True
+            }</field>
+            <field name="view_id" ref="crm.crm_case_kanban_view_leads"/>
+            <field name="target">main</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a new maker opportunity.
+                </p>
+            </field>
+        </record>
+
+        <record id="custom_action_grant_proposal_applications" model="ir.actions.act_window">
+            <field name="name">Grant Proposal Applications</field>
+            <field name="res_model">crm.lead</field>
+            <field name="domain">[('custom_is_grant_seeker', '=', True)]</field>
+            <field name="view_mode">kanban,form</field>
+            <field name="context">{
+            'default_custom_is_grant_seeker': True
+            }</field>
+            <field name="view_id" ref="crm.crm_case_kanban_view_leads"/>
+            <field name="target">main</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a new grant proposal applications.
+                </p>
+            </field>
+        </record>
+
+        <record id="custom_action_open_application_team" model="ir.actions.act_window">
+            <field name="name">Application Team</field>
+            <field name="res_model">crm.team</field>
+            <field name="view_mode">tree,form</field>
+            <field name="target">main</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a new crm team.
+                </p>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="custom_grant_lead_action_pipeline">
+            <field name="name">Grant Proposal Applications</field>
+            <field name="res_model">crm.lead</field>
+            <field name="view_mode">kanban,tree,graph,pivot,form,calendar,activity</field>
+            <field name="domain">[('type','=','opportunity'),('custom_is_grant_seeker', '=', True)]</field>
+            <field name="context">{
+                    'default_type': 'opportunity',
+                    'search_default_assigned_to_me': 1,
+                    'search_default_my_grant_application_request': 1
+            }</field>
+            <field name="search_view_id" ref="crm.view_crm_case_opportunities_filter"/>
+        </record>
+    </data>
+</odoo>

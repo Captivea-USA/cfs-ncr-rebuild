@@ -1,0 +1,531 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- ERPPROD237 - Export Vendor scheduled action -->
+        <record id="res_partner_export_cron" model="ir.cron">
+            <field name="name">Export Vendors for reporting</field>
+            <field name="model_id" ref="cfs_exports.model_export_reports" />
+            <field name="state">code</field>
+            <field name="code">
+                model.export_report(
+                    model_name='res.partner',
+                    model_domain=[('supplier_rank', '>', 0)],
+                    field_values=[
+                        {
+                            'name': 'display_name',
+                            'label': 'Display Name'
+                        },
+                        {
+                        'name': 'company_type',
+                        'label': 'Company Type',
+                        'type': 'selection'
+                    },
+                    {
+                        'name': 'phone',
+                        'label': 'Phone'
+                    },
+                    {
+                        'name': 'email',
+                        'label': 'Email'
+                    },
+                    {
+                        'name': 'status',
+                        'label': 'Status',
+                        'type': 'selection'
+                    },
+                    {
+                        'name': 'last_po_date',
+                        'label': 'Last PO Date',
+                        'type': 'datetime'
+                    },
+                    {
+                        'name': 'last_invoice_date',
+                        'label': 'Last Invoice Date',
+                        'type': 'datetime'
+                    },
+                    {
+                        'name': 'user_id',
+                        'label': 'Salesperson',
+                        'type': 'many2one'
+                    },
+                    {
+                        'name': 'activity_ids',
+                        'label': 'Activities',
+                        'type': 'many2many',
+                        'comodel': 'mail.activity',
+                        'res_name': 'res_name'
+                    },
+                    {
+                        'name': 'city',
+                        'label': 'City'
+                    },
+                    {
+                        'name': 'state_id',
+                        'label': 'State',
+                        'type': 'many2one'
+                    },
+                    {
+                        'name': 'country_id',
+                        'label': 'Country',
+                        'type': 'many2one'
+                    },
+                    {
+                        'name': 'vat',
+                        'label': 'Tax ID'
+                    },
+                    {
+                        'name': 'tax_id_type',
+                        'label': 'Tax ID Type',
+                        'type': 'selection'
+                    },
+                    {
+                        'name': 'category_id',
+                        'label': 'Tags',
+                        'type': 'many2many',
+                        'comodel': 'res.partner.category'
+                    },
+                    {
+                        'name': 'buyer_id',
+                        'label': 'Buyer Name',
+                        'type': 'many2one'
+                    },
+                    {
+                        'name': 'buyer_id',
+                        'label': 'Buyer Login',
+                        'type': 'many2one',
+                        'comodel': 'res.users',
+                        'res_name': 'login'
+                    },
+                    {
+                        'name': 'id',
+                        'label': 'ID'
+                    },
+                    {
+                        'name': 'ten99_reporting',
+                        'label': '1099 Reporting',
+                        'type': 'string_boolean'
+                    },
+                    {
+                        'name': 'incoterms',
+                        'label': 'Incoterms',
+                        'type': 'many2one'
+                    },
+                    {
+                        'name': 'parent_name',
+                        'label': 'Parent Name'
+                    },
+                    {
+                        'name': 'name',
+                        'label': 'Name'
+                    },
+                    ]
+                )
+        </field>
+            <field name="interval_number">7</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field name="nextcall" eval="(DateTime.now() +     timedelta(days=7)).strftime('%Y-%m-%d %H:%M:%S')" />
+            <field name="active">True</field>
+        </record>
+        <!-- ERPPROD237 - Export PO line scheduled action -->
+        <record id="po_line_export_cron" model="ir.cron">
+            <field name="name">Export PO lines for reporting</field>
+            <field name="model_id" ref="cfs_exports.model_export_reports" />
+            <field name="state">code</field>
+            <field name="code">
+model.export_report(
+model_name='purchase.order.line',
+field_values=[
+    {
+        'name': 'order_id',
+        'label': 'Order Reference',
+        'type': 'many2one'
+    },
+    {
+        'name': 'create_date',
+        'label': 'Date Created',
+        'type': 'datetime'
+    },
+    {
+        'name': 'requester_id',
+        'label': 'Requester',
+        'type': 'many2one'
+    },
+    {
+        'name': 'buyer_id',
+        'label': 'Buyer',
+        'type': 'many2one'
+    },
+    {
+        'name': 'date_order',
+        'label': 'Date Ordered',
+        'type': 'datetime'
+    },
+    {
+        'name': 'date_planned',
+        'label': 'Need Date',
+        'type': 'datetime'
+    },
+    {
+        'name': 'date_promised',
+        'label': 'Date Promised',
+        'type': 'datetime'
+    },
+    {
+        'name': 'release_date',
+        'label': 'Date Released',
+        'type': 'datetime'
+    },
+    {
+        'name': 'partner_id',
+        'label': 'Partner',
+        'type': 'many2one'
+    },
+    {
+        'name': 'product_id',
+        'label': 'Product',
+        'type': 'many2one'
+    },
+    {
+        'name': 'cfs_vendor_part',
+        'label': 'Vendor Part'
+    },
+    {
+        'name': 'cfs_quality_codes',
+        'label': 'Quality Codes',
+        'type': 'many2many',
+        'comodel': 'product.quality.code'
+    },
+    {
+        'name': 'buyer_category_id',
+        'label': 'Category',
+        'type': 'many2one'
+    },
+    {
+        'name': 'override_account_id',
+        'label': 'GL Account',
+        'type': 'many2one'
+    },
+    {
+        'name': 'product_qty',
+        'label': 'Quantity',
+        'type': 'string_number'
+    },
+    {
+        'name': 'product_uom',
+        'label': 'Unit of Measure',
+        'type': 'many2one'
+    },
+    {
+        'name': 'price_unit',
+        'label': 'Unit Price',
+        'type': 'currency'
+    },
+    {
+        'name': 'qty_received',
+        'label': 'Received Quantity',
+        'type': 'string_number'
+    },
+    {
+        'name': 'price_subtotal',
+        'label': 'Subtotal',
+        'type': 'currency'
+    },
+    {
+        'name': 'state',
+        'label': 'Status',
+        'type': 'selection',
+        'related': True,
+        'comodel': 'purchase.order'
+    },
+    {
+        'name': 'po_deliver_to',
+        'label': 'Deliver To',
+        'type': 'many2one'
+    },
+    {
+        'name': 'account_analytic_id',
+        'label': 'Analytic Account',
+        'type': 'many2one'
+    }
+]
+        )
+</field>
+            <field name="interval_number">7</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field name="nextcall" eval="(DateTime.now() +     timedelta(days=7)).strftime('%Y-%m-%d %H:%M:%S')" />
+            <field name="active">True</field>
+        </record>
+
+        <!-- ERPPROD237 - Export PO scheduled action -->
+        <record id="po_export_cron" model="ir.cron">
+            <field name="name">Export POs for reporting</field>
+            <field name="model_id" ref="cfs_exports.model_export_reports" />
+            <field name="state">code</field>
+            <field name="code">
+        model.export_report(
+            model_name='purchase.order',
+            field_values=[
+                {
+                    'name': 'priority',
+                    'label': 'Priority',
+                    'type': 'selection'
+                },
+                {
+                'name': 'name',
+                'label': 'PO Number',
+            },
+            {
+                'name': 'date_approve',
+                'label': 'Approved On',
+                'type': 'datetime'
+            },
+            {
+                'name': 'effective_date',
+                'label': 'Effective Date',
+                'type': 'datetime'
+            },
+            {
+                'name': 'partner_id',
+                'label': 'Vendor',
+                'type': 'many2one'
+            },
+            {
+                'name': 'date_planned',
+                'label': 'Need Date',
+                'type': 'datetime'
+            },
+            {
+                'name': 'create_uid',
+                'label': 'Created By',
+                'type': 'many2one'
+            },
+            {
+                'name': 'activity_ids',
+                'label': 'Activities',
+                'type': 'many2many',
+                'comodel': 'mail.activity',
+                'res_name': 'res_name'
+            },
+            {
+                'name': 'origin',
+                'label': 'Source Document'
+            },
+            {
+                'name': 'amount_total',
+                'label': 'Total',
+                'type': 'currency'
+            },
+            {
+                'name': 'state',
+                'label': 'Status',
+                'type': 'selection'
+            },
+            {
+                'name': 'cfs_is_transfer_return',
+                'label': 'Transfer Return',
+                'type': 'string_boolean'
+            },
+            {
+                'name': 'invoice_status',
+                'label': 'Billing Status',
+                'type': 'selection'
+            },
+            {
+                'name': 'cap_shipping_method',
+                'label': 'Vendor Shipping',
+                'type': 'many2one'
+            },
+            {
+                'name': 'mail_reception_confirmed',
+                'label': 'Reception Confirmed',
+                'type': 'string_boolean'
+            },
+            {
+                'name': 'requester_id',
+                'label': 'Requester',
+                'type': 'many2one'
+            }
+            ]
+        )
+</field>
+            <field name="interval_number">7</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field name="nextcall" eval="(DateTime.now() +     timedelta(days=7)).strftime('%Y-%m-%d %H:%M:%S')" />
+            <field name="active">True</field>
+        </record>
+        <!-- ERPPROD237 - Export PR scheduled action -->
+        <!-- TODO: It sounds like we don't need res_model anymore because multi approval is used for bills/POs
+        TODO so we can assume that approval.request is now all purchase requests -->
+        <record id="approval_request_export_cron" model="ir.cron">
+            <field name="name">Export Purchase Requests for reporting</field>
+            <field name="model_id" ref="cfs_exports.model_export_reports" />
+            <field name="state">code</field>
+            <field name="code">
+            model.export_report(
+                model_name='approval.request',
+                field_values=[
+                    {
+                        'name': 'name',
+                        'label': 'Approval Subject'
+                    },
+                    {
+                    'name': 'create_date',
+                    'label': 'Date Created',
+                    'type': 'datetime'
+                },
+                {
+                    'name': 'create_uid',
+                    'label': 'Created By',
+                    'type': 'many2one'
+                },
+                {
+                    'name': 'cap_type',
+                    'label': 'Type',
+                    'type': 'selection'
+                },
+                {
+                    'name': 'request_owner_id',
+                    'label': 'Request Owner',
+                    'type': 'many2one'
+                },
+                {
+                    'name': 'cap_need_date',
+                    'label': 'Need Date',
+                    'type': 'datetime'
+                },
+                {
+                    'name': 'cap_project_id',
+                    'label': 'Project',
+                    'type': 'many2one'
+                },
+                {
+                    'name': 'cap_buyer_ids',
+                    'label': 'Buyers',
+                    'type': 'many2many',
+                    'comodel': 'res.users'
+                },
+                {
+                    'name': 'cap_vendor_ids',
+                    'label': 'Vendors',
+                    'type': 'many2many',
+                    'comodel': 'res.partner'
+                },
+                {
+                    'name': 'cap_warehouse',
+                    'label': 'Warehourse',
+                    'type': 'many2one'
+                },
+                {
+                    'name': 'request_status',
+                    'label': 'Status',
+                    'type': 'selection'
+                },
+                {
+                    'name': 'reference',
+                    'label': 'Reference'
+                },
+                {
+                    'name': 'cap_self_approved',
+                    'label': 'Self Approved',
+                    'type': 'string_boolean',
+                    'computed': True,
+                    'compute_function': '_compute_self_approved'
+                },
+                {
+                    'name': 'cap_self_approved_timestamp',
+                    'label': 'Self Approved Time',
+                    'type': 'datetime',
+                    'computed': True,
+                    'compute_function': '_compute_self_approved_timestamp'
+                },
+                ]
+            )
+</field>
+            <field name="interval_number">7</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field name="nextcall" eval="(DateTime.now() +     timedelta(days=7)).strftime('%Y-%m-%d %H:%M:%S')" />
+            <field name="active">True</field>
+        </record>
+        <!-- ERPPROD237 - Export PR lines scheduled action -->
+        <record id="approval_product_line_export_cron" model="ir.cron">
+            <field name="name">Export Purchase Request Lines for reporting</field>
+            <field name="model_id" ref="cfs_exports.model_export_reports" />
+            <field name="state">code</field>
+            <field name="code">
+            model.export_report(
+                model_name='approval.product.line',
+                field_values=[
+                    {
+                        'name': 'approval_request_id',
+                        'label': 'Approval Request',
+                        'type': 'many2one'
+                    },
+                    {
+                    'name': 'requester_id',
+                    'label': 'Requester',
+                    'type': 'many2one'
+                },
+                {
+                    'name': 'warehouse_id',
+                    'label': 'Ship To',
+                    'type': 'many2one'
+                },
+                {
+                    'name': 'product_id',
+                    'label': 'CFS Part',
+                    'type': 'many2one'
+                },
+                {
+                    'name': 'cap_vendor_name',
+                    'label': 'Vendor',
+                    'type': 'many2one'
+                },
+                {
+                    'name': 'cap_new_vendor_address',
+                    'label': 'Address'
+                },
+                {
+                    'name': 'cap_vendor_part',
+                    'label': 'Vendor Part'
+                },
+                {
+                    'name': 'quality_codes',
+                    'label': 'Quality Codes',
+                    'type': 'many2many',
+                    'comodel': 'product.quality.code'
+                },
+                {
+                    'name': 'cap_subtotal',
+                    'label': 'Subtotal',
+                    'type': 'currency'
+                },
+                {
+                    'name': 'cap_need_date',
+                    'label': 'Need Date',
+                    'type': 'datetime'
+                },
+                {
+                    'name': 'date_promised',
+                    'label': 'Promise Date',
+                    'type': 'datetime'
+                },
+                {
+                    'name': 'current_purchase_order',
+                    'label': 'PO',
+                    'type': 'many2one'
+                },
+                ]
+            )
+</field>
+            <field name="interval_number">7</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field name="nextcall" eval="(DateTime.now() +     timedelta(days=7)).strftime('%Y-%m-%d %H:%M:%S')" />
+            <field name="active">True</field>
+        </record>
+    </data>
+</odoo>

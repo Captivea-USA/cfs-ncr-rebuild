@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- List View -->
+    <record id="ncr_location_tree_view" model="ir.ui.view">
+      <field name="name">ncr.location.tree.view</field>
+      <field name="type">tree</field>
+      <field name="model">ncr.location</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>
+        </tree>
+      </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="ncr_location_form_view" model="ir.ui.view">
+      <field name="name">ncr.location.form.view</field>
+      <field name="type">form</field>
+      <field name="model">ncr.location</field>
+      <field name="arch" type="xml">
+        <form>
+          <sheet>
+            <group>
+              <group>
+                <field name="name"/>
+              </group>
+              <group>
+                
+              </group>
+            </group>
+          </sheet>
+        </form>
+      </field>
+    </record>
+
+    <!-- Search -->
+    <record id="ncr_location_search" model="ir.ui.view">
+        <field name="name">ncr.location.search</field>
+        <field name="model">ncr.location</field>
+        <field name="type">search</field>
+        <field name="arch" type="xml">
+            <search>
+
+            </search>
+        </field>
+    </record>
+
+
+    <!-- Action -->
+    <!-- <record id="ncr_location_view" model="ir.actions.act_window">
+        <field name="name">NCR Locations</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">ncr.location</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a new Non Conformance Location
+                </p>
+            </field>
+    </record> -->
+    
+  <!-- Menu Items -->
+    <!-- <menuitem 
+      id="ncr_location" 
+      name="NCR Locations" 
+      parent="quality_control.menu_quality_configuration" 
+      action="ncr_location_view"
+      sequence="35"/> -->
+
+
+</odoo>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_remittance_advice_report_menu" model="ir.actions.report">
+        <field name="name">Remittance Advice Report</field>
+        <field name="model">account.payment</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">remittance_advice_report_omax.report_remittance_advice</field>
+        <field name="report_file">remittance_advice_report_omax.report_remittance_advice</field>
+        <field name="binding_model_id" ref="model_account_payment"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <template id="report_remittance_advice">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-set="lang" t-value="o.partner_id.lang or o.company_id.partner_id.lang"/>
+                <t t-call="remittance_advice_report_omax.report_remittance_advice_tmpl_id" t-lang="lang"/>
+            </t>
+        </t>
+    </template>
+</odoo>

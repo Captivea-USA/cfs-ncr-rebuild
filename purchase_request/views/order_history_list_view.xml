@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- EOI-341: Expanded tree view for PO Lines -->
+    <!-- EOI-347: Now dedicated PO Line and Order Line Views -->
+    <record id="order_history_list_view_smart" model="ir.ui.view">
+        <field name="name">order_history_list.inherit.custom_cfs</field>
+        <field name="model">purchase.order.line</field>
+        <field name="mode">primary</field>
+        <field name="arch" type="xml">
+            <tree string="Order History" create="false">
+                <field name="order_id" string="PO"/>
+                <field name="create_date"/>
+                <field name="requester_id" optional="hide" />
+                <field name="buyer_id" optional="hide" />
+                <field name="date_order" widget="date" string="Release Date"/>
+                <field name="date_planned" widget="date" string="Need Date"/>
+                <field name="date_promised"/>
+                <field name="release_date" widget="date"/>
+                <field name="partner_id" string="Vendor"/>
+                <field name="account_analytic_id" optional="hide"/>
+                <field name="analytic_tag_ids" optional="hide" widget="many2many_tags"/>
+                <field name="product_id" string="CFS Part"/>
+                <field name="cfs_vendor_part" optional="hide"/>
+                <field name="name" string="Description" />
+                <field name="override_account_id" string="GL Account"/>
+                <field name="product_uom" string="UoM"/>
+                <field name="product_uom_category_id" invisible="1"/>
+                <field name="cfs_quality_codes" optional="hide" widget="many2many_tags" />
+                <!-- EOI-534: Make Category non-optional -->
+                <field name="buyer_category_id"/>
+                <field name="product_qty" string="Ordered"/>
+                <field name="price_unit"/>
+                <field name="qty_received" string="Received" optional="hide"/>
+                <field name="qty_invoiced" string="Billed" optional="hide"/>
+                <field name="qty_to_invoice" string="To Bill" optional="hide"/>
+                <field name="billed_percent" optional="hide" />
+                <field name="price_subtotal"/>
+                <field name="state" optional="show"/>
+                <field name="po_deliver_to" string="Deliver To" optional="hide"/>
+                <button class="fa fa-trash-o" name="unlink" type="object" title="Delete this row"/>
+            </tree>
+        </field>
+    </record>
+
+</odoo>

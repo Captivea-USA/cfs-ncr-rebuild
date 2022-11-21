@@ -1,0 +1,29 @@
+<odoo>
+     <record id="approval_request_view_tree_inherit" model="ir.ui.view">
+        <field name="name">approval.request.view.tree.inherit</field>
+        <field name="model">approval.request</field>
+        <field name="inherit_id" ref="approvals.approval_request_view_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//tree" position="replace">
+                <tree create="false" sample="1" decoration-info="request_status == 'new'">
+                    <field name="name"/>
+                    <field name="cap_type"/>
+                    <field name="request_owner_id"/>
+                    <field name="cap_need_date"/>
+                    <field name="cap_buyer_ids" widget="many2many_tags" />
+                    <field name="cap_vendor_ids"/>
+                    <field name="cap_warehouse"/>
+                    <field name="cap_notes"/>
+                    <field name="request_status"/>
+                    <field name="reference"/>
+                    <field name="cap_self_approved"/>
+                    <field name="cap_self_approved_timestamp"/>
+                </tree>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Removing 'My Requests' menuitem -->
+    <!-- <delete model="ir.ui.menu" id="approvals.approvals_request_menu_my_requests" /> -->
+
+</odoo>

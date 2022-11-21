@@ -1,0 +1,22 @@
+<odoo>
+  <data>
+    <record id="view_partner_bank_form_inherit" model="ir.ui.view">
+      <field name="name">view.partner.bank.form</field>
+      <field name="model">res.partner.bank</field>
+      <field name="inherit_id" ref="base.view_partner_bank_form"/>
+      <field name="arch" type="xml">
+        <xpath expr="//sheet" position="after">
+          <form>
+            <sheet>
+                <div class="oe_chatter">  
+                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>  
+                    <field name="message_ids" widget="mail_thread"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                </div>
+            </sheet>
+          </form>
+        </xpath>
+      </field>
+    </record>
+  </data>
+</odoo>
