@@ -12,7 +12,7 @@ from odoo.osv.expression import OR
 class QualityPoint(models.Model):
     _inherit = "quality.point"
     
-    quality_clause = fields.Many2one("quality.clause", "Quality Clause")
+    quality_clause = fields.Many2one("product.quality.code", "Quality Clause")
 
     @api.model
     def _get_domain(self, product_ids, picking_type_id, measure_on='operation'):
