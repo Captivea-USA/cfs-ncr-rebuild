@@ -51,7 +51,7 @@ class StockMoveLine(models.Model):
         #CFS Ticket
         for ml in mls:
             ml_clauses = ml.move_id.purchase_line_id.cfs_quality_codes
-            ml_picking = ml.move_id.picking_type_id
+            ml_picking = ml.move_id.picking_type_id.id
             if ml_clauses:
                 quality_points = self.env['quality.point'].sudo().search(['&',('quality_clause','in', ml_clauses.ids),('picking_type_ids','in', ml_picking)])
                 check_values_list = []
