@@ -52,7 +52,7 @@ class StockMoveLine(models.Model):
         for ml in mls:
             ml_clauses = ml.move_id.purchase_line_id.cfs_quality_codes
             if ml_clauses:
-                quality_points = self.env['quality.point'].sudo().search([('quality_clause','in', ml_clauses.ids)])
+                quality_points = self.env['quality.point'].sudo().search(['|',('quality_clause','in', ml_clauses.ids),('ml.move_id.picking_type_id','in','picking_type_ids')])
                 check_values_list = []
                 for quality_point in quality_points:
                     if quality_point.check_execute_now():
