@@ -4,6 +4,7 @@
 import ast
 
 from datetime import datetime
+from collections import defaultdict
 
 from odoo import api, fields, models, _, SUPERUSER_ID
 from odoo.exceptions import UserError
@@ -53,13 +54,11 @@ class StockMoveLine(models.Model):
             ml_picking = ml.move_id.picking_type_id.id
             if ml_clauses:
                 quality_points = self.env['quality.point'].sudo().search(['&',('quality_clause','in', ml_clauses.ids),('picking_type_ids','in', ml_picking)])
-                #raise UserError(str(ml_clauses) + "\n" + str(quality_points))
                 check_values_list = []
                 for quality_point in quality_points:
                     if quality_point.check_execute_now():
                         check_values = ml._get_check_values(quality_point)
                         check_values_list.append(check_values)
-                #raise UserError(str(check_values_list))
                 if check_values_list:
                     self.env['quality.check'].sudo().create(check_values_list)
 
@@ -73,35 +72,35 @@ class StockMove(models.Model):
         # Groupby move by picking. Use it in order to generate missing quality checks.
         pick_moves = defaultdict(lambda: self.env['stock.move'])
         check_vals_list = []
-        #raise UserError(str(check_vals_list))
         for move in self:
             if move.picking_id:
                 pick_moves[move.picking_id] |= move
         for picking, moves in pick_moves.items():
             quality_points_domain = self.env['quality.point']._get_domain(moves.product_id, picking.picking_type_id, measure_on='operation')
             quality_points = self.env['quality.point'].sudo().search(quality_points_domain)
+            #CFS Ticket [ERPQ4-284]
+            #create the base odoo points if applicable
+            if quality_points:
+                picking_check_vals_list = quality_points._get_checks_values(moves.product_id, picking.company_id.id, existing_checks=picking.sudo().check_ids)
+                for check_value in picking_check_vals_list:
+                    check_value.update({
+                        'picking_id': picking.id,
+                    })
+                check_vals_list += picking_check_vals_list
+            #create the quality clause depending points
+            for mls in moves.move_line_ids:
+                for ml in mls:
+                    ml_clauses = ml.move_id.purchase_line_id.cfs_quality_codes
+                    ml_picking = ml.move_id.picking_type_id.id
+                    if ml_clauses:
+                        quality_points = self.env['quality.point'].sudo().search(['&',('quality_clause','in', ml_clauses.ids),('picking_type_ids','in', ml_picking)])
+                        checks_already_made = self.env['quality.check'].sudo().search(['&',('move_line_id','=',ml.id),('point_id','in',quality_points.ids)])
+                        if not checks_already_made:
+                            clause_check_values_list = []
+                            for quality_point in quality_points:
+                                if quality_point.check_execute_now():
+                                    check_values = ml._get_check_values(quality_point)
+                                    clause_check_values_list.append(check_values)
+                            check_vals_list += clause_check_values_list
 
-            if not quality_points:
-                continue
-            picking_check_vals_list = quality_points._get_checks_values(moves.product_id, picking.company_id.id, existing_checks=picking.sudo().check_ids)
-            for check_value in picking_check_vals_list:
-                check_value.update({
-                    'picking_id': picking.id,
-                })
-            check_vals_list += picking_check_vals_list
-        raise UserError(str(check_vals_list))
         self.env['quality.check'].sudo().create(check_vals_list) 
-          
-
-# class StockPicking(models.Model):
-#     _inherit = "stock.picking"
-
-#     def _create_backorder(self):
-#         res = super(StockPicking, self)._create_backorder()
-#         if self.env.context.get('skip_check'):
-#             return res
-#         for backorder in res:
-#             backorder.backorder_id.check_ids.filtered(lambda qc: qc.quality_state == 'none').unlink()
-#             backorder.move_lines._create_quality_checks()
-#             #raise UserError("hit backorder create quality checks")
-#         return res
